@@ -35,6 +35,11 @@ Thumbs.db
 # Testes / CI
 coverage/
 .nyc_output/
+tests/
+playwright-report/
+test-results/
+playwright.config.ts
+openspec/
 
 # TypeScript cache
 tsconfig.tsbuildinfo
