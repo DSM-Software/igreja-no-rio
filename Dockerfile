@@ -29,17 +29,16 @@ COPY . .
 ARG NEXT_PUBLIC_SERVER_URL=https://igrejanorio.com
 ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
 
-ENV DATABASE_URI=postgresql://placeholder:placeholder@localhost:5432/placeholder
-ENV PAYLOAD_SECRET=build-placeholder-secret-mude-em-producao
-ENV S3_BUCKET=placeholder
-ENV S3_REGION=us-east-1
-ENV S3_ACCESS_KEY_ID=placeholder
-ENV S3_SECRET_ACCESS_KEY=placeholder
-
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-RUN npm run build
+RUN DATABASE_URI=postgresql://placeholder:placeholder@localhost:5432/placeholder \
+    PAYLOAD_SECRET=build-placeholder-secret \
+    S3_BUCKET=placeholder \
+    S3_REGION=us-east-1 \
+    S3_ACCESS_KEY_ID=placeholder \
+    S3_SECRET_ACCESS_KEY=placeholder \
+    npm run build
 
 # ─── Stage 3: runner ──────────────────────────────────────────────────────────
 FROM base AS runner

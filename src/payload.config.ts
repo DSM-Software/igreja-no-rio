@@ -10,7 +10,7 @@ import { Posts } from './collections/Posts'
 import { Downloads } from './collections/Downloads'
 import { Events } from './collections/Events'
 import { Media } from './collections/Media'
-import * as migrations from './migrations'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
