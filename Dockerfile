@@ -29,9 +29,7 @@ COPY . .
 ARG NEXT_PUBLIC_SERVER_URL=https://igrejanorio.com
 ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
 
-# Placeholders para as variáveis exigidas pelo payload.config (DB/S3 não são
-# acessados durante o build — as páginas usam force-dynamic)
-ENV DATABASE_URI=postgresql://placeholder:placeholder@placeholder:5432/placeholder
+ENV DATABASE_URI=postgresql://placeholder:placeholder@localhost:5432/placeholder
 ENV PAYLOAD_SECRET=build-placeholder-secret-mude-em-producao
 ENV S3_BUCKET=placeholder
 ENV S3_REGION=us-east-1
