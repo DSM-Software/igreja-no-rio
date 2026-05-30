@@ -62,10 +62,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/sharp ./node_modules/sharp
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@img ./node_modules/@img
 
-# Script que roda migrations antes de subir o servidor.
-COPY --from=builder --chown=nextjs:nodejs /app/scripts/migrate-prod.mjs ./migrate-prod.mjs
-
 USER nextjs
 EXPOSE 3000
 
-CMD ["sh", "-c", "node migrate-prod.mjs && node server.js"]
+CMD ["node", "server.js"]
