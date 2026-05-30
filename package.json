@@ -11,6 +11,10 @@
     "start": "next start",
     "generate:types": "payload generate:types",
     "seed": "npx tsx src/scripts/seed.ts",
+    "migrate:create": "payload migrate:create",
+    "migrate": "payload migrate",
+    "migrate:status": "payload migrate:status",
+    "migrate:down": "payload migrate:down",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui"
   },

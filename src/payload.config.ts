@@ -10,6 +10,7 @@ import { Posts } from './collections/Posts'
 import { Downloads } from './collections/Downloads'
 import { Events } from './collections/Events'
 import { Media } from './collections/Media'
+import * as migrations from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -31,7 +32,7 @@ export default buildConfig({
 
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI! },
-    push: true,
+    prodMigrations: migrations,
   }),
 
   secret: process.env.PAYLOAD_SECRET!,
