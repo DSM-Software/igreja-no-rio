@@ -25,7 +25,6 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 services:
-
   # ── PostgreSQL ────────────────────────────────────────────────────────────
   db:
     image: postgres:16-alpine
@@ -40,57 +39,15 @@ services:
     expose:
       - "5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-igrejario} -d ${POSTGRES_DB:-igreja_no_rio}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-igrejario} -d ${POSTGRES_DB:-igreja_no_rio}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 20s
-    networks:
-      - backend
-
-  # ── MinIO (S3 auto-hospedado) ─────────────────────────────────────────────
-  # Se preferir AWS S3 ou Cloudflare R2 gerenciados, remova este bloco
-  # e configure as vars S3_* diretamente no serviço app.
-  minio:
-    image: minio/minio:latest
-    restart: always
-    command: server /data --console-address ":9001"
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?Defina MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?Defina MINIO_ROOT_PASSWORD (mín. 8 chars)}
-      # Permite que os URLs de assets sejam públicos
-      MINIO_BROWSER_REDIRECT_URL: https://${DOMAIN:-igrejanorio.com}/minio
-    volumes:
-      - minio_data:/data
-    expose:
-      - "9000"
-      - "9001"
-    healthcheck:
-      test: ["CMD", "mc", "ready", "local"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-      start_period: 20s
-    networks:
-      - backend
-
-  createbuckets:
-    image: minio/mc:latest
-    depends_on:
-      minio:
-        condition: service_healthy
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      S3_BUCKET: ${S3_BUCKET:-igreja-no-rio}
-    entrypoint: >
-      sh -c "
-        mc alias set local http://minio:9000 $$MINIO_ROOT_USER $$MINIO_ROOT_PASSWORD &&
-        mc mb --ignore-existing local/$$S3_BUCKET &&
-        mc anonymous set public local/$$S3_BUCKET/media &&
-        echo 'Bucket criado: '$$S3_BUCKET
-      "
-    restart: "no"
     networks:
       - backend
 
@@ -125,10 +82,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      minio:
-        condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:3000/api/health 2>/dev/null | grep -q ok || wget -qO- http://localhost:3000 > /dev/null 2>&1"]
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:3000/api/health 2>/dev/null | grep -q ok || wget -qO- http://localhost:3000 > /dev/null 2>&1",
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -137,38 +96,12 @@ services:
       - backend
       - frontend
 
-  # ── Nginx (reverse proxy + SSL) ───────────────────────────────────────────
-  nginx:
-    image: nginx:1.25-alpine
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/certs:/etc/letsencrypt:ro          # certificados Let's Encrypt
-      - nginx_cache:/var/cache/nginx
-    depends_on:
-      app:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "nginx -t && wget -qO- http://localhost/health > /dev/null 2>&1 || exit 0"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-    networks:
-      - frontend
-
 volumes:
   db_data:
-    driver: local
-  minio_data:
-    driver: local
-  nginx_cache:
     driver: local
 
 networks:
   backend:
-    internal: true       # DB e MinIO não acessíveis de fora
+    internal: true # DB e MinIO não acessíveis de fora
   frontend:
-    driver: bridge       # nginx ↔ app; nginx expõe 80/443
+    driver: bridge # nginx ↔ app; nginx expõe 80/443
