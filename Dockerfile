@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────────────────────────────────────
 # Dockerfile — Igreja no Rio (produção)
-# Build multi-stage com Next.js standalone (~150 MB imagem final)
+# Build multi-stage com Next.js + Payload (runner com migrations no startup)
 #
 # Build:
 #   docker build \
@@ -41,28 +41,28 @@ ENV NODE_ENV=production
 
 RUN npm run build
 
-# ─── Stage 3: runner mínimo ───────────────────────────────────────────────────
+# ─── Stage 3: runner ──────────────────────────────────────────────────────────
 FROM base AS runner
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-# standalone precisa que o servidor escute em 0.0.0.0
+# servidor em 0.0.0.0 para container
 ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 
 RUN addgroup --system --gid 1001 nodejs \
- && adduser  --system --uid 1001 nextjs
+    && adduser  --system --uid 1001 nextjs
 
-# Copia somente o que o standalone precisa
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# sharp é importado opcionalmente pelo Payload e não é rastreado pelo bundler do Next.js —
-# precisa ser copiado explicitamente para que o redimensionamento de imagens funcione.
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/sharp ./node_modules/sharp
-COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@img ./node_modules/@img
+# Copia app buildado, dependências e código-fonte necessário para migrations do Payload
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/src ./src
+COPY --from=builder --chown=nextjs:nodejs /app/tsconfig.json ./tsconfig.json
+COPY --from=builder --chown=nextjs:nodejs /app/next.config.ts ./next.config.ts
 
 USER nextjs
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+# Aplica migrations pendentes antes de subir o app
+CMD ["sh", "-c", "npm run migrate && npm run start"]

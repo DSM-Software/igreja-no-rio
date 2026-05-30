@@ -1,52 +1,65 @@
-import type { Metadata } from 'next'
-import { getPayload } from '@/lib/payload'
-import PostCard from '@/components/blog/PostCard'
-import BlogFilters from '@/components/blog/BlogFilters'
+import type { Metadata } from "next";
+import { getPayload } from "@/lib/payload";
+import PostCard from "@/components/blog/PostCard";
+import BlogFilters from "@/components/blog/BlogFilters";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: 'Blog',
-  description: 'Devocionais, estudos em série e reflexões da Igreja no Rio.',
-  openGraph: { title: 'Blog — Igreja no Rio' },
-}
+  title: "Blog",
+  description: "Devocionais, estudos em série e reflexões da Igreja no Rio.",
+  openGraph: { title: "Blog — Igreja no Rio" },
+};
 
 export default async function BlogPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; serie?: string }>
+  searchParams: Promise<{ category?: string; serie?: string }>;
 }) {
-  const { category, serie } = await searchParams
-  const payload = await getPayload()
+  const { category, serie } = await searchParams;
+  const payload = await getPayload();
 
-  const where: Record<string, any> = { published: { equals: true } }
-  if (category) where.category = { equals: category }
-  if (serie) where.serie = { equals: serie }
+  const where: Record<string, any> = { published: { equals: true } };
+  if (category) where.category = { equals: category };
+  if (serie) where.serie = { equals: serie };
 
-  const { docs: posts } = await payload.find({
-    collection: 'posts',
-    where,
-    sort: '-date',
-    limit: 50,
-  })
+  const [postsResult, allPostsResult] = await Promise.allSettled([
+    payload.find({
+      collection: "posts",
+      where,
+      sort: "-date",
+      limit: 50,
+    }),
+    payload.find({
+      collection: "posts",
+      where: { published: { equals: true } },
+      select: { serie: true, category: true } as any,
+      limit: 200,
+    }),
+  ]);
 
-  // Derive unique series for filter
-  const { docs: allPosts } = await payload.find({
-    collection: 'posts',
-    where: { published: { equals: true } },
-    select: { serie: true, category: true } as any,
-    limit: 200,
-  })
+  const posts =
+    postsResult.status === "fulfilled" ? postsResult.value.docs : [];
+  const allPosts =
+    allPostsResult.status === "fulfilled" ? allPostsResult.value.docs : [];
 
-  const series = [...new Set(allPosts.map((p) => p.serie).filter(Boolean))] as string[]
-  const categories = ['Devocional', 'Estudo']
+  const series = [
+    ...new Set(allPosts.map((p) => p.serie).filter(Boolean)),
+  ] as string[];
+  const categories = ["Devocional", "Estudo"];
 
   return (
     <>
-      <div className="page-hero" style={{ paddingTop: 'calc(var(--nav-h) + 48px)' }}>
+      <div
+        className="page-hero"
+        style={{ paddingTop: "calc(var(--nav-h) + 48px)" }}
+      >
         <div className="container">
           <p className="section-label">Blog</p>
-          <h1 className="section-title" style={{ fontSize: 'clamp(32px, 5vw, 56px)' }}>
+          <h1
+            className="section-title"
+            style={{ fontSize: "clamp(32px, 5vw, 56px)" }}
+          >
             Devocionais e Estudos
           </h1>
           <p className="section-desc" style={{ marginTop: 16 }}>
@@ -65,7 +78,13 @@ export default async function BlogPage({
           />
 
           {posts.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '64px 0', color: 'var(--muted)' }}>
+            <div
+              style={{
+                textAlign: "center",
+                padding: "64px 0",
+                color: "var(--muted)",
+              }}
+            >
               <p style={{ fontSize: 18 }}>Nenhum post encontrado.</p>
             </div>
           ) : (
@@ -78,5 +97,5 @@ export default async function BlogPage({
         </div>
       </section>
     </>
-  )
+  );
 }
