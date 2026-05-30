@@ -1,0 +1,40 @@
+# Build artifacts
+.next/
+out/
+
+# Dependencies (serão reinstaladas no container)
+node_modules/
+
+# Env files (não versionados)
+.env
+.env.local
+.env.*.local
+.env.production
+
+# VCS
+.git/
+.gitignore
+
+# Dev tooling
+.eslintcache
+*.log
+npm-debug.log*
+
+# Design reference (não vai para produção)
+design_reference/
+PAYLOAD_SETUP.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Testes / CI
+coverage/
+.nyc_output/
+
+# TypeScript cache
+tsconfig.tsbuildinfo

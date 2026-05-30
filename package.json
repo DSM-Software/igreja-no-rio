@@ -1,0 +1,45 @@
+{
+  "name": "igreja-no-rio",
+  "version": "1.0.0",
+  "description": "Site institucional Igreja no Rio — Santíssimo, RJ",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev --turbopack",
+    "lint": "next lint",
+    "start": "next start",
+    "generate:types": "payload generate:types",
+    "seed": "npx tsx src/scripts/seed.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.0.0",
+    "@iconify/react": "^5.1.7",
+    "@payloadcms/db-postgres": "^3.85.0",
+    "@payloadcms/next": "^3.85.0",
+    "@payloadcms/richtext-lexical": "^3.85.0",
+    "@payloadcms/storage-s3": "^3.85.0",
+    "@payloadcms/ui": "^3.85.0",
+    "next": "15.4.11",
+    "payload": "^3.85.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@playwright/mcp": "^0.0.75",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "15.4.11",
+    "tsx": "^4.19.2",
+    "typescript": "^5.8.3"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}

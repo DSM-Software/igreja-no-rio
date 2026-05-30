@@ -1,0 +1,18 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Dockerfile.dev — desenvolvimento com hot reload
+# O código-fonte é montado via volume — alterações são refletidas sem rebuild.
+# ─────────────────────────────────────────────────────────────────────────────
+
+FROM node:20-alpine
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+
+# Instala dependências numa camada separada para cache eficiente.
+# O node_modules DENTRO do container não é sobrescrito pelo volume do host.
+COPY package.json package-lock.json ./
+RUN npm ci --frozen-lockfile
+
+EXPOSE 3000
+ENV NEXT_TELEMETRY_DISABLED=1
+
+CMD ["npm", "run", "dev"]
