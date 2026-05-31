@@ -35,7 +35,7 @@ export default async function ContatoPage() {
       </div>
 
       <section className="section">
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 80, alignItems: 'start' }}>
+        <div className="container contact-grid">
           {/* Contact info */}
           <div>
             <h2 className="section-title" style={{ fontSize: 28 }}>Informações</h2>
