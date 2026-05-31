@@ -420,6 +420,13 @@ img, svg { display: block; max-width: 100%; }
   align-items: start;
 }
 
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
 .post-card {
   border-radius: var(--r-xl);
   overflow: hidden;
@@ -777,12 +784,14 @@ img, svg { display: block; max-width: 100%; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
 
   .posts-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+
+  .agenda-downloads-grid { grid-template-columns: 1fr; gap: 48px; }
+
+  .contact-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 680px) {
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-
-  .agenda-downloads-grid { grid-template-columns: 1fr; gap: 48px; }
 
   .download-card { flex-direction: column; }
 
