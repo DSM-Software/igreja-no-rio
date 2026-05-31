@@ -121,15 +121,7 @@ export default async function HomePage() {
 
       {/* ─── Agenda de eventos ─── */}
       <section className="section">
-        <div
-          className="container"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 64,
-            alignItems: "start",
-          }}
-        >
+        <div className="container agenda-downloads-grid">
           <div>
             <p className="section-label">Agenda</p>
             <h2 className="section-title">Próximos eventos</h2>

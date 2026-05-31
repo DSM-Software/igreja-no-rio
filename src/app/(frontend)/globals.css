@@ -413,6 +413,13 @@ img, svg { display: block; max-width: 100%; }
   gap: 24px;
 }
 
+.agenda-downloads-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
 .post-card {
   border-radius: var(--r-xl);
   overflow: hidden;
@@ -774,6 +781,8 @@ img, svg { display: block; max-width: 100%; }
 
 @media (max-width: 680px) {
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+
+  .agenda-downloads-grid { grid-template-columns: 1fr; gap: 48px; }
 
   .download-card { flex-direction: column; }
 
