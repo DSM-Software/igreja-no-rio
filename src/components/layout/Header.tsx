@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { Icon } from '@iconify/react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import LogoMark from '@/components/ui/LogoMark'
@@ -21,6 +22,7 @@ export default function Header() {
   const pathname = usePathname()
   const isDarkHero = DARK_HERO_PATHS.includes(pathname)
   const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -28,6 +30,17 @@ export default function Header() {
     onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [pathname])
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [menuOpen])
 
   const solid = !isDarkHero || scrolled
   const onLight = solid
@@ -39,7 +52,7 @@ export default function Header() {
           <LogoMark onLight={onLight} height={36} />
         </Link>
 
-        <nav aria-label="Navegação principal">
+        <nav aria-label="Navegação principal" className="nav-desktop">
           {NAV_LINKS.map(({ href, label }) => {
             const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
             return (
@@ -56,7 +69,41 @@ export default function Header() {
             Fale conosco
           </Link>
         </nav>
+
+        <button
+          type="button"
+          className="nav-burger"
+          aria-label={menuOpen ? 'Fechar menu' : 'Abrir menu'}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-navigation"
+          onClick={() => setMenuOpen((value) => !value)}
+        >
+          <Icon icon={menuOpen ? 'material-symbols:close-rounded' : 'material-symbols:menu-rounded'} />
+        </button>
       </div>
+
+      <nav
+        id="mobile-navigation"
+        className={`nav-mobile ${menuOpen ? 'open' : ''}`}
+        aria-label="Navegação principal mobile"
+      >
+        {NAV_LINKS.map(({ href, label }) => {
+          const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
+          return (
+            <Link
+              key={`mobile-${href}`}
+              href={href}
+              className={`nav-mobile-link ${active ? 'active' : ''}`}
+              onClick={() => setMenuOpen(false)}
+            >
+              {label}
+            </Link>
+          )
+        })}
+        <Link href="/contato" className="btn btn-primary btn-sm nav-mobile-cta" onClick={() => setMenuOpen(false)}>
+          Fale conosco
+        </Link>
+      </nav>
     </header>
   )
 }
