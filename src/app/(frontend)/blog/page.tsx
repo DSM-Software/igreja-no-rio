@@ -50,11 +50,8 @@ export default async function BlogPage({
 
   return (
     <>
-      <div
-        className="page-hero"
-        style={{ paddingTop: "calc(var(--nav-h) + 48px)" }}
-      >
-        <div className="container">
+      <div className="page-hero page-hero-offset">
+        <div className="container page-hero-content">
           <p className="section-label">Blog</p>
           <h1
             className="section-title"
@@ -62,7 +59,7 @@ export default async function BlogPage({
           >
             Devocionais e Estudos
           </h1>
-          <p className="section-desc" style={{ marginTop: 16 }}>
+          <p className="section-desc page-intro-copy">
             Reflexões semanais, estudos em série e palavras para a caminhada.
           </p>
         </div>

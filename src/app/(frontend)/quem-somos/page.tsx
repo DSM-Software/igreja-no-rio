@@ -12,11 +12,8 @@ export default function QuemSomosPage() {
   return (
     <>
       {/* Page hero */}
-      <div
-        className="page-hero"
-        style={{ paddingTop: "calc(var(--nav-h) + 48px)" }}
-      >
-        <div className="container">
+      <div className="page-hero page-hero-offset">
+        <div className="container page-hero-content">
           <p className="section-label">Nossa história</p>
           <h1
             className="section-title"
@@ -29,15 +26,7 @@ export default function QuemSomosPage() {
 
       {/* Missão */}
       <section className="section">
-        <div
-          className="container"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 80,
-            alignItems: "center",
-          }}
-        >
+        <div className="container content-grid-2 content-grid-align-center">
           <div>
             <p className="section-label">Missão</p>
             <h2 className="section-title">
@@ -60,14 +49,7 @@ export default function QuemSomosPage() {
               caseiros, na amizade real e no discipulado do dia a dia.
             </p>
           </div>
-          <div
-            style={{
-              height: 400,
-              borderRadius: "var(--r-2xl)",
-              background:
-                "linear-gradient(135deg, var(--teal-200), var(--teal-500))",
-            }}
-          />
+          <div className="feature-placeholder feature-placeholder-hero" />
         </div>
       </section>
 
@@ -87,13 +69,7 @@ export default function QuemSomosPage() {
           >
             O que nos guia
           </h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-              gap: 24,
-            }}
-          >
+          <div className="cards-grid">
             {[
               {
                 title: "Palavra",
@@ -112,15 +88,7 @@ export default function QuemSomosPage() {
                 desc: "Somos movidos pela graça — não pela religião. Aqui você é recebido como você é.",
               },
             ].map((v) => (
-              <div
-                key={v.title}
-                style={{
-                  padding: "28px 24px",
-                  background: "var(--paper)",
-                  borderRadius: "var(--r-xl)",
-                  border: "1px solid var(--border)",
-                }}
-              >
+              <div key={v.title} className="surface-card">
                 <h3
                   style={{
                     fontFamily: "var(--font-display)",
@@ -157,11 +125,8 @@ export default function QuemSomosPage() {
           <div
             style={{
               marginTop: 32,
-              padding: "28px 24px",
-              background: "var(--paper)",
-              borderRadius: "var(--r-xl)",
-              border: "1px solid var(--border)",
             }}
+            className="surface-card"
           >
             <p
               style={{
@@ -185,23 +150,16 @@ export default function QuemSomosPage() {
 
       {/* CTA */}
       <section className="section section-bg">
-        <div className="container" style={{ textAlign: "center" }}>
+        <div className="container centered-block narrow-section">
           <h2 className="section-title">Quer nos conhecer pessoalmente?</h2>
           <p
-            className="section-desc"
-            style={{ marginInline: "auto", marginBottom: 32 }}
+            className="section-desc centered-copy"
+            style={{ marginBottom: 32 }}
           >
             Venha no domingo, às 10h, para nossa reunião geral, ou fale com a
             gente para encontrar um grupo caseiro perto de você.
           </p>
-          <div
-            style={{
-              display: "flex",
-              gap: 12,
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-          >
+          <div className="inline-actions" style={{ justifyContent: "center" }}>
             <Link href="/cultos" className="btn btn-primary btn-lg">
               Ver horários dos cultos
             </Link>

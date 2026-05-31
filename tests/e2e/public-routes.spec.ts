@@ -106,6 +106,40 @@ test.describe('Header mobile navigation', () => {
   })
 })
 
+test.describe('Consistência visual responsiva', () => {
+  test('desktop mostra navegação principal sem menu mobile visível', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.goto('/contato')
+
+    await expect(page.locator('.nav-desktop')).toBeVisible()
+    await expect(page.locator('.nav-burger')).toBeHidden()
+    await expect(page.locator('#mobile-navigation')).toBeHidden()
+  })
+
+  test('mobile mostra apenas a navegação compacta antes de abrir o menu', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/contato')
+
+    await expect(page.locator('.nav-desktop')).toBeHidden()
+    await expect(page.locator('.nav-burger')).toBeVisible()
+    await expect(page.locator('#mobile-navigation')).toBeHidden()
+  })
+
+  for (const route of ['/quem-somos', '/cultos', '/downloads', '/contato']) {
+    test(`${route} não gera overflow horizontal em mobile`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 })
+      await page.goto(route)
+
+      const hasHorizontalOverflow = await page.evaluate(() => {
+        const root = document.documentElement
+        return root.scrollWidth > root.clientWidth + 1
+      })
+
+      expect(hasHorizontalOverflow).toBe(false)
+    })
+  }
+})
+
 test.describe('Copy institucional atualizada', () => {
   test('cultos deixa explícito domingo às 10h como reunião geral', async ({ page }) => {
     await page.goto('/cultos')
@@ -124,5 +158,17 @@ test.describe('Copy institucional atualizada', () => {
   test('quem somos não exibe nomes de pastores', async ({ page }) => {
     await page.goto('/quem-somos')
     await expect(page.locator('body')).not.toContainText(/Pr\.|Pra\.|pastor principal|Daniel|Lúcia/i)
+  })
+
+  test('contato não fixa grupos caseiros em um horário rígido', async ({ page }) => {
+    await page.goto('/contato')
+    await expect(page.locator('body')).not.toContainText(/quartas?\s+às\s+19h30/i)
+    await expect(page.locator('body')).toContainText(/grupos caseiros se reúnem em casas espalhadas pela cidade/i)
+  })
+
+  test('agenda pública não exibe datas inválidas', async ({ page }) => {
+    await page.goto('/contato')
+    const eventDays = await page.locator('.event-date-day').allTextContents()
+    expect(eventDays.some((value) => value.includes('NaN'))).toBe(false)
   })
 })

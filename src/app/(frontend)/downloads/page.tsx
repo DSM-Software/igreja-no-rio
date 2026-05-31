@@ -12,47 +12,47 @@ export const metadata: Metadata = {
   openGraph: { title: "Downloads — Igreja no Rio" },
 };
 
+const CATEGORY_ORDER = [
+  "Pregações",
+  "Estudos",
+  "Grupos Caseiros",
+  "Devocionais",
+] as const;
+
 export default async function DownloadsPage() {
   const payload = await getPayload();
-  const downloadsResult = await Promise.allSettled([
-    payload.find({
+  let downloads: Download[] = [];
+
+  try {
+    const result = await payload.find({
       collection: "downloads",
       sort: "-date",
       limit: 100,
-    }),
-  ]);
+    });
+    downloads = result.docs as Download[];
+  } catch {
+    downloads = [];
+  }
 
-  const downloads =
-    downloadsResult[0].status === "fulfilled"
-      ? downloadsResult[0].value.docs
-      : [];
-
-  // Group by category
   const groups = downloads.reduce<Record<string, Download[]>>((acc, dl) => {
-    const cat = (dl as Download).category;
+    const cat = dl.category?.trim() || "Outros";
     if (!acc[cat]) acc[cat] = [];
-    acc[cat].push(dl as Download);
+    acc[cat].push(dl);
     return acc;
   }, {});
 
-  const categoryOrder = [
-    "Pregações",
-    "Estudos",
-    "Grupos Caseiros",
-    "Devocionais",
-  ];
   const sortedCategories = [
-    ...categoryOrder.filter((c) => groups[c]),
-    ...Object.keys(groups).filter((c) => !categoryOrder.includes(c)),
+    ...CATEGORY_ORDER.filter((category) => groups[category]),
+    ...Object.keys(groups).filter(
+      (category) =>
+        !CATEGORY_ORDER.includes(category as (typeof CATEGORY_ORDER)[number]),
+    ),
   ];
 
   return (
     <>
-      <div
-        className="page-hero"
-        style={{ paddingTop: "calc(var(--nav-h) + 48px)" }}
-      >
-        <div className="container">
+      <div className="page-hero page-hero-offset">
+        <div className="container page-hero-content">
           <p className="section-label">Materiais</p>
           <h1
             className="section-title"
@@ -60,7 +60,7 @@ export default async function DownloadsPage() {
           >
             Downloads
           </h1>
-          <p className="section-desc" style={{ marginTop: 16 }}>
+          <p className="section-desc page-intro-copy">
             Áudios das pregações, apostilas de estudo, roteiros de grupos
             caseiros e devocionais para levar para casa.
           </p>
@@ -80,7 +80,7 @@ export default async function DownloadsPage() {
               <p>Nenhum material disponível ainda.</p>
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 56 }}>
+            <div className="section-stack" style={{ gap: 56 }}>
               {sortedCategories.map((cat) => (
                 <section key={cat}>
                   <h2
