@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test'
 const PUBLIC_ROUTES = [
   { path: '/', label: 'Home', heading: /Igreja no Rio/i },
   { path: '/quem-somos', label: 'Quem Somos', heading: /Somos uma família plantada em Santíssimo/i },
-  { path: '/cultos', label: 'Cultos', heading: /10h00|Domingo/i },
+  { path: '/cultos', label: 'Cultos', heading: /domingo,?\s*às?\s*10h|10h00/i },
   { path: '/blog', label: 'Blog', heading: /Devocionais e Estudos/i },
   { path: '/downloads', label: 'Downloads', heading: /Downloads/i },
   { path: '/contato', label: 'Contato', heading: /Rua Ivan Pessoa, 341/i },
@@ -71,5 +71,26 @@ test.describe('Logo correto conforme contexto', () => {
     await page.goto('/blog')
     const logo = page.locator('header img[src*="logo"]').first()
     await expect(logo).toHaveAttribute('src', /logo-IR-dark\.svg/)
+  })
+})
+
+test.describe('Copy institucional atualizada', () => {
+  test('cultos deixa explícito domingo às 10h como reunião geral', async ({ page }) => {
+    await page.goto('/cultos')
+    await expect(page.locator('body')).toContainText(/nossa única reunião geral/i)
+    await expect(page.locator('body')).toContainText(/domingo/i)
+    await expect(page.locator('body')).toContainText(/10h00|10h/i)
+  })
+
+  test('grupos caseiros sem horário rígido e sem termo em inglês', async ({ page }) => {
+    await page.goto('/cultos')
+    await expect(page.locator('body')).toContainText(/grupos caseiros são reuniões/i)
+    await expect(page.locator('body')).toContainText(/não é uma reunião com data e hora rígidas/i)
+    await expect(page.locator('body')).not.toContainText(/\bchurch\b/i)
+  })
+
+  test('quem somos não exibe nomes de pastores', async ({ page }) => {
+    await page.goto('/quem-somos')
+    await expect(page.locator('body')).not.toContainText(/Pr\.|Pra\.|pastor principal|Daniel|Lúcia/i)
   })
 })

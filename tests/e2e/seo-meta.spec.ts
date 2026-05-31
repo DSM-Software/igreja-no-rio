@@ -22,6 +22,8 @@ test.describe('SEO — <title>', () => {
     test(`${route.name} — title inclui nome da página`, async ({ page }) => {
       await page.goto(route.path)
       await expect(page).toHaveTitle(new RegExp(route.name, 'i'))
+      const title = await page.title()
+      expect(title).not.toMatch(/\bchurch\b|\bcurch\b/i)
     })
   }
 })
@@ -33,6 +35,7 @@ test.describe('SEO — meta description', () => {
       const content = await page.locator('meta[name="description"]').getAttribute('content')
       expect(content).toBeTruthy()
       expect(content!.length).toBeGreaterThanOrEqual(20)
+      expect(content!).not.toMatch(/\bchurch\b|\bcurch\b/i)
     })
   }
 })
