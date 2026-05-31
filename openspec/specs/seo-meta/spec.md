@@ -5,7 +5,7 @@ Specifies the SEO metadata requirements for all public pages, including descript
 ## Requirements
 
 ### Requirement: Cada página pública tem <title> descritivo
-O sistema SHALL definir um `<title>` único e descritivo para cada rota pública.
+O sistema SHALL definir um `<title>` único e descritivo para cada rota pública, em português do Brasil e sem termos em inglês no copy institucional.
 
 #### Scenario: Title da home contém nome da marca
 - **WHEN** o usuário acessa `/`
@@ -13,14 +13,14 @@ O sistema SHALL definir um `<title>` único e descritivo para cada rota pública
 
 #### Scenario: Title das páginas internas inclui nome da página e marca
 - **WHEN** o usuário acessa `/quem-somos`, `/cultos`, `/blog`, `/downloads` ou `/contato`
-- **THEN** `document.title` contém o nome da página (ex: "Quem Somos") E "Igreja no Rio"
+- **THEN** `document.title` contém o nome da página em português (ex: "Quem Somos") E "Igreja no Rio"
 
 #### Scenario: Title do post individual contém o título do post
 - **WHEN** o usuário acessa `/blog/<slug>` de um post publicado
 - **THEN** `document.title` contém o título do post
 
 ### Requirement: Cada página tem <meta name="description"> preenchido
-O sistema SHALL incluir uma meta description não vazia em todas as rotas públicas.
+O sistema SHALL incluir uma meta description não vazia em todas as rotas públicas, escrita em português do Brasil e coerente com o texto institucional da página.
 
 #### Scenario: Meta description presente na home
 - **WHEN** o usuário acessa `/`
@@ -28,7 +28,7 @@ O sistema SHALL incluir uma meta description não vazia em todas as rotas públi
 
 #### Scenario: Meta description presente em páginas internas
 - **WHEN** o usuário acessa qualquer rota pública (exceto 404)
-- **THEN** `meta[name="description"]` existe e tem `content` com pelo menos 20 caracteres
+- **THEN** `meta[name="description"]` existe e tem `content` com pelo menos 20 caracteres em português do Brasil
 
 ### Requirement: Open Graph tags presentes nas páginas principais
 O sistema SHALL incluir as meta tags Open Graph (`og:title`, `og:description`, `og:type`) nas páginas públicas para compartilhamento em redes sociais.

@@ -5,7 +5,7 @@ Specifies that all public-facing routes load without errors, that header and foo
 ## Requirements
 
 ### Requirement: Todas as rotas públicas carregam sem erro
-O sistema SHALL carregar cada rota pública retornando HTTP 200 e renderizando o header e footer da Igreja no Rio.
+O sistema SHALL carregar cada rota pública retornando HTTP 200 e renderizando o header e footer da Igreja no Rio com copy institucional em portugues do Brasil.
 
 #### Scenario: Home page carrega
 - **WHEN** o usuário acessa `http://localhost:3000/`
@@ -13,11 +13,15 @@ O sistema SHALL carregar cada rota pública retornando HTTP 200 e renderizando o
 
 #### Scenario: Quem Somos carrega
 - **WHEN** o usuário acessa `/quem-somos`
-- **THEN** a página retorna status 200 e exibe o heading "Somos uma família plantada em Santíssimo"
+- **THEN** a página retorna status 200 e exibe conteúdo institucional sem referências nominais a pessoas específicas
 
-#### Scenario: Cultos carrega
+#### Scenario: Cultos carrega com reunião geral explícita
 - **WHEN** o usuário acessa `/cultos`
-- **THEN** a página retorna status 200 e exibe horários dos cultos (texto "10h00" ou "Domingo")
+- **THEN** a página retorna status 200 e informa que a única reunião geral ocorre no domingo às 10h
+
+#### Scenario: Grupos caseiros com descrição correta
+- **WHEN** o usuário acessa a seção de grupos caseiros nas rotas públicas
+- **THEN** o texto informa que são reuniões em casas, espalhadas pela cidade, sem data e hora rígidas em local único
 
 #### Scenario: Blog carrega
 - **WHEN** o usuário acessa `/blog`
@@ -29,7 +33,7 @@ O sistema SHALL carregar cada rota pública retornando HTTP 200 e renderizando o
 
 #### Scenario: Contato carrega
 - **WHEN** o usuário acessa `/contato`
-- **THEN** a página retorna status 200 e exibe o endereço "Rua Ivan Pessoa, 341"
+- **THEN** a página retorna status 200 e exibe informações de contato da igreja
 
 ### Requirement: Header e footer presentes em todas as páginas
 O sistema SHALL exibir o header de navegação e o footer em todas as rotas públicas.
