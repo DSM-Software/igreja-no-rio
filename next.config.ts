@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '*.amazonaws.com' },
+      { protocol: 'https', hostname: '*.igrejanorio.com' },
+      { protocol: 'https', hostname: '*.igrejanorio.com.br' },
       { protocol: 'https', hostname: '*.r2.cloudflarestorage.com' },
       // MinIO local (desenvolvimento Docker)
       { protocol: 'http', hostname: 'localhost', port: '9000' },
