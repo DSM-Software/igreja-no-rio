@@ -133,7 +133,7 @@ export default function CultosPage() {
               className="btn btn-primary btn-md"
               style={{ marginTop: 28 }}
             >
-              Fale conosco para mais info
+              Fale conosco
             </Link>
           </div>
 
