@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { getPayload } from "@/lib/payload";
-import DownloadCard from "@/components/ui/DownloadCard";
+import { slugify } from "@/lib/utils";
+import DownloadCategoryNav from "@/components/ui/DownloadCategoryNav";
+import DownloadCategorySection from "@/components/ui/DownloadCategorySection";
 import type { Download } from "@/payload-types";
 
 export const dynamic = "force-dynamic";
@@ -67,6 +69,10 @@ export default async function DownloadsPage() {
         </div>
       </div>
 
+      {downloads.length > 0 && (
+        <DownloadCategoryNav categories={sortedCategories} />
+      )}
+
       <section className="section">
         <div className="container">
           {downloads.length === 0 ? (
@@ -82,35 +88,12 @@ export default async function DownloadsPage() {
           ) : (
             <div className="section-stack" style={{ gap: 56 }}>
               {sortedCategories.map((cat) => (
-                <section key={cat}>
-                  <h2
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: 20,
-                      fontWeight: 700,
-                      marginBottom: 16,
-                      paddingBottom: 12,
-                      borderBottom: "1px solid var(--border)",
-                    }}
-                  >
-                    {cat}
-                    <span
-                      style={{
-                        marginInlineStart: 8,
-                        fontWeight: 400,
-                        fontSize: 14,
-                        color: "var(--muted)",
-                      }}
-                    >
-                      ({groups[cat].length})
-                    </span>
-                  </h2>
-                  <div className="downloads-list">
-                    {groups[cat].map((dl) => (
-                      <DownloadCard key={dl.id} item={dl} />
-                    ))}
-                  </div>
-                </section>
+                <DownloadCategorySection
+                  key={cat}
+                  title={cat}
+                  items={groups[cat]}
+                  id={slugify(cat)}
+                />
               ))}
             </div>
           )}

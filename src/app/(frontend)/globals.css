@@ -746,6 +746,56 @@ img, svg { display: block; max-width: 100%; }
 }
 
 /* ───────────────────────────────────────────
+   Downloads — Category Nav (sticky)
+─────────────────────────────────────────── */
+:root { --cat-nav-h: 52px; }
+
+.downloads-category-nav {
+  position: sticky;
+  top: var(--nav-h);
+  z-index: 90;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+  padding-block: 10px;
+}
+
+.downloads-category-nav-inner {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: clamp(16px, 5vw, 48px);
+}
+
+.downloads-category-nav-inner::-webkit-scrollbar { display: none; }
+
+.downloads-category-nav-link {
+  flex-shrink: 0;
+  padding: 6px 16px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+  background: transparent;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.downloads-category-nav-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.downloads-category-section {
+  scroll-margin-top: calc(var(--nav-h) + var(--cat-nav-h));
+}
+
+/* ───────────────────────────────────────────
    Download Cards
 ─────────────────────────────────────────── */
 .downloads-list { display: flex; flex-direction: column; gap: 12px; }
