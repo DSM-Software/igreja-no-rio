@@ -1,30 +1,30 @@
-import Image from 'next/image'
+import Image from "next/image";
 
-type CoverColor = 'teal' | 'navy' | 'sand'
+type CoverColor = "teal" | "navy" | "sand";
 
 interface CoverArtProps {
-  imageUrl?: string | null
-  imageAlt?: string
-  color?: CoverColor
-  className?: string
-  style?: React.CSSProperties
-  sizes?: string
-  priority?: boolean
+  imageUrl?: string | null;
+  imageAlt?: string;
+  color?: CoverColor;
+  className?: string;
+  style?: React.CSSProperties;
+  sizes?: string;
+  priority?: boolean;
 }
 
 export default function CoverArt({
   imageUrl,
-  imageAlt = '',
-  color = 'teal',
-  className = '',
+  imageAlt = "",
+  color = "teal",
+  className = "",
   style,
-  sizes = '(max-width: 768px) 100vw, 50vw',
+  sizes = "(max-width: 768px) 100vw, 50vw",
   priority = false,
 }: CoverArtProps) {
   return (
     <div
       className={`cover-art cover-art-${color} ${className}`}
-      style={{ width: '100%', height: '100%', ...style }}
+      style={{ width: "100%", height: "100%", ...style }}
     >
       {imageUrl && (
         <Image
@@ -33,9 +33,13 @@ export default function CoverArt({
           fill
           sizes={sizes}
           priority={priority}
-          style={{ objectFit: 'cover' }}
+          unoptimized={
+            imageUrl.startsWith("http") ||
+            imageUrl.startsWith("/api/media/file/")
+          }
+          style={{ objectFit: "cover" }}
         />
       )}
     </div>
-  )
+  );
 }
