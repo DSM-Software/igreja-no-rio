@@ -11,7 +11,7 @@
 #   docker run -p 3000:3000 --env-file .env.production igreja-no-rio
 # ─────────────────────────────────────────────────────────────────────────────
 
-FROM dhi.io/node:22-alpine3.23-dev AS base
+FROM node:20-alpine AS base
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
