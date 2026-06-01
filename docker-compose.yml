@@ -105,8 +105,8 @@ services:
       PAYLOAD_TRUSTED_ORIGINS: http://localhost:3000
       PAYLOAD_CSRF_ORIGINS: http://localhost:3000
       # Seed local (altere antes de usar fora de desenvolvimento)
-      SEED_ADMIN_EMAIL: admin.local@igrejanorio.test
-      SEED_ADMIN_PASSWORD: troque-por-uma-senha-forte-local
+      SEED_ADMIN_EMAIL: admin@igrejanorio.com
+      SEED_ADMIN_PASSWORD: igreja123
       SEED_ADMIN_NAME: Admin Local
     depends_on:
       db:
