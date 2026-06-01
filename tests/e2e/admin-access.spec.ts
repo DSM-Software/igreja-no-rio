@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test'
+import { Users } from '@/collections/Users'
+import { canMutateOwnOrElevated, resolveContentOwner } from '@/access/contentAccess'
 
 test.describe('Admin — acesso sem autenticação', () => {
   test('/admin sem auth redireciona para URL contendo "login"', async ({ page }) => {
@@ -69,6 +71,33 @@ test.describe('Admin — credenciais inválidas', () => {
     await page.locator('button[type="submit"]').or(
       page.getByRole('button', { name: /entrar|login/i })
     ).first().click()
-    await expect(page.locator('body')).toContainText(/inválid|incorret|não encontr/i, { timeout: 10_000 })
+    await expect(page.locator('body')).toContainText(/inválid|incorrect|incorret|não encontr/i, { timeout: 10_000 })
+  })
+})
+
+test.describe('Admin — regras de permissão', () => {
+  test('editor não pode gerenciar usuários', async () => {
+    const editorContext = { req: { user: { id: 10, role: 'editor' } } } as any
+
+    expect(Users.access?.create?.(editorContext)).toBe(false)
+    expect(Users.access?.update?.(editorContext)).toBe(false)
+    expect(Users.access?.delete?.(editorContext)).toBe(false)
+  })
+
+  test('autor só recebe filtro de mutação para o próprio owner', async () => {
+    const authorContext = { req: { user: { id: 7, role: 'autor' } } } as any
+
+    expect(canMutateOwnOrElevated(authorContext)).toEqual({ owner: { equals: 7 } })
+  })
+
+  test('owner é fixado automaticamente para autor e preservado em updates', () => {
+    expect(resolveContentOwner({ req: { user: { id: 7, role: 'autor' } } })).toBe(7)
+    expect(
+      resolveContentOwner({
+        value: 99,
+        originalDoc: { owner: 7 },
+        req: { user: { id: 7, role: 'autor' } },
+      })
+    ).toBe(7)
   })
 })

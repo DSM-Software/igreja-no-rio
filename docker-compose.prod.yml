@@ -76,6 +76,13 @@ services:
       S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:?Defina S3_SECRET_ACCESS_KEY}
       # URL pública
       NEXT_PUBLIC_SERVER_URL: ${NEXT_PUBLIC_SERVER_URL:-https://igrejanorio.com}
+      PAYLOAD_SERVER_URL: ${PAYLOAD_SERVER_URL:?Defina PAYLOAD_SERVER_URL no .env.production}
+      PAYLOAD_TRUSTED_ORIGINS: ${PAYLOAD_TRUSTED_ORIGINS:-https://igrejanorio.com,https://www.igrejanorio.com}
+      PAYLOAD_CSRF_ORIGINS: ${PAYLOAD_CSRF_ORIGINS:-https://igrejanorio.com,https://www.igrejanorio.com}
+      # Seed inicial (use apenas quando for rodar o bootstrap administrativo)
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-}
+      SEED_ADMIN_NAME: ${SEED_ADMIN_NAME:-}
     depends_on:
       db:
         condition: service_healthy

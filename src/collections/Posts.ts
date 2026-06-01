@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { canReadPublishedOrOwn, canMutateOwnOrElevated } from '../access/contentAccess'
+import { canReadPublishedOrOwn, canMutateOwnOrElevated, resolveContentOwner } from '../access/contentAccess'
 
 function slugify(s: string) {
   return (s || '')
@@ -95,6 +95,19 @@ export const Posts: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'Desmarque para deixar como rascunho (oculto no site).',
+      },
+    },
+    {
+      name: 'owner',
+      type: 'relationship',
+      relationTo: 'users',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Definido automaticamente a partir do usuario que cria o conteudo.',
+      },
+      hooks: {
+        beforeChange: [resolveContentOwner],
       },
     },
   ],

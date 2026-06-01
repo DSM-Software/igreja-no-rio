@@ -14,6 +14,47 @@ import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+const isProduction = process.env.NODE_ENV === 'production'
+const defaultDevServerURL = 'http://localhost:3000'
+
+function parseOrigins(value?: string) {
+  return (value ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+}
+
+function resolveServerURL() {
+  const configuredURL = process.env.PAYLOAD_SERVER_URL ?? process.env.NEXT_PUBLIC_SERVER_URL
+
+  if (configuredURL) {
+    return configuredURL
+  }
+
+  if (!isProduction) {
+    return defaultDevServerURL
+  }
+
+  throw new Error('Defina PAYLOAD_SERVER_URL ou NEXT_PUBLIC_SERVER_URL em producao.')
+}
+
+function resolveTrustedOrigins(envName: 'PAYLOAD_TRUSTED_ORIGINS' | 'PAYLOAD_CSRF_ORIGINS', fallback: string[]) {
+  const configuredOrigins = parseOrigins(process.env[envName])
+
+  if (configuredOrigins.length > 0) {
+    return configuredOrigins
+  }
+
+  if (isProduction) {
+    return fallback
+  }
+
+  return Array.from(new Set([...fallback, defaultDevServerURL]))
+}
+
+const serverURL = resolveServerURL()
+const trustedOrigins = resolveTrustedOrigins('PAYLOAD_TRUSTED_ORIGINS', [serverURL])
+const csrfOrigins = resolveTrustedOrigins('PAYLOAD_CSRF_ORIGINS', trustedOrigins)
 
 export default buildConfig({
   admin: {
@@ -60,9 +101,9 @@ export default buildConfig({
     }),
   ],
 
-  serverURL: process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000',
+  serverURL,
 
-  cors: [process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000'],
+  cors: trustedOrigins,
 
-  csrf: [process.env.NEXT_PUBLIC_SERVER_URL ?? 'http://localhost:3000'],
+  csrf: csrfOrigins,
 })

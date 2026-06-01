@@ -20,8 +20,14 @@ Variáveis de ambiente (`.env`):
 ```
 DATABASE_URI=postgres://...           # Neon / Supabase / Railway
 PAYLOAD_SECRET=<string-aleatoria-longa>
+PAYLOAD_SERVER_URL=https://igrejanorio.org
+PAYLOAD_TRUSTED_ORIGINS=https://igrejanorio.org,https://www.igrejanorio.com
+PAYLOAD_CSRF_ORIGINS=https://igrejanorio.org,https://www.igrejanorio.com
 BLOB_READ_WRITE_TOKEN=...             # se usar Vercel Blob
 NEXT_PUBLIC_SERVER_URL=https://igrejanorio.org
+SEED_ADMIN_EMAIL=<email-admin-real>
+SEED_ADMIN_PASSWORD=<senha-inicial-forte>
+SEED_ADMIN_NAME=<nome-do-admin>
 ```
 
 ---
@@ -277,6 +283,8 @@ const { docs } = await payload.find({ collection: 'posts', where: { slug: { equa
 
 ## 10. Seed inicial
 O conteúdo de exemplo (5 posts, 7 downloads, 4 eventos) está em `design_reference/app/store.jsx` → objeto `SEED`. Crie um script de seed (`payload.create(...)` para cada item) para popular o banco na primeira subida — ótimo para a igreja já ver o site cheio. O `body` dos posts está em markdown leve; converta para Lexical ou cole como parágrafos.
+
+O bootstrap administrativo deve falhar fechado: nunca use fallback para e-mail, senha ou nome do admin. Exija `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` e `SEED_ADMIN_NAME` com valores reais antes de rodar o seed inicial.
 
 ---
 

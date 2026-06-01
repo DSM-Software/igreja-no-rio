@@ -197,6 +197,10 @@ export interface Post {
    * Desmarque para deixar como rascunho (oculto no site).
    */
   published?: boolean | null;
+  /**
+   * Definido automaticamente a partir do usuario que cria o conteudo.
+   */
+  owner?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -270,6 +274,10 @@ export interface Download {
    * Ex.: 38 min · 2,4 MB
    */
   size?: string | null;
+  /**
+   * Definido automaticamente a partir do usuario que cria o conteudo.
+   */
+  owner?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -292,6 +300,10 @@ export interface Event {
   recurring?: string | null;
   desc?: string | null;
   highlight?: boolean | null;
+  /**
+   * Definido automaticamente a partir do usuario que cria o conteudo.
+   */
+  owner?: (number | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -428,6 +440,7 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
       };
   published?: T;
+  owner?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -445,6 +458,7 @@ export interface DownloadsSelect<T extends boolean = true> {
   file?: T;
   externalUrl?: T;
   size?: T;
+  owner?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -460,6 +474,7 @@ export interface EventsSelect<T extends boolean = true> {
   recurring?: T;
   desc?: T;
   highlight?: T;
+  owner?: T;
   updatedAt?: T;
   createdAt?: T;
 }

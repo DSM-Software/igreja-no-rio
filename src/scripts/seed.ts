@@ -11,6 +11,26 @@ import configPromise from '../payload.config'
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
 
+const ADMIN_PLACEHOLDERS = new Set([
+  'admin@igrejanorio.com',
+  'senha-forte-aqui',
+  'administrador',
+])
+
+function requireAdminEnv(name: 'SEED_ADMIN_EMAIL' | 'SEED_ADMIN_PASSWORD' | 'SEED_ADMIN_NAME') {
+  const rawValue = process.env[name]?.trim()
+
+  if (!rawValue) {
+    throw new Error(`Defina ${name} com um valor real antes de rodar o seed.`)
+  }
+
+  if (ADMIN_PLACEHOLDERS.has(rawValue.toLowerCase())) {
+    throw new Error(`Defina ${name} com um valor real; placeholders inseguros nao sao aceitos.`)
+  }
+
+  return rawValue
+}
+
 /** Converte markdown simples para nós Lexical serializados */
 function mdToLexical(markdown: string) {
   const lines = markdown.split('\n')
@@ -234,9 +254,9 @@ async function main() {
   console.log('🌱 Iniciando seed...')
 
   // 1. Admin user
-  const adminEmail = process.env.SEED_ADMIN_EMAIL ?? 'admin@igrejanorio.com'
-  const adminPass  = process.env.SEED_ADMIN_PASSWORD ?? 'senha-forte-aqui'
-  const adminName  = process.env.SEED_ADMIN_NAME ?? 'Administrador'
+  const adminEmail = requireAdminEnv('SEED_ADMIN_EMAIL')
+  const adminPass = requireAdminEnv('SEED_ADMIN_PASSWORD')
+  const adminName = requireAdminEnv('SEED_ADMIN_NAME')
 
   const existing = await payload.find({
     collection: 'users',
@@ -244,11 +264,14 @@ async function main() {
     limit: 1,
   })
 
+  let adminUserId = existing.docs[0]?.id as number | undefined
+
   if (existing.docs.length === 0) {
-    await payload.create({
+    const createdAdmin = await payload.create({
       collection: 'users',
       data: { name: adminName, email: adminEmail, password: adminPass, role: 'admin' },
     })
+    adminUserId = createdAdmin.id as number
     console.log(`✅ Usuário admin criado: ${adminEmail}`)
   } else {
     console.log(`⏭️  Usuário admin já existe: ${adminEmail}`)
@@ -275,6 +298,7 @@ async function main() {
         tags: p.tags.map((t) => ({ tag: t })),
         published: p.published,
         body: mdToLexical(p.body) as any,
+        owner: adminUserId,
       },
     })
     console.log(`  ✅ "${p.title}"`)
@@ -296,6 +320,7 @@ async function main() {
         speaker: d.speaker ?? undefined,
         desc: d.desc ?? undefined,
         size: d.size ?? undefined,
+        owner: adminUserId,
       },
     })
     console.log(`  ✅ "${d.title}"`)
@@ -317,6 +342,7 @@ async function main() {
         recurring: e.recurring ?? undefined,
         desc: e.desc ?? undefined,
         highlight: e.highlight,
+        owner: adminUserId,
       },
     })
     console.log(`  ✅ "${e.title}"`)

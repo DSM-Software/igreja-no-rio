@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { canMutateOwnOrElevated } from '../access/contentAccess'
+import { canMutateOwnOrElevated, resolveContentOwner } from '../access/contentAccess'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -42,6 +42,19 @@ export const Events: CollectionConfig = {
       type: 'checkbox',
       label: 'Destaque na home',
       defaultValue: false,
+    },
+    {
+      name: 'owner',
+      type: 'relationship',
+      relationTo: 'users',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Definido automaticamente a partir do usuario que cria o conteudo.',
+      },
+      hooks: {
+        beforeChange: [resolveContentOwner],
+      },
     },
   ],
 }

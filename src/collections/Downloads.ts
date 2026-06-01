@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { canMutateOwnOrElevated } from '../access/contentAccess'
+import { canMutateOwnOrElevated, resolveContentOwner } from '../access/contentAccess'
+import { getSafeExternalURL } from '../lib/utils'
 
 export const Downloads: CollectionConfig = {
   slug: 'downloads',
@@ -52,12 +53,31 @@ export const Downloads: CollectionConfig = {
       type: 'text',
       label: 'Ou link externo (YouTube, podcast…)',
       admin: { description: 'Use quando o áudio é grande demais para upload.' },
+      validate: (value) => {
+        if (!value) return true
+        return getSafeExternalURL(value)
+          ? true
+          : 'Use uma URL absoluta com protocolo http:// ou https://.'
+      },
     },
     {
       name: 'size',
       type: 'text',
       label: 'Tamanho / duração',
       admin: { description: 'Ex.: 38 min · 2,4 MB' },
+    },
+    {
+      name: 'owner',
+      type: 'relationship',
+      relationTo: 'users',
+      admin: {
+        position: 'sidebar',
+        readOnly: true,
+        description: 'Definido automaticamente a partir do usuario que cria o conteudo.',
+      },
+      hooks: {
+        beforeChange: [resolveContentOwner],
+      },
     },
   ],
 }
