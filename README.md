@@ -159,3 +159,29 @@ Três tipos principais + mídia + usuários:
 - `app/admin.jsx` — painel CRUD (referência do que o Payload vai substituir; bom para entender os campos de cada formulário)
 - `app/ui.jsx` — componentes base (Header, Footer, Btn, Tag, CoverArt, LogoMark, Container)
 - `app/tweaks-panel.jsx` / `app/image-slot.js` — utilitários do protótipo (não precisam ir pra produção)
+
+---
+
+## Checklist de deploy e rollback
+
+Antes de publicar em produção:
+
+- Confirmar `PAYLOAD_SERVER_URL`, `PAYLOAD_TRUSTED_ORIGINS`, `PAYLOAD_CSRF_ORIGINS` e `NEXT_PUBLIC_SERVER_URL` com os domínios reais de produção.
+- Rodar `npm run lint`, `npm audit --omit=dev` e as suítes Playwright críticas (`admin-access`, `downloads`, `public-routes`).
+- Garantir que o banco de produção receberá as migrations novas antes do tráfego normal (`npm run migrate`).
+- Validar que o proxy/Nginx publicado inclui o baseline de headers de segurança, incluindo `Content-Security-Policy`.
+- Confirmar que `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` e `SEED_ADMIN_NAME` estão definidos com valores reais apenas se o seed inicial for executado.
+
+Sequência sugerida de deploy:
+
+- Atualizar dependências e imagem da aplicação.
+- Publicar variáveis de ambiente de origem confiável.
+- Aplicar migrations.
+- Subir a aplicação e validar `/`, `/downloads`, `/contato`, `/privacidade` e `/admin/login`.
+
+Rollback sugerido:
+
+- Reverter a imagem/commit da aplicação para a versão anterior.
+- Restaurar as variáveis de ambiente anteriores de `PAYLOAD_SERVER_URL`, `PAYLOAD_TRUSTED_ORIGINS`, `PAYLOAD_CSRF_ORIGINS` e `NEXT_PUBLIC_SERVER_URL`.
+- Se a regressão vier de headers/proxy, restaurar a configuração anterior do Nginx e reiniciar apenas o proxy.
+- Se a regressão vier da migration de ownership, restaurar o backup do banco ou aplicar o rollback da migration antes de religar a versão anterior da app.

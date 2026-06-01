@@ -33,7 +33,11 @@ export default function Header() {
   }, []);
 
   useEffect(() => {
-    setMenuOpen(false);
+    const closeMenu = window.setTimeout(() => {
+      setMenuOpen(false);
+    }, 0);
+
+    return () => window.clearTimeout(closeMenu);
   }, [pathname]);
 
   useEffect(() => {
