@@ -1,26 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { getPayload } from "@/lib/payload";
-import EventCard from "@/components/ui/EventCard";
-
-export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Contato",
   description:
-    "Entre em contato com a Igreja no Rio. Endereço, telefone e agenda de eventos em Santíssimo, RJ.",
+    "Entre em contato com a Igreja no Rio. Endereço, e-mail e canais de contato em Santíssimo, RJ.",
   openGraph: { title: "Contato — Igreja no Rio" },
 };
 
-export default async function ContatoPage() {
-  const payload = await getPayload();
-  const { docs: events } = await payload.find({
-    collection: "events",
-    sort: "date",
-    limit: 8,
-  });
-
+export default function ContatoPage() {
   return (
     <>
       <div className="page-hero page-hero-offset">
@@ -40,7 +29,7 @@ export default async function ContatoPage() {
       </div>
 
       <section className="section">
-        <div className="container content-grid-2 content-grid-tight">
+        <div className="container">
           <div>
             <h2 className="section-title section-block-title">Informações</h2>
 
@@ -133,25 +122,6 @@ export default async function ContatoPage() {
                 </p>
               </div>
             </div>
-          </div>
-
-          <div>
-            <h2 className="section-title section-block-title">
-              Próximos eventos
-            </h2>
-            <p className="section-desc" style={{ marginBottom: 32 }}>
-              Veja a agenda da igreja e escolha uma boa ocasião para nos
-              visitar.
-            </p>
-            {events.length === 0 ? (
-              <p style={{ color: "var(--muted)" }}>Nenhum evento cadastrado.</p>
-            ) : (
-              <div className="events-list">
-                {events.map((ev) => (
-                  <EventCard key={ev.id} event={ev as any} />
-                ))}
-              </div>
-            )}
           </div>
         </div>
       </section>

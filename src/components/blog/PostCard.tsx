@@ -30,11 +30,11 @@ export default function PostCard({ post }: PostCardProps) {
 
       <div className="post-card-body">
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <span className={`tag tag-${post.coverColor === 'navy' ? 'navy' : 'teal'}`}>
+          <span style={{ fontSize: "0.75rem" }} className={`tag tag-${post.coverColor === 'navy' ? 'navy' : 'teal'}`}>
             {post.category}
           </span>
           {post.serie && (
-            <span className="tag tag-neutral">{post.serie}</span>
+            <span style={{ fontSize: "0.75rem" }} className="tag tag-neutral">{post.serie}</span>
           )}
         </div>
 
