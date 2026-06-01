@@ -80,7 +80,7 @@ export default async function HomePage() {
               </p>
             </div>
             <Link
-              href="/contato"
+              href="/agenda"
               className="btn btn-white btn-md"
               style={{ flexShrink: 0 }}
             >
@@ -137,7 +137,7 @@ export default async function HomePage() {
               </div>
             </div>
             <Link
-              href="/contato"
+              href="/agenda"
               className="btn btn-outline btn-md"
               style={{ marginTop: 24 }}
             >
