@@ -53,7 +53,7 @@ export const Downloads: CollectionConfig = {
       type: 'text',
       label: 'Ou link externo (YouTube, podcast…)',
       admin: { description: 'Use quando o áudio é grande demais para upload.' },
-      validate: (value) => {
+      validate: (value: string | null | undefined) => {
         if (!value) return true
         return getSafeExternalURL(value)
           ? true
