@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { getPayload } from "@/lib/payload";
 import EventCard from "@/components/ui/EventCard";
@@ -110,95 +111,27 @@ export default async function ContatoPage() {
                   marginBottom: 20,
                 }}
               >
-                Envie uma mensagem
+                Canais de contato
               </h3>
-              <form
-                style={{ display: "flex", flexDirection: "column", gap: 16 }}
-              >
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      fontSize: 13,
-                      fontWeight: 600,
-                      marginBottom: 6,
-                    }}
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                <p className="supporting-copy" style={{ margin: 0 }}>
+                  Este site nao envia as informacoes digitadas em um formulario de contato. Para falar com a igreja, use um canal funcional abaixo.
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+                  <a
+                    href="mailto:contato@igrejanorio.com"
+                    className="btn btn-primary btn-md"
                   >
-                    Nome
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Seu nome"
-                    style={{
-                      width: "100%",
-                      padding: "10px 14px",
-                      border: "1.5px solid var(--border)",
-                      borderRadius: "var(--r-md)",
-                      fontSize: 14,
-                      fontFamily: "var(--font-body)",
-                      outline: "none",
-                    }}
-                  />
+                    Enviar e-mail
+                  </a>
+                  <Link href="/privacidade" className="btn btn-outline btn-md">
+                    Ver política de privacidade
+                  </Link>
                 </div>
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      fontSize: 13,
-                      fontWeight: 600,
-                      marginBottom: 6,
-                    }}
-                  >
-                    E-mail
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="seu@email.com"
-                    style={{
-                      width: "100%",
-                      padding: "10px 14px",
-                      border: "1.5px solid var(--border)",
-                      borderRadius: "var(--r-md)",
-                      fontSize: 14,
-                      fontFamily: "var(--font-body)",
-                      outline: "none",
-                    }}
-                  />
-                </div>
-                <div>
-                  <label
-                    style={{
-                      display: "block",
-                      fontSize: 13,
-                      fontWeight: 600,
-                      marginBottom: 6,
-                    }}
-                  >
-                    Mensagem
-                  </label>
-                  <textarea
-                    placeholder="Como posso te ajudar?"
-                    rows={4}
-                    style={{
-                      width: "100%",
-                      padding: "10px 14px",
-                      border: "1.5px solid var(--border)",
-                      borderRadius: "var(--r-md)",
-                      fontSize: 14,
-                      fontFamily: "var(--font-body)",
-                      outline: "none",
-                      resize: "vertical",
-                    }}
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-md"
-                  style={{ alignSelf: "flex-start" }}
-                >
-                  Enviar mensagem
-                </button>
-              </form>
+                <p className="supporting-copy" style={{ margin: 0 }}>
+                  Se voce entrar em contato por e-mail, seus dados serao usados apenas para responder sua mensagem e conduzir o atendimento solicitado. Leia a <Link href="/privacidade">Política de Privacidade</Link> para mais detalhes.
+                </p>
+              </div>
             </div>
           </div>
 

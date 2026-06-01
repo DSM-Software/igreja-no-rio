@@ -7,6 +7,7 @@ const NAV = [
   { href: "/blog", label: "Blog" },
   { href: "/downloads", label: "Downloads" },
   { href: "/contato", label: "Contato" },
+  { href: "/privacidade", label: "Privacidade" },
 ];
 
 export default function Footer() {
@@ -54,7 +55,9 @@ export default function Footer() {
             © {new Date().getFullYear()} Igreja no Rio. Todos os direitos
             reservados.
           </span>
-          <span className="footer-meta">Santíssimo, RJ</span>
+          <span className="footer-meta">
+            <Link href="/privacidade">Política de Privacidade</Link>
+          </span>
         </div>
       </div>
     </footer>

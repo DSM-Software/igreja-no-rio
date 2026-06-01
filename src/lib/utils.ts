@@ -28,3 +28,19 @@ export function slugify(s: string): string {
     .replace(/\s+/g, '-')
     .slice(0, 60)
 }
+
+export function getSafeExternalURL(value: string | null | undefined): string | null {
+  if (!value) return null
+
+  try {
+    const parsedURL = new URL(value)
+
+    if (parsedURL.protocol !== 'https:' && parsedURL.protocol !== 'http:') {
+      return null
+    }
+
+    return parsedURL.toString()
+  } catch {
+    return null
+  }
+}

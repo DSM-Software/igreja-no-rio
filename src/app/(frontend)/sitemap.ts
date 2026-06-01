@@ -9,6 +9,7 @@ const STATIC_ROUTES = [
   { path: '/blog', priority: 0.9, changeFrequency: 'daily' },
   { path: '/downloads', priority: 0.8, changeFrequency: 'weekly' },
   { path: '/contato', priority: 0.7, changeFrequency: 'monthly' },
+  { path: '/privacidade', priority: 0.4, changeFrequency: 'yearly' },
 ] as const
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

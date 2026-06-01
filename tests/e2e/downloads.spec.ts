@@ -59,4 +59,20 @@ test.describe('Downloads — botão de download', () => {
     expect(href).toBeTruthy()
     expect(href!.length).toBeGreaterThan(0)
   })
+
+  test('botões públicos de download não usam protocolos inseguros', async ({ page }) => {
+    await page.goto('/downloads')
+    const downloadBtns = page.getByRole('link', { name: /baixar/i })
+    const count = await downloadBtns.count()
+    if (count === 0) {
+      test.skip()
+      return
+    }
+
+    for (let index = 0; index < count; index++) {
+      const href = await downloadBtns.nth(index).getAttribute('href')
+      expect(href).toBeTruthy()
+      expect(href).not.toMatch(/^javascript:/i)
+    }
+  })
 })

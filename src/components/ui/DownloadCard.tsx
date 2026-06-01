@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/react'
-import { fmtDate } from '@/lib/utils'
+import { fmtDate, getSafeExternalURL } from '@/lib/utils'
 import type { Download } from '@/payload-types'
 
 const KIND_META: Record<string, { icon: string; label: string; cls: string }> = {
@@ -14,8 +14,9 @@ interface DownloadCardProps {
 
 export default function DownloadCard({ item }: DownloadCardProps) {
   const meta = KIND_META[item.kind] ?? KIND_META.audio
+  const safeExternalURL = getSafeExternalURL(item.externalUrl)
   const fileUrl =
-    item.externalUrl ||
+    safeExternalURL ||
     (item.file && typeof item.file === 'object' ? (item.file as any)?.url : null)
 
   return (
@@ -62,7 +63,7 @@ export default function DownloadCard({ item }: DownloadCardProps) {
           rel="noopener noreferrer"
           className="btn btn-outline btn-sm"
           style={{ flexShrink: 0 }}
-          download={!item.externalUrl}
+          download={!safeExternalURL}
         >
           <Icon icon="material-symbols:download-rounded" />
           Baixar

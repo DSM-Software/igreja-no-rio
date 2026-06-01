@@ -7,6 +7,7 @@ const PUBLIC_ROUTES = [
   { path: '/blog', label: 'Blog', heading: /Devocionais e Estudos/i },
   { path: '/downloads', label: 'Downloads', heading: /Downloads/i },
   { path: '/contato', label: 'Contato', heading: /Rua Ivan Pessoa, 341/i },
+  { path: '/privacidade', label: 'Privacidade', heading: /Política de Privacidade/i },
 ]
 
 test.describe('Public routes — smoke', () => {
@@ -40,6 +41,13 @@ test.describe('Header e footer em todas as rotas', () => {
     test(`${route.label} — footer com "Igreja no Rio"`, async ({ page }) => {
       await page.goto(route.path)
       await expect(page.locator('footer[role="contentinfo"]')).toContainText('Igreja no Rio')
+    })
+
+    test(`${route.label} — footer aponta para política de privacidade`, async ({ page }) => {
+      await page.goto(route.path)
+      const privacyLink = page.locator('footer').getByRole('link', { name: /privacidade|política de privacidade/i }).first()
+      await expect(privacyLink).toBeVisible()
+      await expect(privacyLink).toHaveAttribute('href', '/privacidade')
     })
   }
 })
@@ -164,6 +172,20 @@ test.describe('Copy institucional atualizada', () => {
     await page.goto('/contato')
     await expect(page.locator('body')).not.toContainText(/quartas?\s+às\s+19h30/i)
     await expect(page.locator('body')).toContainText(/grupos caseiros se reúnem em casas espalhadas pela cidade/i)
+  })
+
+  test('contato comunica que o formulário não envia dados e aponta para a política', async ({ page }) => {
+    await page.goto('/contato')
+    await expect(page.locator('body')).toContainText(/nao envia as informacoes digitadas em um formulario de contato/i)
+    await expect(page.getByRole('link', { name: /ver política de privacidade/i })).toHaveAttribute('href', '/privacidade')
+    await expect(page.getByRole('link', { name: /enviar e-mail/i })).toHaveAttribute('href', /mailto:contato@igrejanorio\.com/)
+  })
+
+  test('política de privacidade identifica canal de contato e direitos do titular', async ({ page }) => {
+    await page.goto('/privacidade')
+    await expect(page.locator('body')).toContainText(/contato@igrejanorio\.com/i)
+    await expect(page.locator('body')).toContainText(/direitos/i)
+    await expect(page.locator('body')).toContainText(/dados pessoais/i)
   })
 
   test('agenda pública não exibe datas inválidas', async ({ page }) => {
