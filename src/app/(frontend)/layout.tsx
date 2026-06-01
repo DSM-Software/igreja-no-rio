@@ -22,6 +22,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SERVER_URL ?? "https://igrejanorio.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    shortcut: ["/favicon.svg"],
+  },
   title: {
     default: "Igreja no Rio — Santíssimo, RJ",
     template: "%s — Igreja no Rio",
