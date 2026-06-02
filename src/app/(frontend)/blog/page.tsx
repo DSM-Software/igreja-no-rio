@@ -50,23 +50,22 @@ export default async function BlogPage({
 
   return (
     <>
-      <div className="page-hero page-hero-offset">
-        <div className="container page-hero-content">
-          <p className="section-label">Blog</p>
-          <h1
-            className="section-title"
-            style={{ fontSize: "clamp(32px, 5vw, 56px)" }}
-          >
+      <div className="mx-auto w-full max-w-content px-4 pt-36 md:px-8">
+        <div className="max-w-3xl">
+          <p className="font-display text-xs font-semibold uppercase tracking-[0.16em] text-brand-600">
+            Blog
+          </p>
+          <h1 className="mt-2 font-display text-[clamp(34px,5vw,56px)] font-bold tracking-[-0.02em] text-ink">
             Devocionais e Estudos
           </h1>
-          <p className="section-desc page-intro-copy">
+          <p className="mt-4 text-base leading-8 text-ink-2">
             Reflexões semanais, estudos em série e palavras para a caminhada.
           </p>
         </div>
       </div>
 
-      <section className="section">
-        <div className="container">
+      <section className="py-14">
+        <div className="mx-auto w-full max-w-content px-4 md:px-8">
           <BlogFilters
             categories={categories}
             series={series}
@@ -75,17 +74,11 @@ export default async function BlogPage({
           />
 
           {posts.length === 0 ? (
-            <div
-              style={{
-                textAlign: "center",
-                padding: "64px 0",
-                color: "var(--muted)",
-              }}
-            >
-              <p style={{ fontSize: 18 }}>Nenhum post encontrado.</p>
+            <div className="py-16 text-center text-muted">
+              <p className="text-lg">Nenhum post encontrado.</p>
             </div>
           ) : (
-            <div className="posts-grid">
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {posts.map((post) => (
                 <PostCard key={post.id} post={post as any} />
               ))}

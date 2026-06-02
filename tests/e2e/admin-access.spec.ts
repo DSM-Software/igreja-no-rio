@@ -2,12 +2,21 @@ import { test, expect } from '@playwright/test'
 import { Users } from '@/collections/Users'
 import { canMutateOwnOrElevated, resolveContentOwner } from '@/access/contentAccess'
 
+async function expectAdminLoginScreen(page: import('@playwright/test').Page) {
+  const emailInput = page.getByRole('textbox', { name: /email/i }).first()
+  const passwordInput = page.getByRole('textbox', { name: /password/i }).first()
+  const submitBtn = page.getByRole('button', { name: /entrar|login/i }).first()
+
+  await expect(emailInput).toBeVisible({ timeout: 10_000 })
+  await expect(passwordInput).toBeVisible({ timeout: 10_000 })
+  await expect(submitBtn).toBeVisible({ timeout: 10_000 })
+}
+
 test.describe('Admin — acesso sem autenticação', () => {
   test('/admin sem auth redireciona para URL contendo "login"', async ({ page }) => {
-    // Use commit so we don't wait for the full page load (Payload admin may error in dev)
-    await page.goto('/admin', { waitUntil: 'commit' })
-    await page.waitForURL(/login/, { timeout: 10_000 })
-    expect(page.url()).toMatch(/login/)
+    await page.goto('/admin', { waitUntil: 'domcontentloaded' })
+    await page.waitForURL(/\/admin(\/login)?/, { timeout: 15_000 })
+    await expectAdminLoginScreen(page)
   })
 })
 
@@ -18,10 +27,7 @@ test.describe('Admin — formulário de login', () => {
       test.skip()
       return
     }
-    const emailInput = page.locator('input[name="email"], input[type="email"]').first()
-    const passwordInput = page.locator('input[type="password"]').first()
-    await expect(emailInput).toBeVisible({ timeout: 10_000 })
-    await expect(passwordInput).toBeVisible({ timeout: 10_000 })
+    await expectAdminLoginScreen(page)
   })
 
   test('botão de submit presente em /admin/login', async ({ page }) => {
@@ -30,9 +36,7 @@ test.describe('Admin — formulário de login', () => {
       test.skip()
       return
     }
-    const submitBtn = page.locator('button[type="submit"]').or(
-      page.getByRole('button', { name: /entrar|login/i })
-    ).first()
+    const submitBtn = page.getByRole('button', { name: /entrar|login/i }).first()
     await expect(submitBtn).toBeVisible({ timeout: 10_000 })
   })
 })
@@ -50,11 +54,9 @@ test.describe('Admin — login com credenciais válidas', () => {
       test.skip()
       return
     }
-    await page.locator('input[name="email"], input[type="email"]').first().fill(email)
-    await page.locator('input[type="password"]').first().fill(password)
-    await page.locator('button[type="submit"]').or(
-      page.getByRole('button', { name: /entrar|login/i })
-    ).first().click()
+    await page.getByRole('textbox', { name: /email/i }).first().fill(email)
+    await page.getByRole('textbox', { name: /password/i }).first().fill(password)
+    await page.getByRole('button', { name: /entrar|login/i }).first().click()
     await expect(page).toHaveURL(/\/admin(?!\/login)/, { timeout: 15_000 })
   })
 })
@@ -66,11 +68,9 @@ test.describe('Admin — credenciais inválidas', () => {
       test.skip()
       return
     }
-    await page.locator('input[name="email"], input[type="email"]').first().fill('invalido@teste.com')
-    await page.locator('input[type="password"]').first().fill('senhaerrada123')
-    await page.locator('button[type="submit"]').or(
-      page.getByRole('button', { name: /entrar|login/i })
-    ).first().click()
+    await page.getByRole('textbox', { name: /email/i }).first().fill('invalido@teste.com')
+    await page.getByRole('textbox', { name: /password/i }).first().fill('senhaerrada123')
+    await page.getByRole('button', { name: /entrar|login/i }).first().click()
     await expect(page.locator('body')).toContainText(/inválid|incorrect|incorret|não encontr/i, { timeout: 10_000 })
   })
 })

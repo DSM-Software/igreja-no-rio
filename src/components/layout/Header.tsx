@@ -50,22 +50,31 @@ export default function Header() {
 
   const solid = !isDarkHero || scrolled;
   const onLight = solid;
+  const desktopNavLink =
+    "font-display text-sm font-semibold transition-colors duration-200";
 
   return (
     <header
-      className={`site-header ${solid ? "solid" : "transparent"}`}
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-200 ${
+        solid
+          ? "border-border bg-white/95 shadow-soft backdrop-blur"
+          : "border-transparent bg-transparent"
+      }`}
       role="banner"
     >
-      <div className="header-inner">
+      <div className="mx-auto flex h-[76px] w-full max-w-content items-center justify-between px-4 md:px-8">
         <Link
           href="/"
           aria-label="Igreja no Rio — início"
-          className="header-brand"
+          className="inline-flex shrink-0 items-center"
         >
           <LogoMark onLight={onLight} height={36} />
         </Link>
 
-        <nav aria-label="Navegação principal" className="nav-desktop">
+        <nav
+          aria-label="Navegação principal"
+          className="hidden items-center gap-6 lg:flex"
+        >
           {NAV_LINKS.map(({ href, label }) => {
             const active =
               href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -73,7 +82,13 @@ export default function Header() {
               <Link
                 key={href}
                 href={href}
-                className={`nav-link ${active ? "active" : ""}`}
+                className={`${desktopNavLink} ${
+                  active
+                    ? "text-brand-600"
+                    : solid
+                      ? "text-ink hover:text-brand-600"
+                      : "text-white/90 hover:text-white"
+                }`}
               >
                 {label}
               </Link>
@@ -81,8 +96,7 @@ export default function Header() {
           })}
           <Link
             href="/contato"
-            className="btn btn-primary btn-sm"
-            style={{ marginInlineStart: 8 }}
+            className="ml-2 inline-flex h-10 items-center rounded-full bg-brand-500 px-4 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
           >
             Fale conosco
           </Link>
@@ -90,7 +104,11 @@ export default function Header() {
 
         <button
           type="button"
-          className="nav-burger"
+          className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors lg:hidden ${
+            solid
+              ? "border-border bg-white text-ink"
+              : "border-white/30 bg-white/10 text-white"
+          }`}
           aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
           aria-expanded={menuOpen}
           aria-controls={mobileNavigationId}
@@ -108,7 +126,9 @@ export default function Header() {
 
       <nav
         id={mobileNavigationId}
-        className={`nav-mobile ${menuOpen ? "open" : ""}`}
+        className={`${
+          menuOpen ? "grid" : "hidden"
+        } gap-2 border-t border-border bg-white px-4 py-4 lg:hidden`}
         aria-label="Navegação principal mobile"
         aria-hidden={!menuOpen}
       >
@@ -119,7 +139,11 @@ export default function Header() {
             <Link
               key={`mobile-${href}`}
               href={href}
-              className={`nav-mobile-link ${active ? "active" : ""}`}
+              className={`rounded-xl px-3 py-2 font-display text-base font-semibold transition-colors ${
+                active
+                  ? "bg-brand-50 text-brand-700"
+                  : "text-ink hover:bg-bg hover:text-brand-700"
+              }`}
               onClick={() => setMenuOpen(false)}
             >
               {label}
@@ -128,7 +152,7 @@ export default function Header() {
         })}
         <Link
           href="/contato"
-          className="btn btn-primary btn-sm nav-mobile-cta"
+          className="mt-2 inline-flex h-10 items-center justify-center rounded-full bg-brand-500 px-4 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
           onClick={() => setMenuOpen(false)}
         >
           Fale conosco

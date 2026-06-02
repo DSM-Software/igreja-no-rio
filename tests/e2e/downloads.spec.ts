@@ -1,20 +1,23 @@
 import { test, expect } from '@playwright/test'
 
+const downloadCards = (page: import('@playwright/test').Page) =>
+  page.locator('.downloads-list > div')
+
 test.describe('Downloads — listagem agrupada', () => {
   test('exibe .download-card e heading de categoria (com seed)', async ({ page }) => {
     await page.goto('/downloads')
-    const cards = page.locator('.download-card')
+    const cards = downloadCards(page)
     await expect(cards.first()).toBeVisible()
-    const categoryHeading = page.locator('h2').first()
+    const categoryHeading = page.locator('section.downloads-category-section h2').first()
     await expect(categoryHeading).not.toBeEmpty()
   })
 
   test('exibe "Nenhum material disponível ainda" quando vazio', async ({ page }) => {
     await page.goto('/downloads')
-    const cards = page.locator('.download-card')
+    const cards = downloadCards(page)
     const count = await cards.count()
     if (count === 0) {
-      await expect(page.locator('body')).toContainText('Nenhum material disponível ainda')
+      await expect(page.locator('body')).toContainText(/Nenhum material disponível ainda\.?/i)
     } else {
       test.skip()
     }
@@ -22,26 +25,26 @@ test.describe('Downloads — listagem agrupada', () => {
 })
 
 test.describe('Downloads — ícones por tipo', () => {
-  test('.download-icon-audio presente para tipo audio', async ({ page }) => {
+  test('metadado Áudio presente para itens de áudio', async ({ page }) => {
     await page.goto('/downloads')
-    const audioIcon = page.locator('.download-icon-audio').first()
-    const count = await audioIcon.count()
+    const audioLabel = page.locator('span', { hasText: /^Áudio$/ }).first()
+    const count = await audioLabel.count()
     if (count === 0) {
       test.skip()
       return
     }
-    await expect(audioIcon).toBeVisible()
+    await expect(audioLabel).toBeVisible()
   })
 
-  test('.download-icon-pdf presente para tipo pdf', async ({ page }) => {
+  test('metadado PDF presente para itens de pdf', async ({ page }) => {
     await page.goto('/downloads')
-    const pdfIcon = page.locator('.download-icon-pdf').first()
-    const count = await pdfIcon.count()
+    const pdfLabel = page.locator('span', { hasText: /^PDF$/ }).first()
+    const count = await pdfLabel.count()
     if (count === 0) {
       test.skip()
       return
     }
-    await expect(pdfIcon).toBeVisible()
+    await expect(pdfLabel).toBeVisible()
   })
 })
 

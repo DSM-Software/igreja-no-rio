@@ -33,15 +33,21 @@ export default function EventCard({ event }: EventCardProps) {
     hasValidDate && dateValue ? MONTHS_SHORT[dateValue.getMonth()] : "";
 
   return (
-    <div className="event-card">
-      <div className="event-date-block">
-        <p className="event-date-day">{day}</p>
-        <p className="event-date-mon">{mon}</p>
+    <div className="flex gap-4 rounded-card border border-border bg-white p-4 shadow-soft">
+      <div className="flex min-w-[70px] flex-col items-center justify-center rounded-soft bg-brand-50 px-3 py-2 text-brand-700">
+        <p className="font-display text-2xl font-extrabold leading-none">
+          {day}
+        </p>
+        <p className="mt-1 font-display text-xs font-semibold uppercase tracking-wide">
+          {mon}
+        </p>
       </div>
 
-      <div className="event-info">
-        <h4>{event.title}</h4>
-        <p>
+      <div className="min-w-0 flex-1">
+        <h4 className="font-display text-lg font-bold text-ink">
+          {event.title}
+        </h4>
+        <p className="mt-1 text-sm text-ink-2">
           <Icon
             icon="material-symbols:schedule-outline-rounded"
             style={{ verticalAlign: "middle", marginRight: 4 }}
@@ -50,7 +56,7 @@ export default function EventCard({ event }: EventCardProps) {
           {event.recurring && <> · {event.recurring}</>}
         </p>
         {event.location && (
-          <p style={{ marginTop: 4 }}>
+          <p className="mt-1 text-sm text-ink-2">
             <Icon
               icon="material-symbols:location-on-outline-rounded"
               style={{ verticalAlign: "middle", marginRight: 4 }}
@@ -59,9 +65,7 @@ export default function EventCard({ event }: EventCardProps) {
           </p>
         )}
         {event.desc && (
-          <p style={{ marginTop: 6, color: "var(--ink-2)", fontSize: 13 }}>
-            {event.desc}
-          </p>
+          <p className="mt-2 text-sm leading-6 text-ink-2">{event.desc}</p>
         )}
       </div>
     </div>

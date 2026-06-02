@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Mulish:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ───────────────────────────────────────────
    Design Tokens — Igreja no Rio
@@ -311,166 +313,6 @@ img, svg { display: block; max-width: 100%; }
   color: transparent;
 }
 
-/* ───────────────────────────────────────────
-   Header
-─────────────────────────────────────────── */
-.site-header {
-  position: fixed;
-  top: 0;
-  inset-inline: 0;
-  height: var(--nav-h);
-  z-index: 100;
-  transition: background 0.25s, box-shadow 0.25s;
-  display: flex;
-  align-items: center;
-}
-
-.site-header.transparent {
-  background: transparent;
-  color: white;
-}
-
-.site-header.solid {
-  background: var(--paper);
-  box-shadow: var(--shadow-sm);
-  color: var(--ink);
-}
-
-.site-header .header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  width: 100%;
-  max-width: var(--maxw);
-  margin-inline: auto;
-  padding-inline: clamp(16px, 5vw, 48px);
-  min-height: var(--nav-h);
-}
-
-.header-brand {
-  flex-shrink: 0;
-}
-
-.site-header nav {
-  display: flex;
-  gap: 4px;
-  margin-inline-start: auto;
-  align-items: center;
-}
-
-.nav-burger {
-  display: none;
-  margin-inline-start: auto;
-  width: 42px;
-  height: 42px;
-  border: none;
-  border-radius: var(--r-md);
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  cursor: pointer;
-}
-
-.site-header.solid .nav-burger {
-  background: var(--bg);
-  color: var(--ink);
-}
-
-.site-header.transparent .nav-burger {
-  background: rgba(255,255,255,.16);
-  color: white;
-}
-
-.nav-mobile {
-  display: none;
-  visibility: hidden;
-}
-
-.nav-link {
-  padding: 8px 12px;
-  border-radius: var(--r-md);
-  font-size: 14px;
-  font-weight: 500;
-  transition: background 0.15s, color 0.15s;
-  white-space: nowrap;
-}
-
-.site-header.solid .nav-link:hover { background: var(--bg); }
-.site-header.transparent .nav-link:hover { background: rgba(255,255,255,.1); }
-.nav-link.active { color: var(--accent); }
-
-/* ───────────────────────────────────────────
-   Footer
-─────────────────────────────────────────── */
-.site-footer {
-  background: var(--navy-900);
-  color: rgba(255,255,255,.65);
-  padding: 64px 0 32px;
-}
-
-.site-footer a:hover { color: white; }
-
-.footer-brand {
-  max-width: 320px;
-}
-
-.footer-brand-link {
-  display: inline-flex;
-}
-
-.footer-body-copy {
-  margin-top: 16px;
-  font-size: 14px;
-  line-height: 1.7;
-}
-
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 48px;
-  margin-bottom: 48px;
-}
-
-.footer-col h4 {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.3);
-  margin-bottom: 16px;
-}
-
-.footer-col p, .footer-col a {
-  font-size: 14px;
-  line-height: 1.8;
-  display: block;
-}
-
-.footer-contact-line {
-  margin-top: 4px;
-}
-
-.footer-contact-top {
-  margin-top: 12px;
-}
-
-.footer-bottom {
-  border-top: 1px solid rgba(255,255,255,.08);
-  padding-top: 24px;
-  font-size: 13px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.footer-meta {
-  font-size: 13px;
-  color: rgba(255,255,255,.3);
-}
 
 /* ───────────────────────────────────────────
    Buttons
@@ -546,82 +388,6 @@ img, svg { display: block; max-width: 100%; }
 .cover-art-navy  { background: linear-gradient(135deg, var(--navy-700), var(--navy-900)); }
 .cover-art-sand  { background: linear-gradient(135deg, #E8D5B0, #C5A872); }
 
-/* ───────────────────────────────────────────
-   Hero V1 — "Acolhedora" (navy)
-─────────────────────────────────────────── */
-.hero-v1 {
-  min-height: 100svh;
-  background: var(--navy-900);
-  color: white;
-  display: grid;
-  align-items: center;
-  padding-top: var(--nav-h);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-v1-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(22,29,41,.9) 0%, rgba(22,29,41,.6) 100%);
-}
-
-.hero-v1-bg {
-  position: absolute;
-  inset: 0;
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  opacity: 0.35;
-}
-
-.hero-v1-content {
-  position: relative;
-  z-index: 2;
-  max-width: 640px;
-  padding-block: clamp(64px, 10vh, 120px);
-}
-
-.hero-v1-eyebrow {
-  font-family: var(--font-display);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: var(--teal-400);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.hero-v1-eyebrow::before {
-  content: '';
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--teal-400);
-}
-
-.hero-v1-title {
-  font-family: var(--font-display);
-  font-size: clamp(40px, 6vw, 76px);
-  font-weight: 800;
-  line-height: 1.0;
-  letter-spacing: -0.03em;
-  color: white;
-  margin-bottom: 24px;
-}
-
-.hero-v1-subtitle {
-  font-size: clamp(16px, 2vw, 20px);
-  line-height: 1.6;
-  color: rgba(255,255,255,.72);
-  margin-bottom: 40px;
-  max-width: 520px;
-}
-
-.hero-v1-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 
 /* ───────────────────────────────────────────
    Section headings
@@ -674,76 +440,6 @@ img, svg { display: block; max-width: 100%; }
   align-items: start;
 }
 
-.post-card {
-  border-radius: var(--r-xl);
-  overflow: hidden;
-  background: var(--paper);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border);
-  transition: box-shadow 0.2s, transform 0.2s;
-  display: flex;
-  flex-direction: column;
-}
-
-.post-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-}
-
-.post-card-cover {
-  height: 200px;
-  flex-shrink: 0;
-}
-
-.post-card-body {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex: 1;
-}
-
-.post-card-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.post-card-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--border-2); flex-shrink: 0; }
-
-.post-card-title {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--ink);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.post-card-excerpt {
-  font-size: 14px;
-  color: var(--ink-2);
-  line-height: 1.6;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  flex: 1;
-}
-
-.post-card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-}
 
 /* ───────────────────────────────────────────
    Downloads — Category Nav (sticky)
@@ -800,107 +496,12 @@ img, svg { display: block; max-width: 100%; }
 ─────────────────────────────────────────── */
 .downloads-list { display: flex; flex-direction: column; gap: 12px; }
 
-.download-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px 24px;
-  background: var(--paper);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  transition: box-shadow 0.2s, border-color 0.2s;
-}
-
-.download-card:hover {
-  box-shadow: var(--shadow-sm);
-  border-color: var(--border-2);
-}
-
-.download-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--r-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  font-size: 22px;
-}
-.download-icon-audio  { background: var(--teal-50); color: var(--teal-600); }
-.download-icon-pdf    { background: #FEF2F2; color: #DC2626; }
-.download-icon-slides { background: #EFF6FF; color: #2563EB; }
-
-.download-info { flex: 1; min-width: 0; }
-
-.download-title {
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.download-meta {
-  font-size: 13px;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
 
 /* ───────────────────────────────────────────
    Event Cards
 ─────────────────────────────────────────── */
 .events-list { display: flex; flex-direction: column; gap: 12px; }
 
-.event-card {
-  display: flex;
-  gap: 20px;
-  padding: 20px 24px;
-  background: var(--paper);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-}
-
-.event-date-block {
-  flex-shrink: 0;
-  width: 56px;
-  text-align: center;
-  background: var(--teal-50);
-  border-radius: var(--r-md);
-  padding: 10px 8px;
-}
-
-.event-date-day {
-  font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--teal-700);
-  line-height: 1;
-}
-
-.event-date-mon {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  color: var(--teal-600);
-  margin-top: 4px;
-}
-
-.event-info h4 {
-  font-family: var(--font-display);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 4px;
-}
-
-.event-info p { font-size: 13px; color: var(--muted); }
 
 /* ───────────────────────────────────────────
    Page hero (internas)
@@ -972,34 +573,6 @@ img, svg { display: block; max-width: 100%; }
 .section-navy .section-title { color: white; }
 .section-navy .section-desc { color: rgba(255,255,255,.65); }
 
-/* ───────────────────────────────────────────
-   Filters / Tab bar
-─────────────────────────────────────────── */
-.filter-bar {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 32px;
-}
-
-.filter-btn {
-  padding: 8px 16px;
-  border-radius: var(--r-pill);
-  font-size: 13px;
-  font-weight: 600;
-  font-family: var(--font-display);
-  cursor: pointer;
-  border: 1.5px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  transition: all 0.15s;
-}
-
-.filter-btn:hover, .filter-btn.active {
-  background: var(--accent);
-  border-color: var(--accent);
-  color: white;
-}
 
 /* ───────────────────────────────────────────
    Utilities
@@ -1022,69 +595,9 @@ img, svg { display: block; max-width: 100%; }
 @media (max-width: 980px) {
   :root { --nav-h: 64px; }
 
-  .site-header .header-inner {
-    gap: 16px;
-  }
-
-  .site-header .nav-desktop {
-    display: none;
-  }
-
-  .site-header .nav-burger {
-    display: inline-flex;
-  }
-
-  .nav-mobile {
-    position: fixed;
-    top: var(--nav-h);
-    inset-inline: 0;
-    bottom: 0;
-    z-index: 99;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding: 20px 20px 28px;
-    background: rgba(255,255,255,.96);
-    backdrop-filter: blur(8px);
-    border-top: 1px solid var(--border);
-    transform: translateY(-8px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-  }
-
-  .nav-mobile.open {
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  .nav-mobile-link {
-    display: block;
-    font-family: var(--font-display);
-    font-size: clamp(21px, 6vw, 28px);
-    font-weight: 700;
-    color: var(--ink);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 4px;
-  }
-
-  .nav-mobile-link.active {
-    color: var(--teal-600);
-  }
-
-  .nav-mobile-cta {
-    margin-top: 12px;
-    align-self: flex-start;
-  }
-
   .content-grid-2 {
     grid-template-columns: minmax(0, 1fr);
   }
-
-  .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   .posts-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
 
@@ -1102,13 +615,6 @@ img, svg { display: block; max-width: 100%; }
     padding: 24px 20px;
   }
 
-  .download-title {
-    white-space: normal;
-    overflow: visible;
-    text-overflow: clip;
-    overflow-wrap: anywhere;
-  }
-
   .schedule-card {
     flex-direction: column;
     gap: 16px;
@@ -1119,11 +625,6 @@ img, svg { display: block; max-width: 100%; }
     margin-inline-start: 0;
   }
 
-  .footer-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
-
-  .download-card { flex-direction: column; }
-
-  .event-card { flex-direction: column; gap: 12px; }
 }
 
 /* ───────────────────────────────────────────

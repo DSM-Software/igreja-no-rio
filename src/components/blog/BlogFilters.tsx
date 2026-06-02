@@ -1,44 +1,59 @@
-'use client'
+"use client";
 
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { useCallback } from 'react'
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useCallback } from "react";
 
 interface BlogFiltersProps {
-  categories: string[]
-  series: string[]
-  activeCategory?: string
-  activeSerie?: string
+  categories: string[];
+  series: string[];
+  activeCategory?: string;
+  activeSerie?: string;
 }
 
-export default function BlogFilters({ categories, series, activeCategory, activeSerie }: BlogFiltersProps) {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+export default function BlogFilters({
+  categories,
+  series,
+  activeCategory,
+  activeSerie,
+}: BlogFiltersProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const setFilter = useCallback(
     (key: string, value: string | null) => {
-      const params = new URLSearchParams(searchParams.toString())
-      if (value) params.set(key, value)
-      else params.delete(key)
-      router.push(`${pathname}?${params.toString()}`)
+      const params = new URLSearchParams(searchParams.toString());
+      if (value) params.set(key, value);
+      else params.delete(key);
+      router.push(`${pathname}?${params.toString()}`);
     },
     [router, pathname, searchParams],
-  )
+  );
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, marginBottom: 32 }}>
-      <div className="filter-bar">
+    <div className="mb-8 flex flex-col gap-4">
+      <div className="flex flex-wrap items-center gap-2">
         <button
-          className={`filter-btn ${!activeCategory ? 'active' : ''}`}
-          onClick={() => setFilter('category', null)}
+          className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+            !activeCategory
+              ? "bg-brand-500 text-white"
+              : "bg-slate-100 text-slate-700 hover:bg-brand-100 hover:text-brand-700"
+          }`}
+          onClick={() => setFilter("category", null)}
         >
           Todos
         </button>
         {categories.map((cat) => (
           <button
             key={cat}
-            className={`filter-btn ${activeCategory === cat ? 'active' : ''}`}
-            onClick={() => setFilter('category', activeCategory === cat ? null : cat)}
+            className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+              activeCategory === cat
+                ? "bg-brand-500 text-white"
+                : "bg-slate-100 text-slate-700 hover:bg-brand-100 hover:text-brand-700"
+            }`}
+            onClick={() =>
+              setFilter("category", activeCategory === cat ? null : cat)
+            }
           >
             {cat}
           </button>
@@ -46,15 +61,19 @@ export default function BlogFilters({ categories, series, activeCategory, active
       </div>
 
       {series.length > 0 && (
-        <div className="filter-bar">
-          <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)', paddingInline: 4, alignSelf: 'center' }}>
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="px-1 text-xs font-semibold tracking-wide text-muted">
             SÉRIES:
           </span>
           {series.map((s) => (
             <button
               key={s}
-              className={`filter-btn ${activeSerie === s ? 'active' : ''}`}
-              onClick={() => setFilter('serie', activeSerie === s ? null : s)}
+              className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+                activeSerie === s
+                  ? "bg-brand-500 text-white"
+                  : "bg-slate-100 text-slate-700 hover:bg-brand-100 hover:text-brand-700"
+              }`}
+              onClick={() => setFilter("serie", activeSerie === s ? null : s)}
             >
               {s}
             </button>
@@ -62,5 +81,5 @@ export default function BlogFilters({ categories, series, activeCategory, active
         </div>
       )}
     </div>
-  )
+  );
 }

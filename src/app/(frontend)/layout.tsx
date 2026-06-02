@@ -56,9 +56,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className={`${poppins.variable} ${mulish.variable}`}>
-      <body className="site-shell">
+      <body className="min-h-screen font-body text-ink antialiased">
         <Header />
-        <main className="site-main">{children}</main>
+        <main className="min-h-screen">{children}</main>
         <Footer />
       </body>
     </html>

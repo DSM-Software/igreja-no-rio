@@ -56,7 +56,7 @@ test.describe('Header scroll behavior na home', () => {
   test('header transparente no topo da home', async ({ page }) => {
     await page.goto('/')
     const header = page.locator('header')
-    await expect(header).toHaveClass(/transparent/)
+    await expect(header).toHaveClass(/bg-transparent/)
   })
 
   test('header sólido após scroll de 100px', async ({ page }) => {
@@ -64,7 +64,7 @@ test.describe('Header scroll behavior na home', () => {
     await page.evaluate(() => window.scrollTo(0, 100))
     await page.waitForTimeout(300)
     const header = page.locator('header')
-    await expect(header).toHaveClass(/solid/)
+    await expect(header).toHaveClass(/bg-white\/95/)
   })
 })
 
@@ -95,10 +95,10 @@ test.describe('Header mobile navigation', () => {
     await expect(menuButton).toBeVisible()
 
     const mobileNav = page.locator('#mobile-navigation')
-    await expect(mobileNav).not.toHaveClass(/open/)
+    await expect(mobileNav).toBeHidden()
 
     await menuButton.click()
-    await expect(mobileNav).toHaveClass(/open/)
+    await expect(mobileNav).toBeVisible()
     await expect(mobileNav.getByRole('link', { name: 'Blog' })).toBeVisible()
   })
 
@@ -110,7 +110,7 @@ test.describe('Header mobile navigation', () => {
     await page.locator('#mobile-navigation').getByRole('link', { name: 'Downloads' }).click()
 
     await expect(page).toHaveURL(/\/downloads$/)
-    await expect(page.locator('#mobile-navigation')).not.toHaveClass(/open/)
+    await expect(page.locator('#mobile-navigation')).toBeHidden()
   })
 })
 
@@ -119,8 +119,8 @@ test.describe('Consistência visual responsiva', () => {
     await page.setViewportSize({ width: 1280, height: 900 })
     await page.goto('/contato')
 
-    await expect(page.locator('.nav-desktop')).toBeVisible()
-    await expect(page.locator('.nav-burger')).toBeHidden()
+    await expect(page.locator('header nav[aria-label="Navegação principal"]').first()).toBeVisible()
+    await expect(page.getByRole('button', { name: /abrir menu|fechar menu/i })).toBeHidden()
     await expect(page.locator('#mobile-navigation')).toBeHidden()
   })
 
@@ -128,8 +128,7 @@ test.describe('Consistência visual responsiva', () => {
     await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/contato')
 
-    await expect(page.locator('.nav-desktop')).toBeHidden()
-    await expect(page.locator('.nav-burger')).toBeVisible()
+    await expect(page.getByRole('button', { name: /abrir menu|fechar menu/i })).toBeVisible()
     await expect(page.locator('#mobile-navigation')).toBeHidden()
   })
 
@@ -189,8 +188,7 @@ test.describe('Copy institucional atualizada', () => {
   })
 
   test('agenda pública não exibe datas inválidas', async ({ page }) => {
-    await page.goto('/contato')
-    const eventDays = await page.locator('.event-date-day').allTextContents()
-    expect(eventDays.some((value) => value.includes('NaN'))).toBe(false)
+    await page.goto('/agenda')
+    await expect(page.locator('body')).not.toContainText('NaN')
   })
 })

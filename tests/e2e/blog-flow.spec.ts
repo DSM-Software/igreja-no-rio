@@ -1,21 +1,24 @@
 import { test, expect } from '@playwright/test'
 
+const blogCards = (page: import('@playwright/test').Page) =>
+  page.locator('article').filter({ has: page.locator('a[href^="/blog/"] h3') })
+
 test.describe('Blog — listagem de posts', () => {
   test('exibe cards quando há posts (seed rodado)', async ({ page }) => {
     await page.goto('/blog')
-    const cards = page.locator('.post-card')
+    const cards = blogCards(page)
     await expect(cards.first()).toBeVisible()
-    await expect(cards.first().locator('.post-card-title')).not.toBeEmpty()
+    await expect(cards.first().locator('h3')).not.toBeEmpty()
   })
 
   test('exibe "Nenhum post encontrado" quando não há posts', async ({ page }) => {
     // Verifica se a mensagem de estado vazio existe no código; caso o banco tenha posts,
     // o teste é pulado condicionalmente.
     await page.goto('/blog')
-    const cards = page.locator('.post-card')
+    const cards = blogCards(page)
     const count = await cards.count()
     if (count === 0) {
-      await expect(page.locator('body')).toContainText('Nenhum post encontrado')
+      await expect(page.locator('body')).toContainText(/Nenhum post encontrado\.?/i)
     } else {
       test.skip()
     }
@@ -43,19 +46,18 @@ test.describe('Blog — filtro por categoria', () => {
 test.describe('Blog — navegação para post individual', () => {
   test('clique no título do card navega para /blog/<slug>', async ({ page }) => {
     await page.goto('/blog')
-    const firstCard = page.locator('.post-card').first()
+    const firstCard = blogCards(page).first()
     await firstCard.waitFor({ state: 'visible' })
-    // h3.post-card-title is inside an <a href="/blog/slug"> — click the h3 directly
-    await firstCard.locator('.post-card-title').click()
+    await firstCard.locator('a:has(h3)').first().click()
     await expect(page).toHaveURL(/\/blog\/.+/, { timeout: 10_000 })
     await expect(page.locator('h1')).not.toBeEmpty()
   })
 
   test('.post-body presente e não vazio no post individual', async ({ page }) => {
     await page.goto('/blog')
-    const firstCard = page.locator('.post-card').first()
+    const firstCard = blogCards(page).first()
     await firstCard.waitFor({ state: 'visible' })
-    await firstCard.locator('.post-card-title').click()
+    await firstCard.locator('a:has(h3)').first().click()
     await expect(page).toHaveURL(/\/blog\/.+/, { timeout: 10_000 })
     const body = page.locator('.post-body')
     await expect(body).toBeVisible()
@@ -64,9 +66,9 @@ test.describe('Blog — navegação para post individual', () => {
 
   test('metadados do post visíveis (autor, data PT-BR, tempo de leitura)', async ({ page }) => {
     await page.goto('/blog')
-    const firstCard = page.locator('.post-card').first()
+    const firstCard = blogCards(page).first()
     await firstCard.waitFor({ state: 'visible' })
-    await firstCard.locator('.post-card-title').click()
+    await firstCard.locator('a:has(h3)').first().click()
     await expect(page).toHaveURL(/\/blog\/.+/, { timeout: 10_000 })
     await expect(page.locator('body')).toContainText(/min\b/)
     await expect(page.locator('body')).toContainText(/de \d{4}/)
@@ -76,25 +78,24 @@ test.describe('Blog — navegação para post individual', () => {
 test.describe('Blog — navegação de série', () => {
   test('exibe link para próxima parte quando post é parte de série', async ({ page }) => {
     await page.goto('/blog')
-    const cards = page.locator('.post-card')
+    const cards = blogCards(page)
     const count = await cards.count()
     if (count === 0) {
       test.skip()
       return
     }
-    // Procura qualquer link de série em posts disponíveis
-    const seriesLink = page.locator('a').filter({ hasText: /parte seguinte|próxima parte|parte \d/i })
-    if (await seriesLink.count() === 0) {
-      // Verifica post individual para série
-      const titleLink = cards.first().locator('.post-card-title a, a:has(.post-card-title)').first()
-      await titleLink.click()
-      await expect(page).toHaveURL(/\/blog\/.+/)
-      const nextPartLink = page.locator('a').filter({ hasText: /próxima|parte seguinte|parte \d/i })
-      // Não obrigatório — série só existe se seed incluiu série
-      const hasSeriesNav = await nextPartLink.count() > 0
-      if (!hasSeriesNav) {
-        test.skip()
-      }
+
+    await cards.first().locator('a:has(h3)').first().click()
+    await expect(page).toHaveURL(/\/blog\/.+/)
+
+    const hasSeriesHeader = (await page.locator('body').textContent())?.includes('Série:')
+    if (!hasSeriesHeader) {
+      test.skip()
+      return
     }
+
+    await expect(page.locator('body')).toContainText(/Série:/)
+    const seriesNavLinks = page.locator('a').filter({ hasText: /parte|próxima|anterior|←|→/i })
+    await expect(seriesNavLinks.first()).toBeVisible()
   })
 })
