@@ -1,8 +1,4 @@
-## Purpose
-
-Establishes guidelines for consistent layout spacing, alignment, and component usage across public pages to prevent visual conflicts and ensure responsive coherence.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Layout público mantém alinhamento e espaçamento consistentes
 O sistema SHALL exibir as rotas públicas com alinhamento horizontal, espaçamento vertical e largura de conteúdo coerentes entre header, hero, seções principais e footer em mobile e desktop, inclusive durante e após a migração dos estilos para Tailwind.
