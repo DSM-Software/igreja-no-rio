@@ -33,7 +33,7 @@ O sistema SHALL carregar cada rota pública retornando HTTP 200 e renderizando o
 
 #### Scenario: Contato carrega
 - **WHEN** o usuário acessa `/contato`
-- **THEN** a página retorna status 200 e exibe informações de contato da igreja
+- **THEN** a página retorna status 200, exibe informações de endereço, e-mail e canais de contato, e NÃO exibe a seção "Próximos eventos"
 
 ### Requirement: Header e footer presentes em todas as páginas
 O sistema SHALL exibir o header de navegação e o footer em todas as rotas públicas, com navegação previsível e composição consistente em desktop e mobile.
@@ -64,6 +64,21 @@ O sistema SHALL exibir o header transparente no topo da home e sólido após o u
 #### Scenario: Header sólido após scroll
 - **WHEN** o usuário rola 100px para baixo na home
 - **THEN** o header possui a classe `solid`
+
+### Requirement: Rota /agenda acessível como rota pública
+O sistema SHALL incluir `/agenda` no conjunto de rotas públicas do site, com header e footer presentes, e o item "Agenda" ativo no menu de navegação.
+
+#### Scenario: /agenda carrega sem erro
+- **WHEN** o usuário acessa `/agenda`
+- **THEN** a página retorna status 200, o header e o footer estão presentes
+
+#### Scenario: Item "Agenda" ativo no menu ao acessar /agenda
+- **WHEN** o usuário está na rota `/agenda`
+- **THEN** o link "Agenda" no header possui a classe `active`
+
+#### Scenario: /agenda incluída no sitemap
+- **WHEN** o crawler acessa `/sitemap.xml`
+- **THEN** a URL `/agenda` está presente no sitemap
 
 ### Requirement: Logo correto exibido conforme contexto
 O sistema SHALL exibir `logo-IR-white.svg` no hero escuro e `logo-IR-dark.svg` no header sólido.
