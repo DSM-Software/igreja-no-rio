@@ -3,7 +3,7 @@ import LogoMark from "@/components/ui/LogoMark";
 
 const NAV = [
   { href: "/quem-somos", label: "Quem Somos" },
-  { href: "/cultos", label: "Cultos" },
+  { href: "/agenda", label: "Agenda" },
   { href: "/blog", label: "Blog" },
   { href: "/downloads", label: "Downloads" },
   { href: "/contato", label: "Contato" },
