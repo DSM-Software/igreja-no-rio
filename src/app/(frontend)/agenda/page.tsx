@@ -15,6 +15,10 @@ export const metadata: Metadata = {
 export default async function AgendaPage() {
   const payload = await getPayload();
 
+  const today = new Date().toLocaleDateString("en-CA", {
+    timeZone: "America/Sao_Paulo",
+  });
+
   const eventsResult = await payload
     .find({ collection: "events", sort: "date", limit: 20, where: {} })
     .catch(() => ({ docs: [] }));
@@ -22,7 +26,10 @@ export default async function AgendaPage() {
   const events = eventsResult.docs;
 
   const recurringEvents = events.filter((e) => e.recurring);
-  const upcomingEvents = events.filter((e) => !e.recurring);
+  const upcomingEvents = events.filter(
+    (e) => !e.recurring && (!e.date || e.date >= today),
+  );
+  const hasContent = recurringEvents.length > 0 || upcomingEvents.length > 0;
 
   return (
     <>
@@ -45,7 +52,7 @@ export default async function AgendaPage() {
       {/* Events */}
       <section className="section">
         <div className="container">
-          {events.length === 0 ? (
+          {!hasContent ? (
             <div className="surface-card surface-card-muted">
               <p>
                 Nenhum evento programado no momento. Fique de olho por aqui ou
