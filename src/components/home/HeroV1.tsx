@@ -59,7 +59,7 @@ export default function HeroV1({
 
           <div className="mt-9 flex flex-wrap gap-3">
             <Link
-              href="/cultos"
+              href="/agenda"
               className="inline-flex h-11 items-center rounded-full bg-brand-500 px-6 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
             >
               Venha nos conhecer

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getPayload } from "@/lib/payload";
 import PostCard from "@/components/blog/PostCard";
 import BlogFilters from "@/components/blog/BlogFilters";
+import Pagination from "@/components/blog/Pagination";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +15,10 @@ export const metadata: Metadata = {
 export default async function BlogPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; serie?: string }>;
+  searchParams: Promise<{ category?: string; serie?: string; page?: string }>;
 }) {
-  const { category, serie } = await searchParams;
+  const { category, serie, page: pageParam } = await searchParams;
+  const pageNumber = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
   const payload = await getPayload();
 
   const where: Record<string, any> = { published: { equals: true } };
@@ -28,7 +30,8 @@ export default async function BlogPage({
       collection: "posts",
       where,
       sort: "-date",
-      limit: 50,
+      limit: 12,
+      page: pageNumber,
     }),
     payload.find({
       collection: "posts",
@@ -40,6 +43,8 @@ export default async function BlogPage({
 
   const posts =
     postsResult.status === "fulfilled" ? postsResult.value.docs : [];
+  const totalPages =
+    postsResult.status === "fulfilled" ? postsResult.value.totalPages : 1;
   const allPosts =
     allPostsResult.status === "fulfilled" ? allPostsResult.value.docs : [];
 
@@ -78,11 +83,19 @@ export default async function BlogPage({
               <p className="text-lg">Nenhum post encontrado.</p>
             </div>
           ) : (
-            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {posts.map((post) => (
-                <PostCard key={post.id} post={post as any} />
-              ))}
-            </div>
+            <>
+              <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {posts.map((post) => (
+                  <PostCard key={post.id} post={post as any} />
+                ))}
+              </div>
+              <Pagination
+                page={pageNumber}
+                totalPages={totalPages}
+                category={category}
+                serie={serie}
+              />
+            </>
           )}
         </div>
       </section>

@@ -47,20 +47,14 @@ export default function EventCard({ event }: EventCardProps) {
         <h4 className="font-display text-lg font-bold text-ink">
           {event.title}
         </h4>
-        <p className="mt-1 text-sm text-ink-2">
-          <Icon
-            icon="material-symbols:schedule-outline-rounded"
-            style={{ verticalAlign: "middle", marginRight: 4 }}
-          />
+        <p className="mt-1 flex items-center gap-1.5 text-sm text-ink-2">
+          <Icon icon="material-symbols:schedule-outline-rounded" />
           {event.time}
           {event.recurring && <> · {event.recurring}</>}
         </p>
         {event.location && (
-          <p className="mt-1 text-sm text-ink-2">
-            <Icon
-              icon="material-symbols:location-on-outline-rounded"
-              style={{ verticalAlign: "middle", marginRight: 4 }}
-            />
+          <p className="mt-1 flex items-center gap-1.5 text-sm text-ink-2">
+            <Icon icon="material-symbols:location-on-outline-rounded" />
             {event.location}
           </p>
         )}
