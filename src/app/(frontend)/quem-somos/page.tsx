@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -49,7 +50,15 @@ export default function QuemSomosPage() {
               caseiros, na amizade real e no discipulado do dia a dia.
             </p>
           </div>
-          <div className="feature-placeholder feature-placeholder-hero" />
+          <div className="relative h-[400px] overflow-hidden rounded-card bg-gradient-to-br from-brand-200 to-brand-500">
+            <Image
+              src="/images/community/adoracao.png"
+              alt="Comunidade da Igreja no Rio reunida em adoração"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
+          </div>
         </div>
       </section>
 

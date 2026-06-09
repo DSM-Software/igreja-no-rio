@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { getPayload } from "@/lib/payload";
@@ -43,7 +44,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ─── Hero ─── */}
-      <HeroV1 />
+      <HeroV1 backgroundImage="/images/community/boas-vindas.png" />
 
       {/* ─── Próximo evento em destaque ─── */}
       {highlightEvent && (
@@ -155,8 +156,17 @@ export default async function HomePage() {
       </section>
 
       {/* ─── CTA final ─── */}
-      <section className="bg-navy-900 py-20">
-        <div className="mx-auto w-full max-w-[560px] px-4 text-center md:px-8">
+      <section className="relative isolate overflow-hidden bg-navy-900 py-20">
+        {/* Foto de comunhão ao fundo (espelha "Conte conosco" da referência) */}
+        <Image
+          src="/images/community/comunhao.png"
+          alt=""
+          fill
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(22,29,41,.82)_0%,rgba(22,29,41,.92)_100%)]" />
+        <div className="relative mx-auto w-full max-w-[560px] px-4 text-center md:px-8">
           <p className="font-display text-xs font-semibold uppercase tracking-[0.16em] text-brand-400">
             Igreja no Rio
           </p>

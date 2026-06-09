@@ -1,11 +1,43 @@
-// Hero "Acolhedora" — navy hero escuro com boas-vindas calorosas
+// Hero "Acolhedora" — navy hero escuro com boas-vindas calorosas.
+// Aceita uma foto de fundo opcional; sem ela (ou se a imagem falhar),
+// mantém o degradê navy/teal como fallback.
+import Image from "next/image";
 import Link from "next/link";
 
-export default function HeroV1() {
+interface HeroV1Props {
+  /** Caminho da foto de fundo da comunidade (full-bleed). Opcional. */
+  backgroundImage?: string;
+  /** Texto alternativo. Fundo é decorativo por padrão (vazio). */
+  backgroundAlt?: string;
+}
+
+export default function HeroV1({
+  backgroundImage,
+  backgroundAlt = "",
+}: HeroV1Props) {
   return (
     <section className="relative isolate overflow-hidden bg-navy-900 pt-40 pb-28">
-      <div className="absolute inset-0 bg-[linear-gradient(160deg,#283143_0%,#161D29_60%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(92,200,189,.25),transparent_40%)]" />
+      {backgroundImage ? (
+        <>
+          {/* Foto da comunidade — above-the-fold, carregada com prioridade */}
+          <Image
+            src={backgroundImage}
+            alt={backgroundAlt}
+            fill
+            priority
+            sizes="100vw"
+            className="absolute inset-0 object-cover"
+          />
+          {/* Overlay de legibilidade (espelha o gradiente navy/teal original) */}
+          <div className="absolute inset-0 bg-[linear-gradient(160deg,rgba(40,49,67,.86)_0%,rgba(22,29,41,.93)_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(92,200,189,.28),transparent_42%)]" />
+        </>
+      ) : (
+        <>
+          <div className="absolute inset-0 bg-[linear-gradient(160deg,#283143_0%,#161D29_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(92,200,189,.25),transparent_40%)]" />
+        </>
+      )}
 
       <div className="relative mx-auto w-full max-w-content px-4 md:px-8">
         <div className="max-w-3xl">
