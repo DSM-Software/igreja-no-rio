@@ -19,6 +19,11 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const payload = await getPayload();
 
+  // "Hoje" no fuso de São Paulo (mesma regra da /agenda) para excluir eventos passados.
+  const today = new Date().toLocaleDateString("en-CA", {
+    timeZone: "America/Sao_Paulo",
+  });
+
   const [postsResult, eventsResult, downloadsResult] = await Promise.allSettled(
     [
       payload.find({
@@ -27,7 +32,19 @@ export default async function HomePage() {
         sort: "-date",
         limit: 3,
       }),
-      payload.find({ collection: "events", sort: "date", limit: 4 }),
+      // Apenas eventos elegíveis: recorrentes ou com data de hoje/futura.
+      // O filtro na query evita que eventos passados ocupem o limit e escondam os futuros.
+      payload.find({
+        collection: "events",
+        sort: "date",
+        limit: 4,
+        where: {
+          or: [
+            { recurring: { exists: true } },
+            { date: { greater_than_equal: today } },
+          ],
+        },
+      }),
       payload.find({ collection: "downloads", sort: "-date", limit: 4 }),
     ],
   );
@@ -39,6 +56,8 @@ export default async function HomePage() {
   const downloads =
     downloadsResult.status === "fulfilled" ? downloadsResult.value.docs : [];
 
+  // events já vem filtrado (recorrentes + futuros) e ordenado por data: respeita o
+  // flag editorial highlight quando não-passado, senão cai no próximo evento mais próximo.
   const highlightEvent = events.find((e) => e.highlight) ?? events[0] ?? null;
 
   return (
