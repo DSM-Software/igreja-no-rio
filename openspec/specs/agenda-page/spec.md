@@ -1,6 +1,8 @@
+# agenda-page
+
 ## Purpose
 
-Specifies the behavior of the `/agenda` public page, including event listing, recurring events section, and SEO metadata.
+Definir a rota pública `/agenda`, que apresenta os próximos eventos da Igreja no Rio em ordem cronológica, separa encontros recorrentes dos eventos com data específica, e expõe metadados de SEO adequados.
 
 ## Requirements
 

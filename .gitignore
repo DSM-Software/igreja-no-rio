@@ -44,3 +44,10 @@ docker-volumes/
 # Playwright
 playwright-report/
 test-results/
+
+# Playwright MCP — logs/snapshots temporários, nunca versionados
+.playwright-mcp/
+
+# Screenshots ad-hoc de inspeção visual na raiz — nunca versionados
+# (imagens de conteúdo ficam em public/ e SÃO versionadas)
+/*.png

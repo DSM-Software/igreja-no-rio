@@ -1,145 +1,178 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Quem Somos",
   description:
-    "Somos parte da igreja na cidade do Rio de Janeiro — não vamos à igreja, somos a igreja. Você está em casa.",
+    "Conheça a história, os valores e a visão da Igreja no Rio — uma comunidade cristã em Santíssimo, Rio de Janeiro.",
   openGraph: { title: "Quem Somos — Igreja no Rio" },
 };
 
 export default function QuemSomosPage() {
   return (
     <>
-      {/* Hero */}
-      <div className="bg-bg pt-[calc(76px+64px)] pb-16">
-        <div className="mx-auto w-full max-w-content px-4 md:px-8">
-          <p className="font-display text-xs font-semibold uppercase tracking-[0.16em] text-brand-600">
-            Nossa identidade
-          </p>
+      {/* Page hero */}
+      <div className="page-hero page-hero-offset">
+        <div className="container page-hero-content">
+          <p className="section-label">Nossa história</p>
           <h1
-            className="mt-3 font-display font-bold tracking-[-0.02em] text-ink"
-            style={{ fontSize: "clamp(36px, 6vw, 64px)", maxWidth: 640 }}
+            className="section-title"
+            style={{ fontSize: "clamp(32px, 5vw, 56px)", maxWidth: 640 }}
           >
             Somos uma família plantada em Santíssimo
           </h1>
         </div>
       </div>
 
-      {/* Quem Somos */}
-      <section className="bg-bg-2 py-20">
-        <div className="mx-auto w-full max-w-content px-4 md:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
-              <h2
-                className="font-display font-bold leading-[1.0] tracking-[-0.02em] text-brand-500"
-                style={{ fontSize: "clamp(44px, 6vw, 72px)" }}
-              >
-                Quem
-                <br />
-                Somos
-              </h2>
-            </div>
-            <div className="space-y-5">
-              <p className="text-lg leading-8 text-ink">
-                Somos parte da igreja na cidade do Rio de Janeiro, e celebramos
-                nossos encontros neste sítio no Monte do Santíssimo. Você não
-                está visitando uma organização. Está entre família.
-              </p>
-              <div className="space-y-1 border-l-4 border-brand-400 pl-5">
-                <p className="font-display text-base font-bold leading-7 text-ink">
-                  Não vamos à igreja — somos a igreja.
-                </p>
-                <p className="font-display text-base font-bold leading-7 text-ink">
-                  E você também é parte dessa família.
-                </p>
-                <p className="font-display text-base font-bold leading-7 text-ink">
-                  Por isso, está em casa.
-                </p>
-              </div>
-            </div>
+      {/* Missão */}
+      <section className="section">
+        <div className="container content-grid-2 content-grid-align-center">
+          <div>
+            <p className="section-label">Missão</p>
+            <h2 className="section-title">
+              Para que todos conheçam e amem Jesus
+            </h2>
+            <p
+              style={{
+                color: "var(--ink-2)",
+                lineHeight: 1.8,
+                marginBottom: 20,
+              }}
+            >
+              A Igreja no Rio nasceu do desejo de ser uma comunidade genuína no
+              coração do Rio de Janeiro — um lugar onde a fé se vive de perto,
+              nas casas, nas mesas e nas ruas de Santíssimo.
+            </p>
+            <p style={{ color: "var(--ink-2)", lineHeight: 1.8 }}>
+              Acreditamos que a igreja é o povo de Deus vivendo junto, não
+              apenas um evento de domingo. Por isso nossa ênfase está nos grupos
+              caseiros, na amizade real e no discipulado do dia a dia.
+            </p>
+          </div>
+          <div className="relative h-[400px] overflow-hidden rounded-card bg-gradient-to-br from-brand-200 to-brand-500">
+            <Image
+              src="/images/community/adoracao.png"
+              alt="Comunidade da Igreja no Rio reunida em adoração"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
 
-      {/* Uma família de muitos filhos */}
-      <section className="bg-brand-500 py-20">
-        <div className="mx-auto w-full max-w-content px-4 md:px-8">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            <div>
-              <h2
-                className="font-display font-extrabold leading-[1.05] text-white"
-                style={{ fontSize: "clamp(36px, 5vw, 56px)", maxWidth: 340 }}
-              >
-                Uma família de muitos filhos
-              </h2>
-            </div>
-            <div className="space-y-6">
-              <p className="text-base font-bold leading-8 text-white">
-                O Pai tem um propósito eterno: uma família, de muitos filhos,
-                conformes à imagem de Jesus, para o louvor da Sua glória.
-              </p>
-              <blockquote className="border-l-4 border-white/40 pl-5">
-                <p className="text-sm italic leading-7 text-white/85">
-                  &ldquo;Porque os que dantes conheceu, também os predestinou
-                  para serem conformes à imagem de seu Filho, a fim de que ele
-                  seja o primogênito entre muitos irmãos&rdquo;
-                </p>
-                <footer className="mt-2 text-sm font-semibold text-white/70">
-                  Romanos 8:29
-                </footer>
-              </blockquote>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Você é parte desse propósito */}
-      <section className="bg-navy-900 py-20">
-        <div className="mx-auto w-full max-w-[640px] px-4 text-center md:px-8">
-          <p
-            className="font-display font-light leading-[1.4] text-white/90"
-            style={{ fontSize: "clamp(26px, 3.5vw, 38px)" }}
-          >
-            Você é parte desse propósito.
-            <br />
-            Nós também.
-          </p>
-          <p
-            className="mt-6 font-display font-extrabold leading-[1.2] tracking-[-0.02em] text-white"
-            style={{ fontSize: "clamp(30px, 4vw, 46px)" }}
-          >
-            É isso que nos reúne aqui.
-          </p>
-        </div>
-      </section>
-
-      {/* Seja bem-vindo / CTA */}
-      <section className="bg-bg py-20">
-        <div className="mx-auto w-full max-w-[580px] px-4 text-center md:px-8">
-          <p className="font-display text-xs font-semibold uppercase tracking-[0.16em] text-brand-600">
-            Seja bem-vindo
+      {/* Valores */}
+      <section className="section section-bg">
+        <div className="container">
+          <p className="section-label" style={{ textAlign: "center" }}>
+            Nossos valores
           </p>
           <h2
-            className="mt-3 font-display font-bold tracking-[-0.02em] text-ink"
-            style={{ fontSize: "clamp(30px, 4.2vw, 44px)" }}
+            className="section-title"
+            style={{
+              textAlign: "center",
+              marginInline: "auto",
+              marginBottom: 48,
+            }}
           >
-            Conte conosco!
+            O que nos guia
           </h2>
-          <p className="mt-4 text-base leading-8 text-ink-2">
-            Desfrute da comunhão. E nos procure se precisar.
+          <div className="cards-grid">
+            {[
+              {
+                title: "Palavra",
+                desc: "A Bíblia é a fundação de tudo que fazemos — pregamos, ensinamos e vivemos a partir dela.",
+              },
+              {
+                title: "Comunidade",
+                desc: "Acreditamos na igreja que vive em comunhão nas casas. Grupos caseiros são o coração do nosso relacionamento.",
+              },
+              {
+                title: "Missão",
+                desc: "A igreja existe para servir a cidade. Amamos Santíssimo e o Rio como missão de vida.",
+              },
+              {
+                title: "Graça",
+                desc: "Somos movidos pela graça — não pela religião. Aqui você é recebido como você é.",
+              },
+            ].map((v) => (
+              <div key={v.title} className="surface-card">
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    marginBottom: 10,
+                    color: "var(--teal-700)",
+                  }}
+                >
+                  {v.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: 15,
+                    color: "var(--ink-2)",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  {v.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Liderança pastoral */}
+      <section className="section">
+        <div className="container">
+          <p className="section-label">Liderança</p>
+          <h2 className="section-title">
+            Cuidado pastoral e vida em comunidade
+          </h2>
+          <div
+            style={{
+              marginTop: 32,
+            }}
+            className="surface-card"
+          >
+            <p
+              style={{
+                color: "var(--ink-2)",
+                lineHeight: 1.8,
+                marginBottom: 16,
+              }}
+            >
+              Nosso cuidado pastoral acontece de forma próxima e relacional, com
+              acompanhamento espiritual, oração e encorajamento para cada fase
+              da vida.
+            </p>
+            <p style={{ color: "var(--ink-2)", lineHeight: 1.8 }}>
+              Esse cuidado se fortalece na convivência da igreja local,
+              especialmente nos grupos caseiros espalhados pela cidade, onde a
+              fé é vivida no dia a dia.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="section section-bg">
+        <div className="container centered-block narrow-section">
+          <h2 className="section-title">Quer nos conhecer pessoalmente?</h2>
+          <p
+            className="section-desc centered-copy"
+            style={{ marginBottom: 32 }}
+          >
+            Venha no domingo, às 10h, para nossa reunião geral, ou fale com a
+            gente para encontrar um grupo caseiro perto de você.
           </p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Link
-              href="/agenda"
-              className="inline-flex h-11 items-center rounded-full bg-brand-500 px-6 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
-            >
-              Ver agenda
+          <div className="inline-actions" style={{ justifyContent: "center" }}>
+            <Link href="/cultos" className="btn btn-primary btn-lg">
+              Ver horários dos cultos
             </Link>
-            <Link
-              href="/contato"
-              className="inline-flex h-11 items-center rounded-full border border-border px-6 font-display text-sm font-semibold text-ink transition-colors hover:border-brand-200 hover:bg-brand-50 hover:text-brand-700"
-            >
+            <Link href="/contato" className="btn btn-outline btn-lg">
               Fale conosco
             </Link>
           </div>
