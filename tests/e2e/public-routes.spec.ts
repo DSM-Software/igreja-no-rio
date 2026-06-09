@@ -147,6 +147,33 @@ test.describe('Consistência visual responsiva', () => {
   }
 })
 
+test.describe('Header contato sem duplicidade', () => {
+  test('desktop exibe apenas um link "Contato" e não mostra "Fale conosco"', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.goto('/')
+
+    const desktopNav = page.locator('header nav[aria-label="Navegação principal"]').first()
+    const contatoLink = desktopNav.getByRole('link', { name: /^Contato$/ })
+
+    await expect(contatoLink).toHaveCount(1)
+    await expect(contatoLink).toHaveAttribute('href', '/contato')
+    await expect(desktopNav.getByRole('link', { name: /fale conosco/i })).toHaveCount(0)
+  })
+
+  test('mobile exibe apenas um link "Contato" e não mostra "Fale conosco"', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await page.goto('/')
+    await page.getByRole('button', { name: /abrir menu/i }).click()
+
+    const mobileNav = page.locator('#mobile-navigation')
+    const contatoLink = mobileNav.getByRole('link', { name: /^Contato$/ })
+
+    await expect(contatoLink).toHaveCount(1)
+    await expect(contatoLink).toHaveAttribute('href', '/contato')
+    await expect(mobileNav.getByRole('link', { name: /fale conosco/i })).toHaveCount(0)
+  })
+})
+
 test.describe('Copy institucional atualizada', () => {
   test('cultos deixa explícito domingo às 10h como reunião geral', async ({ page }) => {
     await page.goto('/cultos')

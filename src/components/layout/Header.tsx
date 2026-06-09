@@ -12,7 +12,6 @@ const NAV_LINKS = [
   { href: "/agenda", label: "Agenda" },
   { href: "/blog", label: "Blog" },
   { href: "/downloads", label: "Downloads" },
-  { href: "/contato", label: "Contato" },
 ];
 
 // Pages where the hero is dark (navy) — header starts transparent/white text
@@ -97,7 +96,7 @@ export default function Header() {
             href="/contato"
             className="ml-2 inline-flex h-10 items-center rounded-full bg-brand-500 px-4 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
           >
-            Fale conosco
+            Contato
           </Link>
         </nav>
 
@@ -154,7 +153,7 @@ export default function Header() {
           className="mt-2 inline-flex h-10 items-center justify-center rounded-full bg-brand-500 px-4 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
           onClick={() => setMenuOpen(false)}
         >
-          Fale conosco
+          Contato
         </Link>
       </nav>
     </header>
