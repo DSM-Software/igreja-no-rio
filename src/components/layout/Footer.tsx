@@ -21,7 +21,7 @@ export default function Footer() {
               aria-label="Igreja no Rio — início"
               className="inline-flex"
             >
-              <LogoMark onLight={false} height={32} />
+              <LogoMark onLight={true} height={32} />
             </Link>
             <p className="max-w-sm text-sm leading-7 text-ink-2">
               Uma comunidade cristã no coração de Santíssimo, Rio de Janeiro.
