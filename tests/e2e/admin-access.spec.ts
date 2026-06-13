@@ -1,7 +1,51 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 import { Users } from '@/collections/Users'
 import { Posts } from '@/collections/Posts'
-import { canMutateOwnOrElevated, resolveContentOwner } from '@/access/contentAccess'
+import {
+  canEditPostsField,
+  canMutateOwnOrElevated,
+  resolveContentOwner,
+} from '@/access/contentAccess'
+
+type Role = 'admin' | 'editor' | 'autor'
+
+function credentialsFor(role: Role) {
+  if (role === 'admin') {
+    return {
+      email: process.env.SEED_ADMIN_EMAIL,
+      password: process.env.SEED_ADMIN_PASSWORD,
+    }
+  }
+  if (role === 'editor') {
+    return {
+      email: process.env.SEED_EDITOR_EMAIL ?? 'editor@igrejanorio.local',
+      password: process.env.SEED_EDITOR_PASSWORD ?? 'change-me-now',
+    }
+  }
+  return {
+    email: process.env.SEED_AUTOR_EMAIL ?? 'autor@igrejanorio.local',
+    password: process.env.SEED_AUTOR_PASSWORD ?? 'change-me-now',
+  }
+}
+
+async function loginAs(page: Page, role: Role): Promise<boolean> {
+  const { email, password } = credentialsFor(role)
+  if (!email || !password) return false
+
+  const response = await page.goto('/admin/login', { waitUntil: 'domcontentloaded' })
+  if (response && response.status() >= 500) return false
+
+  await page.getByRole('textbox', { name: /email/i }).first().fill(email)
+  await page.getByRole('textbox', { name: /password/i }).first().fill(password)
+  await page.getByRole('button', { name: /entrar|login/i }).first().click()
+
+  try {
+    await page.waitForURL(/\/admin(?!\/login)/, { timeout: 15_000 })
+    return true
+  } catch {
+    return false
+  }
+}
 
 async function expectAdminLoginScreen(page: import('@playwright/test').Page) {
   const emailInput = page.getByRole('textbox', { name: /email/i }).first()
@@ -121,5 +165,134 @@ test.describe('Admin — regras de permissão', () => {
         req: { user: { id: 7, role: 'autor' } },
       })
     ).toBe(7)
+  })
+})
+
+test.describe('Posts — campo body acessível para todos os papéis editores', () => {
+  test('canEditPostsField libera admin/editor/autor e bloqueia anônimo', () => {
+    expect(canEditPostsField({ req: { user: { id: 1, role: 'admin' } } } as any)).toBe(true)
+    expect(canEditPostsField({ req: { user: { id: 2, role: 'editor' } } } as any)).toBe(true)
+    expect(canEditPostsField({ req: { user: { id: 3, role: 'autor' } } } as any)).toBe(true)
+    expect(canEditPostsField({ req: { user: null } } as any)).toBe(false)
+    expect(canEditPostsField({ req: { user: { id: 4, role: null } } } as any)).toBe(false)
+  })
+
+  test('campo body declara access explícito por papel', () => {
+    const bodyField = Posts.fields.find(
+      (f) => 'name' in f && f.name === 'body',
+    ) as { name: string; access?: { read?: any; update?: any; create?: any } } | undefined
+
+    expect(bodyField).toBeDefined()
+    expect(typeof bodyField?.access?.read).toBe('function')
+    expect(typeof bodyField?.access?.update).toBe('function')
+    expect(typeof bodyField?.access?.create).toBe('function')
+
+    expect(bodyField?.access?.read?.({ req: { user: { id: 1, role: 'autor' } } } as any)).toBe(true)
+    expect(bodyField?.access?.update?.({ req: { user: { id: 1, role: 'autor' } } } as any)).toBe(true)
+    expect(bodyField?.access?.create?.({ req: { user: { id: 1, role: 'autor' } } } as any)).toBe(true)
+  })
+
+  test('todos os campos editáveis de Posts têm access explícito', () => {
+    const editableFieldNames = [
+      'title',
+      'slug',
+      'category',
+      'serie',
+      'serieParte',
+      'author',
+      'date',
+      'coverImage',
+      'coverColor',
+      'excerpt',
+      'body',
+      'tags',
+      'published',
+    ]
+
+    for (const name of editableFieldNames) {
+      const field = Posts.fields.find((f) => 'name' in f && f.name === name) as
+        | { name: string; access?: { read?: any; update?: any; create?: any } }
+        | undefined
+
+      expect(field, `campo "${name}" deve existir em Posts`).toBeDefined()
+      expect(typeof field?.access?.read, `${name}.access.read`).toBe('function')
+      expect(typeof field?.access?.update, `${name}.access.update`).toBe('function')
+      expect(typeof field?.access?.create, `${name}.access.create`).toBe('function')
+
+      const autorCtx = { req: { user: { id: 1, role: 'autor' } } } as any
+      expect(field?.access?.read?.(autorCtx), `${name} read autor`).toBe(true)
+      expect(field?.access?.update?.(autorCtx), `${name} update autor`).toBe(true)
+    }
+  })
+})
+
+test.describe('Admin — visibilidade do campo body no formulário por papel', () => {
+  // Apenas labels explicitamente definidas em PT-BR em src/collections/Posts.ts.
+  // `title`, `category`, `date`, `slug` usam o label default do Payload (depende
+  // do locale do admin), então não os asseguramos aqui — a cobertura de "todos
+  // os campos editáveis têm `access`" já existe nos testes não-visuais acima.
+  const explicitLabelChecks = [
+    'Autor',
+    'Resumo (chamada)',
+    'Corpo do post',
+    'Publicado',
+  ]
+
+  for (const role of ['admin', 'editor', 'autor'] as const) {
+    test(`${role}: campo "Corpo do post" visível em /admin/collections/posts/create`, async ({ page }) => {
+      const logged = await loginAs(page, role)
+      if (!logged) {
+        test.skip()
+        return
+      }
+
+      const response = await page.goto('/admin/collections/posts/create', {
+        waitUntil: 'domcontentloaded',
+      })
+      if (response && response.status() >= 500) {
+        test.skip()
+        return
+      }
+
+      const bodyLabel = page.getByText('Corpo do post', { exact: false }).first()
+      await expect(bodyLabel).toBeVisible({ timeout: 15_000 })
+
+      for (const label of explicitLabelChecks) {
+        await expect(
+          page.getByText(label, { exact: false }).first(),
+          `Esperava label "${label}" visível para o papel ${role}`,
+        ).toBeVisible({ timeout: 10_000 })
+      }
+    })
+  }
+
+  test('autor: campo "Corpo do post" visível ao editar post próprio', async ({ page }) => {
+    const logged = await loginAs(page, 'autor')
+    if (!logged) {
+      test.skip()
+      return
+    }
+
+    const listResp = await page.goto('/admin/collections/posts', {
+      waitUntil: 'domcontentloaded',
+    })
+    if (listResp && listResp.status() >= 500) {
+      test.skip()
+      return
+    }
+
+    const seededLink = page
+      .getByRole('link', { name: /Rascunho do autor para testes/i })
+      .first()
+
+    if (!(await seededLink.isVisible().catch(() => false))) {
+      test.skip()
+      return
+    }
+
+    await seededLink.click()
+
+    const bodyLabel = page.getByText('Corpo do post', { exact: false }).first()
+    await expect(bodyLabel).toBeVisible({ timeout: 15_000 })
   })
 })

@@ -172,6 +172,9 @@ export interface Post {
    */
   coverColor?: ('teal' | 'navy' | 'sand') | null;
   excerpt: string;
+  /**
+   * Conteúdo principal do post. Use a barra de ferramentas para formatar o texto.
+   */
   body: {
     root: {
       type: string;

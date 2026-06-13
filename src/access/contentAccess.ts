@@ -1,9 +1,15 @@
-import type { Access } from 'payload'
+import type { Access, FieldAccess } from 'payload'
 
 type ContentUser = {
   id: number
   role?: 'admin' | 'editor' | 'autor' | null
 } | null | undefined
+
+const POSTS_EDITOR_ROLES: ReadonlyArray<NonNullable<NonNullable<ContentUser>['role']>> = [
+  'admin',
+  'editor',
+  'autor',
+]
 
 function normalizeOwnerValue(owner: unknown): number | null {
   if (typeof owner === 'number') {
@@ -48,4 +54,9 @@ export const canMutateOwnOrElevated: Access = ({ req: { user } }) => {
   if (!user) return false
   if (hasElevatedContentAccess(user)) return true
   return { owner: { equals: user.id } }
+}
+
+export const canEditPostsField: FieldAccess = ({ req: { user } }) => {
+  const role = (user as ContentUser)?.role
+  return Boolean(role && POSTS_EDITOR_ROLES.includes(role))
 }

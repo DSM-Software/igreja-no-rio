@@ -4,6 +4,14 @@
  *
  * Variáveis necessárias no .env:
  *   DATABASE_URI, PAYLOAD_SECRET, SEED_ADMIN_EMAIL, SEED_ADMIN_PASSWORD, SEED_ADMIN_NAME
+ *
+ * Opcionais (para garantir usuários de teste com cada papel):
+ *   SEED_EDITOR_EMAIL, SEED_EDITOR_PASSWORD, SEED_EDITOR_NAME
+ *   SEED_AUTOR_EMAIL, SEED_AUTOR_PASSWORD, SEED_AUTOR_NAME
+ *
+ * Em desenvolvimento (NODE_ENV != 'production'), valores padrão de email e nome
+ * são aplicados quando as envs estão ausentes; a senha cai para `change-me-now`
+ * apenas em dev. Em produção, qualquer ausência aborta o seed.
  */
 import 'dotenv/config'
 import { getPayload } from 'payload'
@@ -17,6 +25,9 @@ const ADMIN_PLACEHOLDERS = new Set([
   'administrador',
 ])
 
+const IS_PRODUCTION = process.env.NODE_ENV === 'production'
+const DEV_PASSWORD_FALLBACK = 'change-me-now'
+
 function requireAdminEnv(name: 'SEED_ADMIN_EMAIL' | 'SEED_ADMIN_PASSWORD' | 'SEED_ADMIN_NAME') {
   const rawValue = process.env[name]?.trim()
 
@@ -29,6 +40,55 @@ function requireAdminEnv(name: 'SEED_ADMIN_EMAIL' | 'SEED_ADMIN_PASSWORD' | 'SEE
   }
 
   return rawValue
+}
+
+type RoleSeed = {
+  role: 'editor' | 'autor'
+  emailEnv: 'SEED_EDITOR_EMAIL' | 'SEED_AUTOR_EMAIL'
+  passwordEnv: 'SEED_EDITOR_PASSWORD' | 'SEED_AUTOR_PASSWORD'
+  nameEnv: 'SEED_EDITOR_NAME' | 'SEED_AUTOR_NAME'
+  defaultEmail: string
+  defaultName: string
+}
+
+function readRoleEnv(envName: string, fallback: string | null, label: string) {
+  const value = process.env[envName]?.trim()
+  if (value) return value
+
+  if (IS_PRODUCTION) {
+    throw new Error(`Defina ${envName} antes de rodar o seed em producao.`)
+  }
+
+  if (fallback === null) {
+    throw new Error(`Defina ${envName} (sem fallback) antes de rodar o seed.`)
+  }
+
+  console.warn(`⚠️  ${envName} ausente — usando fallback de desenvolvimento para ${label}.`)
+  return fallback
+}
+
+async function upsertRoleUser(payload: Awaited<ReturnType<typeof getPayload>>, spec: RoleSeed) {
+  const email = readRoleEnv(spec.emailEnv, spec.defaultEmail, `email do ${spec.role}`)
+  const password = readRoleEnv(spec.passwordEnv, DEV_PASSWORD_FALLBACK, `senha do ${spec.role}`)
+  const name = readRoleEnv(spec.nameEnv, spec.defaultName, `nome do ${spec.role}`)
+
+  const existing = await payload.find({
+    collection: 'users',
+    where: { email: { equals: email } },
+    limit: 1,
+  })
+
+  if (existing.docs.length > 0) {
+    console.log(`⏭️  Usuário ${spec.role} já existe: ${email}`)
+    return existing.docs[0].id as number
+  }
+
+  const created = await payload.create({
+    collection: 'users',
+    data: { name, email, password, role: spec.role },
+  })
+  console.log(`✅ Usuário ${spec.role} criado: ${email}`)
+  return created.id as number
 }
 
 /** Converte markdown simples para nós Lexical serializados */
@@ -277,6 +337,26 @@ async function main() {
     console.log(`⏭️  Usuário admin já existe: ${adminEmail}`)
   }
 
+  // 1b. Editor e Autor (para testes E2E e workflow editorial)
+  const editorUserId = await upsertRoleUser(payload, {
+    role: 'editor',
+    emailEnv: 'SEED_EDITOR_EMAIL',
+    passwordEnv: 'SEED_EDITOR_PASSWORD',
+    nameEnv: 'SEED_EDITOR_NAME',
+    defaultEmail: 'editor@igrejanorio.local',
+    defaultName: 'Editor de Conteúdo',
+  })
+  void editorUserId
+
+  const autorUserId = await upsertRoleUser(payload, {
+    role: 'autor',
+    emailEnv: 'SEED_AUTOR_EMAIL',
+    passwordEnv: 'SEED_AUTOR_PASSWORD',
+    nameEnv: 'SEED_AUTOR_NAME',
+    defaultEmail: 'autor@igrejanorio.local',
+    defaultName: 'Autor de Conteúdo',
+  })
+
   // 2. Posts
   console.log('\n📝 Inserindo posts...')
   for (const p of POSTS) {
@@ -302,6 +382,36 @@ async function main() {
       },
     })
     console.log(`  ✅ "${p.title}"`)
+  }
+
+  // 2b. Post de propriedade do autor (para fluxo de edição por papel `autor`)
+  const autorPostSlug = 'rascunho-do-autor-para-testes'
+  const existingAutorPost = await payload.find({
+    collection: 'posts',
+    where: { slug: { equals: autorPostSlug } },
+    limit: 1,
+  })
+
+  if (existingAutorPost.docs.length === 0) {
+    await payload.create({
+      collection: 'posts',
+      data: {
+        title: 'Rascunho do autor para testes',
+        slug: autorPostSlug,
+        category: 'Devocional' as any,
+        author: 'Autor de Conteúdo',
+        date: '2026-06-01',
+        coverColor: 'teal' as any,
+        excerpt: 'Post de exemplo criado pelo seed para validar o fluxo de edição do papel autor.',
+        tags: [{ tag: 'teste' }],
+        published: false,
+        body: mdToLexical('Corpo inicial do rascunho do autor para testes.') as any,
+        owner: autorUserId,
+      },
+    })
+    console.log(`  ✅ post "${autorPostSlug}" (owner=autor) criado`)
+  } else {
+    console.log(`  ⏭️  post "${autorPostSlug}" já existe`)
   }
 
   // 3. Downloads

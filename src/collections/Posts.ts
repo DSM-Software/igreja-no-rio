@@ -1,6 +1,17 @@
 import type { CollectionConfig } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { canReadPublishedOrOwn, canMutateOwnOrElevated, resolveContentOwner } from '../access/contentAccess'
+import {
+  canReadPublishedOrOwn,
+  canMutateOwnOrElevated,
+  canEditPostsField,
+  resolveContentOwner,
+} from '../access/contentAccess'
+
+const editableFieldAccess = {
+  read: canEditPostsField,
+  update: canEditPostsField,
+  create: canEditPostsField,
+}
 
 function slugify(s: string) {
   return (s || '')
@@ -26,12 +37,13 @@ export const Posts: CollectionConfig = {
     delete: canMutateOwnOrElevated,
   },
   fields: [
-    { name: 'title', type: 'text', required: true },
+    { name: 'title', type: 'text', required: true, access: editableFieldAccess },
     {
       name: 'slug',
       type: 'text',
       unique: true,
       index: true,
+      access: editableFieldAccess,
       admin: {
         position: 'sidebar',
         description: 'Gerado do título; pode editar.',
@@ -47,19 +59,21 @@ export const Posts: CollectionConfig = {
       type: 'select',
       required: true,
       defaultValue: 'Devocional',
+      access: editableFieldAccess,
       options: [
         { label: 'Devocional', value: 'Devocional' },
         { label: 'Estudo', value: 'Estudo' },
       ],
     },
-    { name: 'serie', type: 'text', label: 'Série (opcional)' },
-    { name: 'serieParte', type: 'number', label: 'Parte nº', min: 1 },
-    { name: 'author', type: 'text', label: 'Autor', required: true },
+    { name: 'serie', type: 'text', label: 'Série (opcional)', access: editableFieldAccess },
+    { name: 'serieParte', type: 'number', label: 'Parte nº', min: 1, access: editableFieldAccess },
+    { name: 'author', type: 'text', label: 'Autor', required: true, access: editableFieldAccess },
     {
       name: 'date',
       type: 'date',
       required: true,
       defaultValue: () => new Date().toISOString(),
+      access: editableFieldAccess,
       admin: { date: { pickerAppearance: 'dayOnly' } },
     },
     {
@@ -67,11 +81,13 @@ export const Posts: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       label: 'Imagem de capa (opcional)',
+      access: editableFieldAccess,
     },
     {
       name: 'coverColor',
       type: 'select',
       defaultValue: 'teal',
+      access: editableFieldAccess,
       options: [
         { label: 'Turquesa', value: 'teal' },
         { label: 'Marinho', value: 'navy' },
@@ -79,12 +95,19 @@ export const Posts: CollectionConfig = {
       ],
       admin: { description: 'Cor usada quando não há imagem de capa.' },
     },
-    { name: 'excerpt', type: 'textarea', label: 'Resumo (chamada)', required: true },
+    {
+      name: 'excerpt',
+      type: 'textarea',
+      label: 'Resumo (chamada)',
+      required: true,
+      access: editableFieldAccess,
+    },
     {
       name: 'body',
       type: 'richText',
       label: 'Corpo do post',
       required: true,
+      access: editableFieldAccess,
       admin: {
         description: 'Conteúdo principal do post. Use a barra de ferramentas para formatar o texto.',
       },
@@ -96,6 +119,7 @@ export const Posts: CollectionConfig = {
       name: 'tags',
       type: 'array',
       label: 'Tags',
+      access: editableFieldAccess,
       fields: [{ name: 'tag', type: 'text' }],
     },
     {
@@ -103,6 +127,7 @@ export const Posts: CollectionConfig = {
       type: 'checkbox',
       label: 'Publicado',
       defaultValue: true,
+      access: editableFieldAccess,
       admin: {
         position: 'sidebar',
         description: 'Desmarque para deixar como rascunho (oculto no site).',

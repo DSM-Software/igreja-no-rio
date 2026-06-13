@@ -39,6 +39,18 @@ Copy `.env.example` to `.env`. The Docker Compose stack provides:
 
 Required env vars: `DATABASE_URI`, `PAYLOAD_SECRET`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_ENDPOINT`, `NEXT_PUBLIC_SERVER_URL`, `PAYLOAD_SERVER_URL`, `PAYLOAD_TRUSTED_ORIGINS`, `PAYLOAD_CSRF_ORIGINS`.
 
+### Seed users
+
+`npm run seed` cria/garante (upsert por email) três usuários — um por papel — para viabilizar testes E2E e o fluxo editorial completo:
+
+| Papel | Email default | Envs para sobrescrever |
+|---|---|---|
+| `admin` | (env obrigatória) | `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD`, `SEED_ADMIN_NAME` |
+| `editor` | `editor@igrejanorio.local` | `SEED_EDITOR_EMAIL`, `SEED_EDITOR_PASSWORD`, `SEED_EDITOR_NAME` |
+| `autor` | `autor@igrejanorio.local` | `SEED_AUTOR_EMAIL`, `SEED_AUTOR_PASSWORD`, `SEED_AUTOR_NAME` |
+
+Em desenvolvimento (`NODE_ENV != 'production'`), envs ausentes do `editor` e `autor` caem para defaults; a senha cai para `change-me-now` apenas em dev. Em produção, qualquer ausência aborta o seed. O seed também cria um post de propriedade do `autor` (`slug: rascunho-do-autor-para-testes`) para os testes de edição.
+
 ## Architecture
 
 ### Route groups
@@ -126,5 +138,16 @@ The codebase is mid-migration from CSS variables to Tailwind. When editing a com
 
 - Set `PAYLOAD_SERVER_URL`, `PAYLOAD_TRUSTED_ORIGINS`, `PAYLOAD_CSRF_ORIGINS`, and `NEXT_PUBLIC_SERVER_URL` to real production domains
 - Run `npm run migrate` before traffic hits the new image
+- Run `npm run build` para gerar o bundle atualizado do admin Payload e **invalidar o cache do bundle em CDN/Nginx** para os arquivos servidos sob `/admin` (especialmente `index.html`/HTML do admin, que não devem ser cacheados com TTL longo). Sem isso, usuários com bundle antigo podem deixar de enxergar campos novos no formulário (ex.: o campo `body` de Posts).
 - Run `npm run lint` and the critical Playwright suites: `admin-access`, `downloads`, `public-routes`
 - Validate Nginx security headers including `Content-Security-Policy`
+
+### Runbook — "usuário não vê campo novo após deploy"
+
+Quando um usuário relatar que um campo novo (ex.: `body` em Posts) não aparece no formulário do admin após um deploy:
+
+1. Confirme com o usuário que ele fez **hard refresh** (`Cmd+Shift+R` no macOS / `Ctrl+Shift+R` no Windows/Linux) para descartar cache do navegador.
+2. Verifique a tag/SHA da imagem em produção (`docker ps` ou painel do provedor) — confirme que o deploy promovido contém o commit do campo novo.
+3. Verifique os headers `Cache-Control` do Nginx/CDN para arquivos servidos sob `/admin` — arquivos JS/CSS hashados podem ter cache longo, mas o HTML (`/admin`, `/admin/login`) deve responder `Cache-Control: no-store` ou `max-age=0`.
+4. Rode `npm run test:e2e -- tests/e2e/admin-access.spec.ts` apontando para a URL de produção para reproduzir.
+5. Se persistir, valide o acesso por papel: o campo declara `access` no nível de campo em `src/collections/Posts.ts`; mudanças recentes em `src/access/contentAccess.ts` podem ter restringido o papel afetado.
