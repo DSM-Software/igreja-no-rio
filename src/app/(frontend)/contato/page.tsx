@@ -71,6 +71,23 @@ export default function ContatoPage() {
 
               <div className="icon-detail-item">
                 <div className="icon-detail-icon">
+                  <Icon icon="mdi:whatsapp" style={{ fontSize: 22 }} />
+                </div>
+                <div>
+                  <p className="icon-detail-title">WhatsApp</p>
+                  <a
+                    href="https://wa.me/5521996647023"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "var(--accent)", fontSize: 14 }}
+                  >
+                    (21) 99664-7023
+                  </a>
+                </div>
+              </div>
+
+              <div className="icon-detail-item">
+                <div className="icon-detail-icon">
                   <Icon
                     icon="material-symbols:schedule-outline-rounded"
                     style={{ fontSize: 22 }}
@@ -108,8 +125,18 @@ export default function ContatoPage() {
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                   <a
-                    href="mailto:contato@igrejanorio.com"
+                    href="https://wa.me/5521996647023"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="btn btn-primary btn-md"
+                    style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+                  >
+                    <Icon icon="mdi:whatsapp" style={{ fontSize: 18 }} />
+                    WhatsApp
+                  </a>
+                  <a
+                    href="mailto:contato@igrejanorio.com"
+                    className="btn btn-outline btn-md"
                   >
                     Enviar e-mail
                   </a>

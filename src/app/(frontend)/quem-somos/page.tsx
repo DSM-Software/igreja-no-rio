@@ -172,9 +172,14 @@ export default function QuemSomosPage() {
             <Link href="/cultos" className="btn btn-primary btn-lg">
               Ver horários dos cultos
             </Link>
-            <Link href="/contato" className="btn btn-outline btn-lg">
+            <a
+              href="https://wa.me/5521996647023"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-outline btn-lg"
+            >
               Fale conosco
-            </Link>
+            </a>
           </div>
         </div>
       </section>
