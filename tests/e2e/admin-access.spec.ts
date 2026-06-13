@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { Users } from '@/collections/Users'
+import { Posts } from '@/collections/Posts'
 import { canMutateOwnOrElevated, resolveContentOwner } from '@/access/contentAccess'
 
 async function expectAdminLoginScreen(page: import('@playwright/test').Page) {
@@ -72,6 +73,27 @@ test.describe('Admin — credenciais inválidas', () => {
     await page.getByRole('textbox', { name: /password/i }).first().fill('senhaerrada123')
     await page.getByRole('button', { name: /entrar|login/i }).first().click()
     await expect(page.locator('body')).toContainText(/inválid|incorrect|incorret|não encontr/i, { timeout: 10_000 })
+  })
+})
+
+test.describe('Posts — campo corpo do post', () => {
+  test('coleção Posts tem campo body do tipo richText', () => {
+    const bodyField = Posts.fields.find(
+      (f) => 'name' in f && f.name === 'body',
+    ) as { name: string; type: string; label?: string; required?: boolean } | undefined
+
+    expect(bodyField).toBeDefined()
+    expect(bodyField?.type).toBe('richText')
+    expect(bodyField?.required).toBe(true)
+  })
+
+  test('campo body tem label em português', () => {
+    const bodyField = Posts.fields.find(
+      (f) => 'name' in f && f.name === 'body',
+    ) as { name: string; label?: string } | undefined
+
+    expect(bodyField?.label).toBeTruthy()
+    expect(typeof bodyField?.label).toBe('string')
   })
 })
 

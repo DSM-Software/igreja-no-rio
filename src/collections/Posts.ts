@@ -80,7 +80,18 @@ export const Posts: CollectionConfig = {
       admin: { description: 'Cor usada quando não há imagem de capa.' },
     },
     { name: 'excerpt', type: 'textarea', label: 'Resumo (chamada)', required: true },
-    { name: 'body', type: 'richText', editor: lexicalEditor(), required: true },
+    {
+      name: 'body',
+      type: 'richText',
+      label: 'Corpo do post',
+      required: true,
+      admin: {
+        description: 'Conteúdo principal do post. Use a barra de ferramentas para formatar o texto.',
+      },
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [...defaultFeatures],
+      }),
+    },
     {
       name: 'tags',
       type: 'array',
