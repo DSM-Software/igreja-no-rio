@@ -203,12 +203,15 @@ export default async function HomePage() {
             >
               Ver agenda
             </Link>
-            <Link
-              href="/contato"
-              className="inline-flex h-11 items-center rounded-full border border-white/35 px-6 font-display text-sm font-semibold text-white transition-colors hover:bg-white/10"
+            <a
+              href="https://wa.me/5521996647023"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-11 items-center gap-2 rounded-full border border-white/35 px-6 font-display text-sm font-semibold text-white transition-colors hover:bg-white/10"
             >
+              <Icon icon="mdi:whatsapp" style={{ fontSize: 18 }} />
               Fale conosco
-            </Link>
+            </a>
           </div>
         </div>
       </section>
