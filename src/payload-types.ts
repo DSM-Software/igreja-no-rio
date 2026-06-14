@@ -302,6 +302,10 @@ export interface Event {
    */
   recurring?: string | null;
   desc?: string | null;
+  /**
+   * URL da página de inscrição do evento. Quando preenchido, exibe o botão de inscrição.
+   */
+  registrationUrl?: string | null;
   highlight?: boolean | null;
   /**
    * Definido automaticamente a partir do usuario que cria o conteudo.
