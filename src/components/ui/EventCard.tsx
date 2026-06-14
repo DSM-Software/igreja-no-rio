@@ -61,6 +61,16 @@ export default function EventCard({ event }: EventCardProps) {
         {event.desc && (
           <p className="mt-2 text-sm leading-6 text-ink-2">{event.desc}</p>
         )}
+        {event.registrationUrl && (
+          <a
+            href={event.registrationUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary btn-sm mt-3 inline-block"
+          >
+            Inscrever-se
+          </a>
+        )}
       </div>
     </div>
   );
