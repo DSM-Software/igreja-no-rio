@@ -36,10 +36,12 @@ export default async function HomePage() {
       // O filtro na query evita que eventos passados ocupem o limit e escondam os futuros.
       payload.find({
         collection: "events",
-        // Multi-sort no formato comma-separated — em Payload 3.85, a forma
-        // array nem sempre aplica o segundo campo como tie-breaker.
-        sort: "date,time",
-        limit: 4,
+        // Tie-break por horário acontece em memória depois do fetch
+        // (ver agenda/page.tsx para o porquê). Aqui buscamos mais que 4
+        // pra garantir que o sort em memória tenha de onde tirar os 4
+        // realmente mais próximos.
+        sort: "date",
+        limit: 10,
         where: {
           or: [
             { recurring: { exists: true } },
@@ -53,13 +55,21 @@ export default async function HomePage() {
 
   const posts =
     postsResult.status === "fulfilled" ? postsResult.value.docs : [];
-  const events =
+  const dayPart = (d: string | null | undefined) => (d ?? "").slice(0, 10);
+  const rawEvents =
     eventsResult.status === "fulfilled" ? eventsResult.value.docs : [];
+  const events = [...rawEvents]
+    .sort((a, b) => {
+      const cmp = dayPart(a.date).localeCompare(dayPart(b.date));
+      return cmp !== 0 ? cmp : (a.time ?? "").localeCompare(b.time ?? "");
+    })
+    .slice(0, 4);
   const downloads =
     downloadsResult.status === "fulfilled" ? downloadsResult.value.docs : [];
 
-  // events já vem filtrado (recorrentes + futuros) e ordenado por data: respeita o
-  // flag editorial highlight quando não-passado, senão cai no próximo evento mais próximo.
+  // events já vem filtrado (recorrentes + futuros) e ordenado por data+hora:
+  // respeita o flag editorial highlight quando não-passado, senão cai no
+  // próximo evento mais próximo.
   const highlightEvent = events.find((e) => e.highlight) ?? events[0] ?? null;
 
   return (
