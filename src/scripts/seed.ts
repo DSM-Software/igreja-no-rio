@@ -31,13 +31,13 @@ const DEV_PASSWORD_FALLBACK = 'change-me-now'
 function requireAdminEnv(name: 'SEED_ADMIN_EMAIL' | 'SEED_ADMIN_PASSWORD' | 'SEED_ADMIN_NAME') {
   const rawValue = process.env[name]?.trim()
 
-  // if (!rawValue) {
-  //   throw new Error(`Defina ${name} com um valor real antes de rodar o seed.`)
-  // }
+  if (!rawValue) {
+    throw new Error(`Defina ${name} com um valor real antes de rodar o seed.`)
+  }
 
-  // if (ADMIN_PLACEHOLDERS.has(rawValue.toLowerCase())) {
-  //   throw new Error(`Defina ${name} com um valor real; placeholders inseguros nao sao aceitos.`)
-  // }
+  if (ADMIN_PLACEHOLDERS.has(rawValue.toLowerCase())) {
+    throw new Error(`Defina ${name} com um valor real; placeholders inseguros nao sao aceitos.`)
+  }
 
   return rawValue
 }
