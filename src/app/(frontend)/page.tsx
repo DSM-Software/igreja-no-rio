@@ -36,7 +36,9 @@ export default async function HomePage() {
       // O filtro na query evita que eventos passados ocupem o limit e escondam os futuros.
       payload.find({
         collection: "events",
-        sort: ["date", "time"],
+        // Multi-sort no formato comma-separated — em Payload 3.85, a forma
+        // array nem sempre aplica o segundo campo como tie-breaker.
+        sort: "date,time",
         limit: 4,
         where: {
           or: [

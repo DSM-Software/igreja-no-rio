@@ -22,7 +22,9 @@ export default async function AgendaPage() {
   const eventsResult = await payload
     .find({
       collection: "events",
-      sort: ["date", "time"],
+      // Multi-sort no formato comma-separated — em Payload 3.85, a forma
+      // array nem sempre aplica o segundo campo como tie-breaker.
+      sort: "date,time",
       limit: 20,
       where: {},
     })
