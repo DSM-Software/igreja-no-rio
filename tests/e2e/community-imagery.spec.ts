@@ -16,7 +16,7 @@ test.describe('Imagens da comunidade — home', () => {
     await expect(heroImg).toBeVisible()
     // Título permanece visível sobre a foto (overlay garante contraste)
     await expect(
-      page.getByRole('heading', { name: /encontrado/i }),
+      page.getByRole('heading', { name: /bem-vindo/i }),
     ).toBeVisible()
   })
 
