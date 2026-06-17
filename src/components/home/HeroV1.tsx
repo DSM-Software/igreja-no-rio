@@ -50,9 +50,8 @@ export default function HeroV1({
           </h1>
 
           <p className="mt-7 max-w-2xl text-base leading-8 text-white/80 md:text-lg">
-            Somos uma família que vive, celebra e serve juntos no coração do
-            Rio. Toda semana você é bem-vindo aqui — seja na sua primeira visita
-            ou na décima vez.
+            Somos uma família que vive, celebra e serve juntos na cidade do Rio
+            de Janeiro.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">
