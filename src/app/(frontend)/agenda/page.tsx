@@ -20,7 +20,12 @@ export default async function AgendaPage() {
   });
 
   const eventsResult = await payload
-    .find({ collection: "events", sort: "date", limit: 20, where: {} })
+    .find({
+      collection: "events",
+      sort: ["date", "time"],
+      limit: 20,
+      where: {},
+    })
     .catch(() => ({ docs: [] }));
 
   const events = eventsResult.docs;

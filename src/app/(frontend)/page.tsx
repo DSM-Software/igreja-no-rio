@@ -36,7 +36,7 @@ export default async function HomePage() {
       // O filtro na query evita que eventos passados ocupem o limit e escondam os futuros.
       payload.find({
         collection: "events",
-        sort: "date",
+        sort: ["date", "time"],
         limit: 4,
         where: {
           or: [
@@ -45,7 +45,7 @@ export default async function HomePage() {
           ],
         },
       }),
-      payload.find({ collection: "downloads", sort: "-date", limit: 4 }),
+      payload.find({ collection: "downloads", sort: ["-date"], limit: 4 }),
     ],
   );
 
