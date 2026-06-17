@@ -202,7 +202,7 @@ export default async function HomePage() {
             Igreja no Rio
           </p>
           <h2 className="mt-2 font-display text-[clamp(30px,4.2vw,44px)] font-bold tracking-[-0.02em] text-white">
-            Um lugar para chamar de casa
+            Venha fazer parte da familia
           </h2>
           <p className="mt-4 text-base leading-8 text-white/70">
             Não importa de onde você vem ou como chegou até aqui. Há lugar para
