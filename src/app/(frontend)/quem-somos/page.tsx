@@ -29,10 +29,8 @@ export default function QuemSomosPage() {
       <section className="section">
         <div className="container content-grid-2 content-grid-align-center mt-4">
           <div>
-            <p className="section-label">Missão</p>
-            <h2 className="section-title">
-              Para que todos conheçam e amem Jesus
-            </h2>
+            {/* <p className="section-label">Missão</p> */}
+            <h2 className="section-title">Quem somos</h2>
             <p className="mb-5 leading-8 text-ink-2">
               Somos parte da igreja na cidade do Rio de Janeiro. Não vamos à
               igreja — somos a igreja. E você também pode fazer parte dessa
