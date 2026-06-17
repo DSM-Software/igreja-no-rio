@@ -480,6 +480,7 @@ export interface EventsSelect<T extends boolean = true> {
   location?: T;
   recurring?: T;
   desc?: T;
+  registrationUrl?: T;
   highlight?: T;
   owner?: T;
   updatedAt?: T;
