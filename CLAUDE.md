@@ -17,7 +17,8 @@ npm run dev                      # Next.js with Turbopack at localhost:3000
 docker compose up                # db + minio + app
 
 # Build & lint
-npm run build
+npm run build                    # full Next.js build — SLOW locally (minutes); prefer the next line for quick checks
+npx tsc --noEmit                 # fast typecheck only (no Next compile), use for verifying type fixes
 npm run lint
 
 # E2E tests (requires a running server at localhost:3000)
@@ -126,6 +127,20 @@ Every new public route, UI component, or user-visible behavior must have a corre
 - Verify the route renders without errors (`expect(response.ok()).toBeTruthy()`)
 - Assert the key content or element is visible (`expect(page.locator(...)).toBeVisible()`)
 - Cover the main interaction or data state (e.g., filtered list, empty state, form submission)
+
+## OpenSpec workflow
+
+Substantive changes are tracked under `openspec/`:
+- `openspec/specs/<capability>/spec.md` — source of truth for each capability's requirements
+- `openspec/changes/<name>/` — active changes (proposal, design, delta specs, tasks checklist)
+- `openspec/changes/archive/YYYY-MM-DD-<name>/` — completed changes, kept as historical record
+
+Slash commands (invoked inside Claude Code) drive the flow:
+- `/opsx:propose <description>` — scaffold proposal, design, delta specs, and tasks for a new change
+- `/opsx:apply [name]` — implement the change's tasks, ticking checkboxes as you go
+- `/opsx:archive [name]` — sync the delta specs into `openspec/specs/` and move the change to archive
+
+When work touches cross-cutting behavior (multiple files, user-visible changes, new capabilities), prefer this flow over ad-hoc edits — the archived changes form the codebase's institutional memory of *why* each behavior exists. For small bugfixes or refactors, edit directly without the ceremony.
 
 ## Tailwind migration guardrails
 

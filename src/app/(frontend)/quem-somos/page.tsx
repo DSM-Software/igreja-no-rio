@@ -27,7 +27,7 @@ export default function QuemSomosPage() {
 
       {/* Missão */}
       <section className="section">
-        <div className="container content-grid-2 content-grid-align-center">
+        <div className="container content-grid-2 content-grid-align-center mt-4">
           <div>
             <p className="section-label">Missão</p>
             <h2 className="section-title">
