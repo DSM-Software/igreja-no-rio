@@ -7,6 +7,23 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  async headers() {
+    // Advertise agent-discoverable resources via Link headers (RFC 8288).
+    // Relation types are IANA-registered: https://www.iana.org/assignments/link-relations/
+    const linkHeader = [
+      '</sitemap.xml>; rel="sitemap"; type="application/xml"',
+      '</privacidade>; rel="privacy-policy"',
+      '</quem-somos>; rel="about"',
+      '</contato>; rel="help"',
+    ].join(', ')
+
+    return [
+      {
+        source: '/',
+        headers: [{ key: 'Link', value: linkHeader }],
+      },
+    ]
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'igrejanorio.com' },

@@ -65,6 +65,23 @@ test.describe('SEO — Google Search Console verification', () => {
   }
 })
 
+test.describe('SEO — Link headers (RFC 8288)', () => {
+  test('/ envia Link header com rels úteis a agentes', async () => {
+    const baseURL = process.env.BASE_URL ?? 'http://localhost:3000'
+    const context = await playwrightRequest.newContext({ baseURL })
+    const response = await context.get('/')
+    expect(response.status()).toBe(200)
+    const linkHeader = response.headers()['link'] ?? ''
+    expect(linkHeader).toContain('rel="sitemap"')
+    expect(linkHeader).toContain('</sitemap.xml>')
+    expect(linkHeader).toContain('rel="privacy-policy"')
+    expect(linkHeader).toContain('</privacidade>')
+    expect(linkHeader).toContain('rel="about"')
+    expect(linkHeader).toContain('rel="help"')
+    await context.dispose()
+  })
+})
+
 test.describe('SEO — sitemap', () => {
   test('/sitemap.xml retorna XML válido com <urlset', async ({ page }) => {
     const baseURL = process.env.BASE_URL ?? 'http://localhost:3000'
