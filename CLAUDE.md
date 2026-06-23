@@ -47,6 +47,12 @@ Analytics envs (opcionais — string vazia desabilita o respectivo script):
 
 Para rodar testes E2E sem disparar hits reais para Meta/Google, sete os três como string vazia no `.env` de teste.
 
+Os scripts de tracking são gated por consentimento via `localStorage` (chave `ir:consent:v1`):
+- Meta Pixel só carrega quando `categories.marketing === true`.
+- GA4 sempre carrega o `gtag.js` mas inicia em Google Consent Mode v2 `denied`; emite `consent update` quando `categories.analytics === true`.
+- Sem decisão registrada, o `<ConsentBanner />` aparece no rodapé.
+- Testes E2E que exigem Pixel/GA ativos devem pré-popular `localStorage.ir:consent:v1` antes do `page.goto`.
+
 ### Seed users
 
 `npm run seed` cria/garante (upsert por email) três usuários — um por papel — para viabilizar testes E2E e o fluxo editorial completo:

@@ -3,6 +3,7 @@
 import Script from 'next/script'
 import { useCallback } from 'react'
 import { usePageviewTracker } from './usePageviewTracker'
+import { useConsent } from '@/components/consent/useConsent'
 
 const DEFAULT_PIXEL_ID = '878835207994765'
 
@@ -14,24 +15,27 @@ declare global {
 
 export function MetaPixel() {
   const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? DEFAULT_PIXEL_ID
+  const { hasConsent } = useConsent()
+  const marketingGranted = hasConsent('marketing')
 
   const trackPageview = useCallback(() => {
+    if (!marketingGranted) return
     if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
       window.fbq('track', 'PageView')
     }
-  }, [])
+  }, [marketingGranted])
 
   usePageviewTracker(trackPageview)
 
   if (!pixelId) return null
+  if (!marketingGranted) return null
 
   return (
-    <>
-      <Script
-        id="meta-pixel"
-        strategy="afterInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
+    <Script
+      id="meta-pixel"
+      strategy="afterInteractive"
+      dangerouslySetInnerHTML={{
+        __html: `
 !function(f,b,e,v,n,t,s)
 {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -43,18 +47,7 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 fbq('init', '${pixelId}');
 fbq('track', 'PageView');
 `,
-        }}
-      />
-      <noscript>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          height="1"
-          width="1"
-          style={{ display: 'none' }}
-          src={`https://www.facebook.com/tr?id=${pixelId}&ev=PageView&noscript=1`}
-          alt=""
-        />
-      </noscript>
-    </>
+      }}
+    />
   )
 }

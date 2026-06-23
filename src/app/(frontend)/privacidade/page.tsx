@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { ManagePreferencesButton } from '@/components/consent/ManagePreferencesButton'
 
 export const metadata: Metadata = {
   title: 'Política de Privacidade',
@@ -20,7 +21,7 @@ const sections = [
     body: [
       'Quando voce entra em contato pelos canais oficiais da igreja, podemos tratar dados como nome, e-mail, telefone e o conteudo da sua mensagem.',
       'Tambem podemos receber dados tecnicos basicos de acesso e navegacao necessarios para manter o site disponivel e seguro, como logs de acesso, endereco IP e informacoes do navegador.',
-      'Para entender o alcance das publicacoes e otimizar conteudo, utilizamos Google Analytics 4 e Meta Pixel, que coletam dados agregados e pseudonimizados de navegacao (paginas visitadas, origem do trafego, dispositivo) por meio de cookies de terceiros.',
+      'Mediante seu consentimento, coletamos tambem dados agregados e pseudonimizados de navegacao (paginas visitadas, origem do trafego, dispositivo) para entender como o site e usado e melhorar a experiencia.',
     ],
   },
   {
@@ -28,7 +29,7 @@ const sections = [
     body: [
       'Os dados de contato sao usados para responder duvidas, orientar visitantes, acompanhar pedidos relacionados a grupos caseiros, eventos e atividades da igreja.',
       'Os dados tecnicos sao usados para seguranca, prevencao de abuso, diagnostico de erros e operacao regular do site e do CMS.',
-      'Os dados coletados por Google Analytics 4 sao usados para medir audiencia e desempenho do site. Os dados coletados pelo Meta Pixel sao usados para medir o alcance de campanhas e otimizar anuncios em Facebook e Instagram. Voce pode bloquear esses scripts no nivel do navegador (extensoes de privacidade, modo de navegacao anonima ou configuracoes de cookies).',
+      'Os dados de navegacao coletados com seu consentimento sao usados exclusivamente para medir audiencia, melhorar o conteudo do site e medir o alcance das nossas publicacoes. Voce pode aceitar, recusar ou ajustar essa coleta a qualquer momento na secao "Gerenciar preferencias de cookies" desta pagina.',
     ],
   },
   {
@@ -82,6 +83,28 @@ export default function PrivacyPage() {
               Se voce tiver qualquer duvida sobre esta politica ou quiser exercer direitos relacionados aos seus dados pessoais, escreva para <a href="mailto:contato@igrejanorio.com" style={{ color: 'var(--accent)' }}>contato@igrejanorio.com</a>.
             </p>
           </div>
+
+          <section className="surface-card" style={{ marginBottom: 32 }}>
+            <h2 className="section-title section-block-title" style={{ fontSize: 24 }}>
+              Gerenciar preferências de cookies
+            </h2>
+            <div className="section-stack" style={{ gap: 12 }}>
+              <p className="supporting-copy" style={{ margin: 0 }}>
+                Voce pode aceitar, recusar ou ajustar a qualquer momento o uso
+                de cookies analiticos e de marketing neste site. A decisao fica
+                gravada apenas no seu navegador e e valida por 12 meses.
+              </p>
+              <p className="supporting-copy" style={{ margin: 0 }}>
+                Use o botao abaixo para reabrir o painel de preferencias e atualizar
+                sua escolha. Categorias essenciais (necessarias ao funcionamento
+                basico do site) nao envolvem rastreamento e nao podem ser
+                desativadas.
+              </p>
+              <div style={{ marginTop: 8 }}>
+                <ManagePreferencesButton />
+              </div>
+            </div>
+          </section>
 
           <div className="section-stack" style={{ gap: 32 }}>
             {sections.map((section) => (
