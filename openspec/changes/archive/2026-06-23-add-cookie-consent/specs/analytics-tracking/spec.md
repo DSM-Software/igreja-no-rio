@@ -1,8 +1,4 @@
-## Purpose
-
-Specifies how analytics and marketing pixels are integrated into the public site. Defines where Meta Pixel and Google Analytics 4 must be loaded, when page-view events must fire (including App Router client-side navigations), and which surfaces (Payload admin) must be excluded from tracking. Ensures the church can measure reach across the public funnel without leaking analytics into the admin experience.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Meta Pixel carregado em todas as rotas públicas
 O sistema SHALL injetar o script do Meta Pixel (`fbevents.js`) no `<head>` de todas as rotas servidas pelo route group `(frontend)` quando **ambas** as condições forem verdadeiras: a variável de ambiente `NEXT_PUBLIC_META_PIXEL_ID` (com fallback para `878835207994765`) for não-vazia E o usuário tiver consentido explicitamente a categoria `marketing` (`localStorage.ir:consent:v1.categories.marketing === true`). Sem consentimento, o script NÃO SHALL ser injetado.
@@ -73,7 +69,7 @@ O sistema SHALL disparar um evento `page_view` no GA quando o usuário navegar p
 - **THEN** nenhuma requisição para `google-analytics.com/g/collect` é feita (Consent Mode bloqueia o transporte; somente requisições agregadas sem cookies — se houver — podem sair)
 
 ### Requirement: Analytics não carrega no admin Payload
-O sistema SHALL NOT injetar Meta Pixel nem GA em nenhuma rota servida sob `/admin` ou pelo route group `(payload)`.
+O sistema SHALL NOT injetar Meta Pixel nem GA em nenhuma rota servida sob `/admin` ou pelo route group `(payload)`, independentemente do estado de consentimento.
 
 #### Scenario: Admin sem Pixel
 - **WHEN** o usuário acessa `/admin` ou `/admin/login`
