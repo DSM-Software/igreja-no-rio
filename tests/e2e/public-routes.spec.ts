@@ -29,6 +29,36 @@ test.describe('Public routes — smoke', () => {
   }
 })
 
+test.describe('Destaque do canal no YouTube', () => {
+  const YOUTUBE_URL = 'https://www.youtube.com/@IgrejanoRio7'
+
+  test('home exibe destaque do YouTube com link seguro', async ({ page }) => {
+    const response = await page.goto('/')
+    expect(response?.ok()).toBeTruthy()
+
+    const link = page
+      .locator(`a[href="${YOUTUBE_URL}"]`)
+      .filter({ hasText: /inscreva-se no canal/i })
+    await expect(link).toBeVisible()
+    await expect(link).toHaveAttribute('target', '_blank')
+    await expect(link).toHaveAttribute('rel', /noopener/)
+    await expect(page.locator('body')).toContainText(/acompanhe nossos cultos/i)
+  })
+
+  test('contato expõe item e botão do YouTube apontando para a mesma URL', async ({ page }) => {
+    const response = await page.goto('/contato')
+    expect(response?.ok()).toBeTruthy()
+
+    const links = page.locator(`a[href="${YOUTUBE_URL}"]`)
+    await expect(links).toHaveCount(2)
+
+    for (let i = 0; i < 2; i++) {
+      await expect(links.nth(i)).toHaveAttribute('target', '_blank')
+      await expect(links.nth(i)).toHaveAttribute('rel', /noopener/)
+    }
+  })
+})
+
 test.describe('Header e footer em todas as rotas', () => {
   for (const route of PUBLIC_ROUTES) {
     test(`${route.label} — header com links de navegação`, async ({ page }) => {
