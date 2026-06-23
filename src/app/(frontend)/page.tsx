@@ -7,6 +7,7 @@ import HeroV1 from "@/components/home/HeroV1";
 import PostCard from "@/components/blog/PostCard";
 import EventCard from "@/components/ui/EventCard";
 import DownloadCard from "@/components/ui/DownloadCard";
+import { YOUTUBE_CHANNEL_URL } from "@/lib/links";
 
 export const dynamic = "force-dynamic";
 
@@ -182,6 +183,38 @@ export default async function HomePage() {
             >
               Ver todos os materiais →
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Destaque do canal no YouTube ─── */}
+      <section className="bg-bg-2 py-20">
+        <div className="mx-auto w-full max-w-content px-4 md:px-8">
+          <div className="flex flex-col items-center gap-8 rounded-3xl bg-navy-900 px-6 py-12 text-center shadow-soft md:flex-row md:px-12 md:text-left">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-white">
+              <Icon icon="mdi:youtube" style={{ fontSize: 40 }} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-display text-xs font-semibold uppercase tracking-[0.16em] text-brand-400">
+                YouTube
+              </p>
+              <h2 className="mt-2 font-display text-[clamp(26px,3.6vw,38px)] font-bold tracking-[-0.02em] text-white">
+                Acompanhe nossos cultos e mensagens
+              </h2>
+              <p className="mt-3 max-w-[56ch] text-base leading-8 text-white/70">
+                Assista às pregações, louvores e momentos da nossa comunidade.
+                Inscreva-se no canal para não perder nada.
+              </p>
+            </div>
+            <a
+              href={YOUTUBE_CHANNEL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-brand-500 px-6 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
+            >
+              <Icon icon="mdi:youtube" style={{ fontSize: 18 }} />
+              Inscreva-se no canal
+            </a>
           </div>
         </div>
       </section>
