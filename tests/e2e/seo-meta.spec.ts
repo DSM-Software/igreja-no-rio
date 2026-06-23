@@ -51,6 +51,20 @@ test.describe('SEO — Open Graph tags', () => {
   }
 })
 
+test.describe('SEO — Google Search Console verification', () => {
+  const SEARCH_CONSOLE_TOKEN = 'zVoVtbyWEF_aoYieMdzO7wcwKa2jrEDNdTXe2yw-vYs'
+
+  for (const route of ROUTES) {
+    test(`${route.name} — meta google-site-verification presente`, async ({ page }) => {
+      await page.goto(route.path)
+      const content = await page
+        .locator('meta[name="google-site-verification"]')
+        .getAttribute('content')
+      expect(content).toBe(SEARCH_CONSOLE_TOKEN)
+    })
+  }
+})
+
 test.describe('SEO — sitemap', () => {
   test('/sitemap.xml retorna XML válido com <urlset', async ({ page }) => {
     const baseURL = process.env.BASE_URL ?? 'http://localhost:3000'
