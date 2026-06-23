@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Poppins, Mulish } from "next/font/google";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { MetaPixel } from "@/components/analytics/MetaPixel";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -47,6 +50,11 @@ export const metadata: Metadata = {
     ],
   },
   twitter: { card: "summary_large_image" },
+  verification: {
+    google:
+      process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ??
+      "zVoVtbyWEF_aoYieMdzO7wcwKa2jrEDNdTXe2yw-vYs",
+  },
 };
 
 export default function RootLayout({
@@ -57,6 +65,10 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={`${poppins.variable} ${mulish.variable}`}>
       <body className="min-h-screen font-body text-ink antialiased">
+        <Suspense fallback={null}>
+          <MetaPixel />
+          <GoogleAnalytics />
+        </Suspense>
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />

@@ -40,6 +40,13 @@ Copy `.env.example` to `.env`. The Docker Compose stack provides:
 
 Required env vars: `DATABASE_URI`, `PAYLOAD_SECRET`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_ENDPOINT`, `NEXT_PUBLIC_SERVER_URL`, `PAYLOAD_SERVER_URL`, `PAYLOAD_TRUSTED_ORIGINS`, `PAYLOAD_CSRF_ORIGINS`.
 
+Analytics envs (opcionais — string vazia desabilita o respectivo script):
+- `NEXT_PUBLIC_META_PIXEL_ID` — ID do Meta Pixel (default em código: `878835207994765`)
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` — Measurement ID do Google Analytics 4 (default em código: `G-EX9WZW1607`)
+- `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` — token do Google Search Console (default em código: `zVoVtbyWEF_aoYieMdzO7wcwKa2jrEDNdTXe2yw-vYs`)
+
+Para rodar testes E2E sem disparar hits reais para Meta/Google, sete os três como string vazia no `.env` de teste.
+
 ### Seed users
 
 `npm run seed` cria/garante (upsert por email) três usuários — um por papel — para viabilizar testes E2E e o fluxo editorial completo:

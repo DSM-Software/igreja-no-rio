@@ -20,6 +20,7 @@ const sections = [
     body: [
       'Quando voce entra em contato pelos canais oficiais da igreja, podemos tratar dados como nome, e-mail, telefone e o conteudo da sua mensagem.',
       'Tambem podemos receber dados tecnicos basicos de acesso e navegacao necessarios para manter o site disponivel e seguro, como logs de acesso, endereco IP e informacoes do navegador.',
+      'Para entender o alcance das publicacoes e otimizar conteudo, utilizamos Google Analytics 4 e Meta Pixel, que coletam dados agregados e pseudonimizados de navegacao (paginas visitadas, origem do trafego, dispositivo) por meio de cookies de terceiros.',
     ],
   },
   {
@@ -27,6 +28,7 @@ const sections = [
     body: [
       'Os dados de contato sao usados para responder duvidas, orientar visitantes, acompanhar pedidos relacionados a grupos caseiros, eventos e atividades da igreja.',
       'Os dados tecnicos sao usados para seguranca, prevencao de abuso, diagnostico de erros e operacao regular do site e do CMS.',
+      'Os dados coletados por Google Analytics 4 sao usados para medir audiencia e desempenho do site. Os dados coletados pelo Meta Pixel sao usados para medir o alcance de campanhas e otimizar anuncios em Facebook e Instagram. Voce pode bloquear esses scripts no nivel do navegador (extensoes de privacidade, modo de navegacao anonima ou configuracoes de cookies).',
     ],
   },
   {
