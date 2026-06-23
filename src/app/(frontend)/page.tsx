@@ -36,8 +36,12 @@ export default async function HomePage() {
       // O filtro na query evita que eventos passados ocupem o limit e escondam os futuros.
       payload.find({
         collection: "events",
+        // Tie-break por horário acontece em memória depois do fetch
+        // (ver agenda/page.tsx para o porquê). Aqui buscamos mais que 4
+        // pra garantir que o sort em memória tenha de onde tirar os 4
+        // realmente mais próximos.
         sort: "date",
-        limit: 4,
+        limit: 10,
         where: {
           or: [
             { recurring: { exists: true } },
@@ -45,19 +49,27 @@ export default async function HomePage() {
           ],
         },
       }),
-      payload.find({ collection: "downloads", sort: "-date", limit: 4 }),
+      payload.find({ collection: "downloads", sort: ["-date"], limit: 4 }),
     ],
   );
 
   const posts =
     postsResult.status === "fulfilled" ? postsResult.value.docs : [];
-  const events =
+  const dayPart = (d: string | null | undefined) => (d ?? "").slice(0, 10);
+  const rawEvents =
     eventsResult.status === "fulfilled" ? eventsResult.value.docs : [];
+  const events = [...rawEvents]
+    .sort((a, b) => {
+      const cmp = dayPart(a.date).localeCompare(dayPart(b.date));
+      return cmp !== 0 ? cmp : (a.time ?? "").localeCompare(b.time ?? "");
+    })
+    .slice(0, 4);
   const downloads =
     downloadsResult.status === "fulfilled" ? downloadsResult.value.docs : [];
 
-  // events já vem filtrado (recorrentes + futuros) e ordenado por data: respeita o
-  // flag editorial highlight quando não-passado, senão cai no próximo evento mais próximo.
+  // events já vem filtrado (recorrentes + futuros) e ordenado por data+hora:
+  // respeita o flag editorial highlight quando não-passado, senão cai no
+  // próximo evento mais próximo.
   const highlightEvent = events.find((e) => e.highlight) ?? events[0] ?? null;
 
   return (
@@ -190,7 +202,7 @@ export default async function HomePage() {
             Igreja no Rio
           </p>
           <h2 className="mt-2 font-display text-[clamp(30px,4.2vw,44px)] font-bold tracking-[-0.02em] text-white">
-            Um lugar para chamar de casa
+            Venha fazer parte da familia
           </h2>
           <p className="mt-4 text-base leading-8 text-white/70">
             Não importa de onde você vem ou como chegou até aqui. Há lugar para
@@ -203,12 +215,15 @@ export default async function HomePage() {
             >
               Ver agenda
             </Link>
-            <Link
-              href="/contato"
-              className="inline-flex h-11 items-center rounded-full border border-white/35 px-6 font-display text-sm font-semibold text-white transition-colors hover:bg-white/10"
+            <a
+              href="https://wa.me/5521996647023"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-11 items-center gap-2 rounded-full border border-white/35 px-6 font-display text-sm font-semibold text-white transition-colors hover:bg-white/10"
             >
+              <Icon icon="mdi:whatsapp" style={{ fontSize: 18 }} />
               Fale conosco
-            </Link>
+            </a>
           </div>
         </div>
       </section>

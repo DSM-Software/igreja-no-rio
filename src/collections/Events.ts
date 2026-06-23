@@ -38,6 +38,12 @@ export const Events: CollectionConfig = {
     },
     { name: 'desc', type: 'textarea', label: 'Descrição' },
     {
+      name: 'registrationUrl',
+      type: 'text',
+      label: 'Link de inscrição (opcional)',
+      admin: { description: 'URL da página de inscrição do evento. Quando preenchido, exibe o botão de inscrição.' },
+    },
+    {
       name: 'highlight',
       type: 'checkbox',
       label: 'Destaque na home',

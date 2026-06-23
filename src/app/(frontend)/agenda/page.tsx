@@ -23,7 +23,16 @@ export default async function AgendaPage() {
     .find({ collection: "events", sort: "date", limit: 20, where: {} })
     .catch(() => ({ docs: [] }));
 
-  const events = eventsResult.docs;
+  // Tie-break por horário em memória. O campo `date` no banco guarda
+  // timestamp completo (HH:MM:SS variável por registro), então o sort
+  // do Payload `date,time` não dispara o tie-breaker `time` — dois
+  // eventos do mesmo dia nunca empatam em `date`. Aqui normalizamos
+  // pra dia e usamos `time` (HH:MM) como segundo critério.
+  const dayPart = (d: string | null | undefined) => (d ?? "").slice(0, 10);
+  const events = [...eventsResult.docs].sort((a, b) => {
+    const cmp = dayPart(a.date).localeCompare(dayPart(b.date));
+    return cmp !== 0 ? cmp : (a.time ?? "").localeCompare(b.time ?? "");
+  });
 
   const recurringEvents = events.filter((e) => e.recurring);
   const upcomingEvents = events.filter(

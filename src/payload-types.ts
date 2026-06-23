@@ -172,6 +172,9 @@ export interface Post {
    */
   coverColor?: ('teal' | 'navy' | 'sand') | null;
   excerpt: string;
+  /**
+   * Conteúdo principal do post. Use a barra de ferramentas para formatar o texto.
+   */
   body: {
     root: {
       type: string;
@@ -299,6 +302,10 @@ export interface Event {
    */
   recurring?: string | null;
   desc?: string | null;
+  /**
+   * URL da página de inscrição do evento. Quando preenchido, exibe o botão de inscrição.
+   */
+  registrationUrl?: string | null;
   highlight?: boolean | null;
   /**
    * Definido automaticamente a partir do usuario que cria o conteudo.
@@ -473,6 +480,7 @@ export interface EventsSelect<T extends boolean = true> {
   location?: T;
   recurring?: T;
   desc?: T;
+  registrationUrl?: T;
   highlight?: T;
   owner?: T;
   updatedAt?: T;

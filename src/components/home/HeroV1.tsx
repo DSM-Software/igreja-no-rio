@@ -41,20 +41,17 @@ export default function HeroV1({
 
       <div className="relative mx-auto w-full max-w-content px-4 md:px-8">
         <div className="max-w-3xl">
-          <p className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-brand-300">
+          {/* <p className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-brand-300">
             Santíssimo · Rio de Janeiro
-          </p>
+          </p> */}
 
           <h1 className="mt-5 font-display text-[clamp(44px,8vw,88px)] font-extrabold leading-[0.95] tracking-[-0.02em] text-white">
-            Você já foi
-            <br />
-            encontrado.
+            Seja bem-vindo.
           </h1>
 
           <p className="mt-7 max-w-2xl text-base leading-8 text-white/80 md:text-lg">
-            Somos uma família que vive, celebra e serve juntos no coração do
-            Rio. Toda semana você é bem-vindo aqui — seja na sua primeira visita
-            ou na décima vez.
+            Somos uma família que vive, celebra e serve juntos na cidade do Rio
+            de Janeiro.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">

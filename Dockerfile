@@ -32,13 +32,17 @@ ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+# Regenera o importMap do admin Payload ANTES do next build para garantir
+# que o arquivo correto vá pra imagem mesmo se o withPayload+Turbopack
+# falhar silenciosamente. Sem isso, o admin pode renderizar sem o editor
+# Lexical (RscEntryLexicalField "not found in importMap" em runtime).
 RUN DATABASE_URI=postgresql://placeholder:placeholder@localhost:5432/placeholder \
     PAYLOAD_SECRET=build-placeholder-secret \
     S3_BUCKET=placeholder \
     S3_REGION=us-east-1 \
     S3_ACCESS_KEY_ID=placeholder \
     S3_SECRET_ACCESS_KEY=placeholder \
-    npm run build
+    sh -c "npx payload generate:importmap && npm run build"
 
 # ─── Stage 3: runner ──────────────────────────────────────────────────────────
 FROM base AS runner

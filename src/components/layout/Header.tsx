@@ -93,12 +93,15 @@ export default function Header() {
               </Link>
             );
           })}
-          <Link
-            href="/contato"
-            className="ml-2 inline-flex h-10 items-center rounded-full bg-brand-500 px-4 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
+          <a
+            href="https://wa.me/5521996647023"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ml-2 inline-flex h-10 items-center gap-2 rounded-full bg-brand-500 px-4 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
           >
+            <Icon icon="mdi:whatsapp" style={{ fontSize: 16 }} />
             Fale conosco
-          </Link>
+          </a>
         </nav>
 
         <button
@@ -149,13 +152,16 @@ export default function Header() {
             </Link>
           );
         })}
-        <Link
-          href="/contato"
-          className="mt-2 inline-flex h-10 items-center justify-center rounded-full bg-brand-500 px-4 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
+        <a
+          href="https://wa.me/5521996647023"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-2 inline-flex h-10 items-center justify-center gap-2 rounded-full bg-brand-500 px-4 font-display text-sm font-semibold text-white transition-colors hover:bg-brand-600"
           onClick={() => setMenuOpen(false)}
         >
+          <Icon icon="mdi:whatsapp" style={{ fontSize: 16 }} />
           Fale conosco
-        </Link>
+        </a>
       </nav>
     </header>
   );
