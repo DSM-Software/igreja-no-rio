@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
+import { YOUTUBE_CHANNEL_URL } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "Contato",
@@ -88,6 +89,23 @@ export default function ContatoPage() {
 
               <div className="icon-detail-item">
                 <div className="icon-detail-icon">
+                  <Icon icon="mdi:youtube" style={{ fontSize: 22 }} />
+                </div>
+                <div>
+                  <p className="icon-detail-title">YouTube</p>
+                  <a
+                    href={YOUTUBE_CHANNEL_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "var(--accent)", fontSize: 14 }}
+                  >
+                    @IgrejanoRio7
+                  </a>
+                </div>
+              </div>
+
+              <div className="icon-detail-item">
+                <div className="icon-detail-icon">
                   <Icon
                     icon="material-symbols:schedule-outline-rounded"
                     style={{ fontSize: 22 }}
@@ -133,6 +151,16 @@ export default function ContatoPage() {
                   >
                     <Icon icon="mdi:whatsapp" style={{ fontSize: 18 }} />
                     WhatsApp
+                  </a>
+                  <a
+                    href={YOUTUBE_CHANNEL_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-outline btn-md"
+                    style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
+                  >
+                    <Icon icon="mdi:youtube" style={{ fontSize: 18 }} />
+                    YouTube
                   </a>
                   <a
                     href="mailto:contato@igrejanorio.com"
