@@ -58,6 +58,37 @@ test.describe('Destaque do canal no YouTube', () => {
   })
 })
 
+test.describe('Editora parceira (Servo Livre)', () => {
+  const STORE_URL = 'https://www.loja.servolivre.com/'
+
+  test('home exibe banner da editora com link seguro', async ({ page }) => {
+    const response = await page.goto('/')
+    expect(response?.ok()).toBeTruthy()
+
+    const link = page
+      .locator(`a[href="${STORE_URL}"]`)
+      .filter({ hasText: /visitar a loja/i })
+    await expect(link).toBeVisible()
+    await expect(link).toHaveAttribute('target', '_blank')
+    await expect(link).toHaveAttribute('rel', /noopener/)
+    await expect(page.locator('body')).toContainText(/conheça nossos materiais/i)
+
+    // As seções vizinhas da home continuam visíveis.
+    await expect(page.locator('body')).toContainText(/materiais recentes/i)
+    await expect(page.locator('body')).toContainText(/acompanhe nossos cultos/i)
+  })
+
+  test('footer aponta para a loja da editora com link seguro', async ({ page }) => {
+    await page.goto('/')
+    const footerLink = page
+      .locator('footer[role="contentinfo"]')
+      .locator(`a[href="${STORE_URL}"]`)
+    await expect(footerLink).toBeVisible()
+    await expect(footerLink).toHaveAttribute('target', '_blank')
+    await expect(footerLink).toHaveAttribute('rel', /noopener/)
+  })
+})
+
 test.describe('Header e footer em todas as rotas', () => {
   for (const route of PUBLIC_ROUTES) {
     test(`${route.label} — header com links de navegação`, async ({ page }) => {
