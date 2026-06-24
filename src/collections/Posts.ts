@@ -6,6 +6,7 @@ import {
   canEditPostsField,
   resolveContentOwner,
 } from '../access/contentAccess'
+import { lexicalToText } from '../lib/lexical-to-text'
 
 const editableFieldAccess = {
   read: canEditPostsField,
@@ -144,6 +145,25 @@ export const Posts: CollectionConfig = {
       },
       hooks: {
         beforeChange: [resolveContentOwner],
+      },
+    },
+    {
+      name: 'searchBody',
+      type: 'textarea',
+      admin: { hidden: true, disabled: true },
+      hooks: {
+        beforeChange: [
+          ({ siblingData }) => {
+            const tags = Array.isArray(siblingData?.tags)
+              ? (siblingData.tags as Array<{ tag?: string | null }>)
+                  .map((t) => t?.tag ?? '')
+                  .filter(Boolean)
+                  .join(' ')
+              : ''
+            const body = lexicalToText(siblingData?.body)
+            return [body, tags].filter(Boolean).join(' ').slice(0, 50000)
+          },
+        ],
       },
     },
   ],

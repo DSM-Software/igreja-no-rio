@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LogoMark from "@/components/ui/LogoMark";
+import { SearchOverlay, SearchTrigger } from "@/components/search";
 
 const NAV_LINKS = [
   { href: "/", label: "Início" },
@@ -23,6 +24,7 @@ export default function Header() {
   const isDarkHero = DARK_HERO_PATHS.includes(pathname);
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const mobileNavigationId = "mobile-navigation";
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export default function Header() {
   useEffect(() => {
     const closeMenu = window.setTimeout(() => {
       setMenuOpen(false);
+      setSearchOpen(false);
     }, 0);
 
     return () => window.clearTimeout(closeMenu);
@@ -46,6 +49,45 @@ export default function Header() {
       document.body.style.overflow = "";
     };
   }, [menuOpen]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) return;
+      const target = event.target as HTMLElement | null;
+      const tag = target?.tagName;
+      const isEditableTarget =
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        tag === "SELECT" ||
+        Boolean(target?.isContentEditable);
+
+      const isCmdK =
+        (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
+      const isSlash =
+        event.key === "/" &&
+        !event.metaKey &&
+        !event.ctrlKey &&
+        !event.altKey &&
+        !window.matchMedia("(max-width: 1023px)").matches &&
+        !isEditableTarget;
+
+      if (!isCmdK && !isSlash) return;
+      event.preventDefault();
+      setMenuOpen(false);
+      setSearchOpen(true);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  const openSearch = () => {
+    setMenuOpen(false);
+    setSearchOpen(true);
+  };
+  const toggleMenu = () => {
+    setSearchOpen(false);
+    setMenuOpen((value) => !value);
+  };
 
   const solid = !isDarkHero || scrolled;
   const onLight = solid;
@@ -93,6 +135,7 @@ export default function Header() {
               </Link>
             );
           })}
+          <SearchTrigger onLight={onLight} onClick={openSearch} className="ml-2" />
           <a
             href="https://wa.me/5521996647023"
             target="_blank"
@@ -104,26 +147,29 @@ export default function Header() {
           </a>
         </nav>
 
-        <button
-          type="button"
-          className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors lg:hidden ${
-            solid
-              ? "border-border bg-white text-ink"
-              : "border-white/30 bg-white/10 text-white"
-          }`}
-          aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
-          aria-expanded={menuOpen}
-          aria-controls={mobileNavigationId}
-          onClick={() => setMenuOpen((value) => !value)}
-        >
-          <Icon
-            icon={
-              menuOpen
-                ? "material-symbols:close-rounded"
-                : "material-symbols:menu-rounded"
-            }
-          />
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <SearchTrigger onLight={onLight} onClick={openSearch} />
+          <button
+            type="button"
+            className={`inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors ${
+              solid
+                ? "border-border bg-white text-ink"
+                : "border-white/30 bg-white/10 text-white"
+            }`}
+            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={menuOpen}
+            aria-controls={mobileNavigationId}
+            onClick={toggleMenu}
+          >
+            <Icon
+              icon={
+                menuOpen
+                  ? "material-symbols:close-rounded"
+                  : "material-symbols:menu-rounded"
+              }
+            />
+          </button>
+        </div>
       </div>
 
       <nav
@@ -163,6 +209,8 @@ export default function Header() {
           Fale conosco
         </a>
       </nav>
+
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }

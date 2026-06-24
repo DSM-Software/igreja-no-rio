@@ -204,6 +204,7 @@ export interface Post {
    * Definido automaticamente a partir do usuario que cria o conteudo.
    */
   owner?: (number | null) | User;
+  searchBody?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -448,6 +449,7 @@ export interface PostsSelect<T extends boolean = true> {
       };
   published?: T;
   owner?: T;
+  searchBody?: T;
   updatedAt?: T;
   createdAt?: T;
 }
