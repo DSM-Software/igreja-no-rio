@@ -1,4 +1,4 @@
-import type { Access, FieldAccess } from 'payload'
+import type { Access, FieldAccess, Where } from 'payload'
 
 type ContentUser = {
   id: number
@@ -45,9 +45,16 @@ export function resolveContentOwner({ value, originalDoc, req }: { value?: unkno
 }
 
 export const canReadPublishedOrOwn: Access = ({ req: { user } }) => {
-  if (!user) return { published: { equals: true } }
+  if (!user) return { published: { equals: true } } as Where
   if (hasElevatedContentAccess(user)) return true
-  return true
+  // Autor: published OR posts they own. Without this filter the role could
+  // list every other autor's drafts via `GET /api/posts?where[published][equals]=false`.
+  return {
+    or: [
+      { published: { equals: true } },
+      { owner: { equals: user.id } },
+    ],
+  } as Where
 }
 
 export const canMutateOwnOrElevated: Access = ({ req: { user } }) => {

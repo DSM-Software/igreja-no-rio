@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react";
 import type { Event } from "@/payload-types";
+import { getSafeExternalURL } from "@/lib/utils";
 
 const MONTHS_SHORT = [
   "jan",
@@ -31,6 +32,7 @@ export default function EventCard({ event }: EventCardProps) {
   const day = hasValidDate && dateValue ? dateValue.getDate() : "—";
   const mon =
     hasValidDate && dateValue ? MONTHS_SHORT[dateValue.getMonth()] : "";
+  const safeRegistrationUrl = getSafeExternalURL(event.registrationUrl);
 
   return (
     <div className="flex gap-4 rounded-card border border-border bg-white p-4 shadow-soft">
@@ -61,9 +63,9 @@ export default function EventCard({ event }: EventCardProps) {
         {event.desc && (
           <p className="mt-2 text-sm leading-6 text-ink-2">{event.desc}</p>
         )}
-        {event.registrationUrl && (
+        {safeRegistrationUrl && (
           <a
-            href={event.registrationUrl}
+            href={safeRegistrationUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary btn-sm mt-3 inline-block"

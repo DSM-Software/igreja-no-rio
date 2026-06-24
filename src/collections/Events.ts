@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { canMutateOwnOrElevated, resolveContentOwner } from '../access/contentAccess'
+import { getSafeExternalURL } from '../lib/utils'
 
 export const Events: CollectionConfig = {
   slug: 'events',
@@ -42,6 +43,12 @@ export const Events: CollectionConfig = {
       type: 'text',
       label: 'Link de inscrição (opcional)',
       admin: { description: 'URL da página de inscrição do evento. Quando preenchido, exibe o botão de inscrição.' },
+      validate: (value: string | null | undefined) => {
+        if (!value) return true
+        return getSafeExternalURL(value)
+          ? true
+          : 'Use uma URL absoluta com protocolo http:// ou https://.'
+      },
     },
     {
       name: 'highlight',
