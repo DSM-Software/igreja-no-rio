@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { Icon } from "@iconify/react";
 import LogoMark from "@/components/ui/LogoMark";
+import { SERVO_LIVRE_URL } from "@/lib/links";
 
 const NAV = [
   { href: "/quem-somos", label: "Quem Somos" },
@@ -41,6 +43,18 @@ export default function Footer() {
                 {label}
               </Link>
             ))}
+            <a
+              href={SERVO_LIVRE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-sm text-ink-2 transition-colors hover:text-brand-700"
+            >
+              Editora Servo Livre
+              <Icon
+                icon="material-symbols:open-in-new-rounded"
+                style={{ fontSize: 14 }}
+              />
+            </a>
           </div>
 
           <div className="space-y-2 text-sm leading-7 text-ink-2">

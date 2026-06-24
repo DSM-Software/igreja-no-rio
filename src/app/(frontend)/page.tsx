@@ -7,6 +7,7 @@ import HeroV1 from "@/components/home/HeroV1";
 import PostCard from "@/components/blog/PostCard";
 import EventCard from "@/components/ui/EventCard";
 import DownloadCard from "@/components/ui/DownloadCard";
+import PublisherBanner from "@/components/home/PublisherBanner";
 import { YOUTUBE_CHANNEL_URL } from "@/lib/links";
 
 export const dynamic = "force-dynamic";
@@ -186,6 +187,9 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ─── Editora parceira (Servo Livre) ─── */}
+      <PublisherBanner />
 
       {/* ─── Destaque do canal no YouTube ─── */}
       <section className="bg-bg-2 py-20">
