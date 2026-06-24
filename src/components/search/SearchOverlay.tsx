@@ -167,7 +167,7 @@ function OverlayPanel({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className="fixed inset-0 z-[60] bg-navy-900/60 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] bg-navy-900/60 backdrop-blur-sm"
       role="presentation"
       onClick={handleBackdropClick}
     >

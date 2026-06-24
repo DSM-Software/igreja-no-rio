@@ -177,6 +177,61 @@ test.describe('Site search — resultados no overlay', () => {
   })
 })
 
+test.describe('Site search — overlay cobre chrome elevado da página', () => {
+  // A nav de categorias de /downloads é position: sticky com z-index próprio.
+  // O backdrop do overlay deve pintar acima dela — sem deixar uma faixa branca.
+  async function openSearchOnDownloads(page: Page) {
+    await seedConsent(page)
+    const response = await page.goto('/downloads')
+    expect(response?.ok()).toBeTruthy()
+
+    const categoryNav = page.locator('.downloads-category-nav')
+    await expect(categoryNav).toBeVisible()
+
+    await page
+      .locator('header[role="banner"]')
+      .locator('button[aria-label="Buscar"]:visible')
+      .first()
+      .click()
+    await expect(page.getByRole('dialog', { name: 'Buscar no site' })).toBeVisible()
+    return categoryNav
+  }
+
+  // No ponto onde a nav de categorias está, o elemento pintado no topo deve ser
+  // o backdrop do overlay (ou um descendente), nunca a nav de categorias.
+  async function topElementOverNavIsOverlay(page: Page) {
+    return page.evaluate(() => {
+      const nav = document.querySelector('.downloads-category-nav')
+      if (!nav) return { ok: false, reason: 'sem nav' }
+      const rect = nav.getBoundingClientRect()
+      const x = rect.left + rect.width / 2
+      const y = rect.top + rect.height / 2
+      const el = document.elementFromPoint(x, y)
+      const insideNav = Boolean(el?.closest('.downloads-category-nav'))
+      const insideOverlay = Boolean(
+        el?.closest('[role="presentation"], [role="dialog"][aria-label="Buscar no site"]'),
+      )
+      return { ok: insideOverlay && !insideNav, insideNav, insideOverlay }
+    })
+  }
+
+  test('desktop: backdrop cobre a nav de categorias em /downloads', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await openSearchOnDownloads(page)
+    const result = await topElementOverNavIsOverlay(page)
+    expect(result.insideNav).toBe(false)
+    expect(result.insideOverlay).toBe(true)
+  })
+
+  test('mobile: backdrop cobre a nav de categorias em /downloads', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
+    await openSearchOnDownloads(page)
+    const result = await topElementOverNavIsOverlay(page)
+    expect(result.insideNav).toBe(false)
+    expect(result.insideOverlay).toBe(true)
+  })
+})
+
 test.describe('Site search — página /busca', () => {
   test('/busca?q=igreja retorna 200 com noindex e seções', async ({ page }) => {
     await seedConsent(page)

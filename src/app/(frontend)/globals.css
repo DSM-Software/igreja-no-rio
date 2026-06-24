@@ -449,7 +449,9 @@ img, svg { display: block; max-width: 100%; }
 .downloads-category-nav {
   position: sticky;
   top: var(--nav-h);
-  z-index: 90;
+  /* Acima do conteúdo de fluxo, mas abaixo do header (z-50) e do overlay de
+     busca (z-100), para não pintar como faixa sólida sobre o backdrop. */
+  z-index: 40;
   background: var(--paper);
   border-bottom: 1px solid var(--border);
   padding-block: 10px;

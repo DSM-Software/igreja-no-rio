@@ -254,3 +254,17 @@ O sistema SHALL ter uma suíte Playwright em `tests/e2e/site-search.spec.ts` que
 
 - **WHEN** a suíte `tests/e2e/site-search.spec.ts` é executada com seed padrão
 - **THEN** os seguintes fluxos passam: (a) gatilho visível no header em desktop e mobile; (b) atalho `/` abre overlay; (c) atalho `Ctrl/⌘+K` abre overlay; (d) digitar 2+ letras dispara busca e exibe agrupamento; (e) navegação por setas + Enter abre o hit; (f) estado "sem resultados" aparece para termo improvável; (g) página `/busca?q=...` carrega com `noindex`; (h) post `published: false` no seed não aparece nos resultados; (i) `q` de 2.000 caracteres retorna 200 sem sobrecarregar o servidor
+
+### Requirement: Backdrop do overlay cobre toda a viewport acima de qualquer chrome de página
+
+O sistema SHALL renderizar o backdrop do overlay de busca cobrindo toda a viewport e em uma camada de empilhamento (`z-index`) acima de **todo** o chrome de página, incluindo o header e quaisquer elementos `position: sticky`/posicionados elevados (por exemplo, a navegação de categorias da página `/downloads`). Nenhum elemento de página SHALL permanecer visível como faixa sólida sobre o backdrop enquanto o overlay estiver aberto, em viewports desktop e mobile.
+
+#### Scenario: Overlay aberto sobre a página de downloads não deixa a nav de categorias visível
+
+- **WHEN** o usuário está em `/downloads` (com a navegação de categorias renderizada) e abre o overlay de busca, em viewport desktop ou mobile
+- **THEN** o backdrop desfocado/escurecido cobre toda a viewport e a barra de navegação de categorias NÃO permanece visível como faixa branca sobre o backdrop
+
+#### Scenario: Overlay fica acima de chrome de página com z-index elevado
+
+- **WHEN** uma rota pública renderiza um elemento de chrome `sticky`/posicionado com `z-index` próprio (como a nav de categorias) e o overlay de busca é aberto
+- **THEN** o backdrop e o painel do overlay são pintados acima desse elemento, dominando-o visualmente
