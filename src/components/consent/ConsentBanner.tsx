@@ -32,7 +32,7 @@ export function ConsentBanner() {
   if (isConsentValid(state)) return null
 
   const buttonBase =
-    'inline-flex h-11 items-center justify-center rounded-md px-4 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2'
+    'inline-flex h-11 items-center justify-center whitespace-nowrap rounded-md px-4 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2'
 
   return (
     <div
