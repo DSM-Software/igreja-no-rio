@@ -24,7 +24,7 @@ O sistema SHALL exibir um banner de consentimento fixo na parte inferior da view
 - **THEN** o banner é renderizado novamente em qualquer rota pública
 
 ### Requirement: Três ações com igual proeminência
-O banner SHALL oferecer três ações visíveis simultaneamente — `Aceitar todos`, `Rejeitar todos`, `Personalizar` — com tamanho de fonte, padding e contraste equivalentes, sem dark pattern que favoreça aceitação.
+O banner SHALL oferecer três ações visíveis simultaneamente — `Aceitar todos`, `Rejeitar todos`, `Personalizar` — com tamanho de fonte, padding e contraste equivalentes, sem dark pattern que favoreça aceitação. O rótulo de cada botão de ação SHALL permanecer em uma única linha (sem quebra de texto) na disposição horizontal do desktop.
 
 #### Scenario: Três botões presentes
 - **WHEN** o banner está visível
@@ -33,6 +33,10 @@ O banner SHALL oferecer três ações visíveis simultaneamente — `Aceitar tod
 #### Scenario: Rejeitar tem o mesmo destaque visual de Aceitar
 - **WHEN** o banner está visível
 - **THEN** os botões "Aceitar todos" e "Rejeitar todos" têm a mesma altura computada (`getBoundingClientRect().height`) E o mesmo `font-size`
+
+#### Scenario: Texto das ações em linha única no desktop
+- **WHEN** o banner está visível em uma viewport de desktop (largura ≥ 1024px)
+- **THEN** os botões "Aceitar todos" e "Rejeitar todos" renderizam seu texto em uma única linha (cada um com `getClientRects().length === 1`, sem wrap)
 
 ### Requirement: Aceitar todos concede consentimento para analytics e marketing
 Ao clicar em "Aceitar todos", o sistema SHALL gravar em `localStorage` a chave `ir:consent:v1` com `categories.analytics = true` e `categories.marketing = true`, e SHALL fechar o banner.
