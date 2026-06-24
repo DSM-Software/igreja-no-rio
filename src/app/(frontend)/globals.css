@@ -542,8 +542,6 @@ img, svg { display: block; max-width: 100%; }
   color: var(--ink);
 }
 
-.post-body p { margin-bottom: 24px; }
-
 .post-body blockquote {
   border-left: 3px solid var(--accent);
   padding-left: 24px;
