@@ -12,7 +12,7 @@ import { YOUTUBE_CHANNEL_URL } from "@/lib/links";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Início",
+  title: "Faça parte dessa família",
   description:
     "Uma comunidade cristã no coração de Santíssimo, Rio de Janeiro.",
 };

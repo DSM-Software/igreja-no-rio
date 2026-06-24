@@ -9,7 +9,6 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Blog",
   description: "Devocionais, estudos em série e reflexões da Igreja no Rio.",
-  openGraph: { title: "Blog — Igreja no Rio" },
 };
 
 export default async function BlogPage({

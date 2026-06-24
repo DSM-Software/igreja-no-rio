@@ -115,6 +115,21 @@ test.describe('Consent banner — ações', () => {
     const rejectFont = await reject.evaluate((el) => getComputedStyle(el).fontSize)
     expect(acceptFont).toBe(rejectFont)
   })
+
+  test('Aceitar e Rejeitar mantêm texto em linha única no desktop', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await clearConsent(page)
+    await page.goto('/')
+    const banner = page.getByTestId('cookie-consent-banner')
+    const accept = banner.getByRole('button', { name: /aceitar todos/i })
+    const reject = banner.getByRole('button', { name: /rejeitar todos/i })
+
+    // Cada botão deve renderizar seu texto numa única linha (sem wrap).
+    const acceptLines = await accept.evaluate((el) => el.getClientRects().length)
+    const rejectLines = await reject.evaluate((el) => el.getClientRects().length)
+    expect(acceptLines).toBe(1)
+    expect(rejectLines).toBe(1)
+  })
 })
 
 test.describe('Consent banner — persistência', () => {

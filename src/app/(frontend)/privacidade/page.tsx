@@ -5,7 +5,6 @@ export const metadata: Metadata = {
   title: 'Política de Privacidade',
   description:
     'Saiba como a Igreja no Rio trata dados pessoais em seus canais institucionais e como exercer seus direitos.',
-  openGraph: { title: 'Política de Privacidade — Igreja no Rio' },
 }
 
 const sections = [

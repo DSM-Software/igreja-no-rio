@@ -7,7 +7,6 @@ export const metadata: Metadata = {
   title: "Contato",
   description:
     "Entre em contato com a Igreja no Rio. Endereço, e-mail e canais de contato em Santíssimo, RJ.",
-  openGraph: { title: "Contato — Igreja no Rio" },
 };
 
 export default function ContatoPage() {
