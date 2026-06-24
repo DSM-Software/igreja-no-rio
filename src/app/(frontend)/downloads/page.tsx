@@ -11,7 +11,6 @@ export const metadata: Metadata = {
   title: "Downloads",
   description:
     "Pregações em áudio, PDFs de estudo e slides dos grupos caseiros da Igreja no Rio.",
-  openGraph: { title: "Downloads — Igreja no Rio" },
 };
 
 const CATEGORY_ORDER = [

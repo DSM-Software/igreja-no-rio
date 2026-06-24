@@ -9,7 +9,6 @@ export const metadata: Metadata = {
   title: "Agenda",
   description:
     "Veja a programação de eventos e encontros da Igreja no Rio — Santíssimo, RJ.",
-  openGraph: { title: "Agenda — Igreja no Rio" },
 };
 
 export default async function AgendaPage() {

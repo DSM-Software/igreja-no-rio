@@ -6,7 +6,6 @@ export const metadata: Metadata = {
   title: "Quem Somos",
   description:
     "Conheça a história, os valores e a visão da Igreja no Rio — uma comunidade cristã em Santíssimo, Rio de Janeiro.",
-  openGraph: { title: "Quem Somos — Igreja no Rio" },
 };
 
 export default function QuemSomosPage() {

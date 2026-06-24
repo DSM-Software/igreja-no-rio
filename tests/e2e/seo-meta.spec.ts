@@ -53,6 +53,27 @@ test.describe('SEO — Open Graph tags', () => {
   }
 })
 
+test.describe('SEO — Open Graph image', () => {
+  for (const route of ROUTES) {
+    test(`${route.name} — og:image presente e resolvível (200)`, async ({ page }) => {
+      await page.goto(route.path)
+      const ogImage = await page.locator('meta[property="og:image"]').first().getAttribute('content')
+      expect(ogImage).toBeTruthy()
+
+      const imageUrl = new URL(ogImage!, page.url()).toString()
+      const response = await page.request.get(imageUrl)
+      expect(response.status()).toBe(200)
+      expect(response.headers()['content-type'] ?? '').toMatch(/^image\//)
+    })
+  }
+
+  test('home declara twitter card summary_large_image', async ({ page }) => {
+    await page.goto('/')
+    const card = await page.locator('meta[name="twitter:card"]').getAttribute('content')
+    expect(card).toBe('summary_large_image')
+  })
+})
+
 test.describe('SEO — Google Search Console verification', () => {
   const SEARCH_CONSOLE_TOKEN = 'zVoVtbyWEF_aoYieMdzO7wcwKa2jrEDNdTXe2yw-vYs'
 
