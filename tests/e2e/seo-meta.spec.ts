@@ -1,21 +1,23 @@
 import { test, expect } from '@playwright/test'
 import { request as playwrightRequest } from '@playwright/test'
 
+// /cultos redireciona (307) para /agenda, por isso não entra na lista de rotas com página própria.
 const ROUTES = [
   { path: '/', name: 'Home' },
   { path: '/quem-somos', name: 'Quem Somos' },
-  { path: '/cultos', name: 'Cultos' },
   { path: '/blog', name: 'Blog' },
   { path: '/downloads', name: 'Downloads' },
   { path: '/contato', name: 'Contato' },
 ]
 
 test.describe('SEO — <title>', () => {
-  test('home title contém "Início" (ou "Igreja no Rio")', async ({ page }) => {
+  test('home title contém "Faça parte dessa família"', async ({ page }) => {
     await page.goto('/')
-    // Layout template: '%s — Igreja no Rio'; page title: 'Início'
-    // In dev mode Turbopack may render just 'Início' or 'Início — Igreja no Rio'
-    await expect(page).toHaveTitle(/Início|Igreja no Rio/)
+    // Layout template: '%s — Igreja no Rio'. Em dev o Turbopack pode renderizar o
+    // <title> apenas com o título da página; a marca é garantida pelo template em prod.
+    await expect(page).toHaveTitle(/Faça parte dessa família/)
+    const title = await page.title()
+    expect(title).not.toMatch(/Início/)
   })
 
   for (const route of ROUTES.filter((r) => r.path !== '/')) {
