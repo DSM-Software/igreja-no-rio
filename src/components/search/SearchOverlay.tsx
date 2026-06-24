@@ -12,6 +12,7 @@ import {
   type KeyboardEvent,
   type MouseEvent,
 } from "react";
+import { createPortal } from "react-dom";
 import SearchResults from "./SearchResults";
 import { hitDomId } from "./SearchHit";
 import { useSearch } from "./useSearch";
@@ -24,8 +25,17 @@ interface SearchOverlayProps {
 const VISIBLE_LIMIT = 5;
 
 export default function SearchOverlay({ open, onClose }: SearchOverlayProps) {
-  if (!open) return null;
-  return <OverlayPanel onClose={onClose} />;
+  // Portal to document.body so the fixed backdrop isn't trapped inside the
+  // header's containing block — the header uses `backdrop-blur`, and any CSS
+  // backdrop-filter creates a new containing block for `position: fixed`
+  // descendants, which would constrain `inset-0` to the header strip.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!open || !mounted) return null;
+  return createPortal(<OverlayPanel onClose={onClose} />, document.body);
 }
 
 function OverlayPanel({ onClose }: { onClose: () => void }) {
