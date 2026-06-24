@@ -296,3 +296,78 @@ test.describe('Admin — visibilidade do campo body no formulário por papel', (
     await expect(bodyLabel).toBeVisible({ timeout: 15_000 })
   })
 })
+
+// Regressão: o editor Lexical do campo `body` é um componente renderizado no
+// servidor (RSC). Ele só renderiza quando `req.payload.importMap` (o importMap
+// da instância global compartilhada do Payload) contém a entrada do Lexical.
+// Um importMap vazio passado por qualquer rota (ex.: o `not-found.tsx` do admin
+// importando um `importMap.ts` órfão/vazio) sobrescrevia esse mapa, fazendo o
+// editor sumir do formulário **na navegação SPA** — mas NÃO no reload completo
+// (SSR), que re-semeava o mapa. Por isso os testes acima, que usam `page.goto`
+// (= SSR), não pegavam o bug. Estes cenários reproduzem o caminho real do
+// usuário: navegação client-side (clicar), e asseguram que o editor (não só o
+// label) de fato renderizou.
+test.describe('Admin — editor Lexical do body renderiza na navegação SPA', () => {
+  const LEXICAL_EDITOR = '[data-lexical-editor="true"]'
+
+  test('admin: editor renderiza ao clicar em "Create New" (sem reload)', async ({ page }) => {
+    const logged = await loginAs(page, 'admin')
+    if (!logged) {
+      test.skip()
+      return
+    }
+
+    // Visita uma rota do site primeiro: frontend e admin compartilham a mesma
+    // instância global do Payload, condição em que o bug se manifestava.
+    await page.goto('/blog', { waitUntil: 'domcontentloaded' })
+
+    const listResp = await page.goto('/admin/collections/posts', {
+      waitUntil: 'domcontentloaded',
+    })
+    if (listResp && listResp.status() >= 500) {
+      test.skip()
+      return
+    }
+
+    // Navegação SPA (client-side), não `page.goto` — é o caminho que falhava.
+    await page.getByRole('link', { name: /Create new Post/i }).first().click()
+    await expect(page).toHaveURL(/\/admin\/collections\/posts\/create/, { timeout: 15_000 })
+
+    await expect(page.getByText('Corpo do post', { exact: false }).first()).toBeVisible({
+      timeout: 15_000,
+    })
+    // O editor em si (RSC) precisa ter renderizado, não apenas o label.
+    await expect(page.locator(LEXICAL_EDITOR).first()).toBeVisible({ timeout: 15_000 })
+  })
+
+  test('autor: editor renderiza ao clicar no post próprio (sem reload)', async ({ page }) => {
+    const logged = await loginAs(page, 'autor')
+    if (!logged) {
+      test.skip()
+      return
+    }
+
+    const listResp = await page.goto('/admin/collections/posts', {
+      waitUntil: 'domcontentloaded',
+    })
+    if (listResp && listResp.status() >= 500) {
+      test.skip()
+      return
+    }
+
+    const seededLink = page
+      .getByRole('link', { name: /Rascunho do autor para testes/i })
+      .first()
+    if (!(await seededLink.isVisible().catch(() => false))) {
+      test.skip()
+      return
+    }
+
+    await seededLink.click()
+
+    await expect(page.getByText('Corpo do post', { exact: false }).first()).toBeVisible({
+      timeout: 15_000,
+    })
+    await expect(page.locator(LEXICAL_EDITOR).first()).toBeVisible({ timeout: 15_000 })
+  })
+})
