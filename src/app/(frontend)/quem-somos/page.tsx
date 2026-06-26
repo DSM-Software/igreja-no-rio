@@ -29,25 +29,44 @@ export default function QuemSomosPage() {
         <div className="container content-grid-2 content-grid-align-center mt-4">
           <div>
             {/* <p className="section-label">Missão</p> */}
-            <h2 className="section-title">Quem somos</h2>
-            <p className="mb-5 leading-8 text-ink-2">
-              Somos parte da igreja na cidade do Rio de Janeiro. Não vamos à
-              igreja — somos a igreja. E você também pode fazer parte dessa
-              família.
+            <h2 className=”section-title”>Quem somos?</h2>
+            <p className=”mb-5 leading-8 text-ink-2”>
+              Somos homens e mulheres. Somos anciãos, adultos, jovens e
+              crianças. Somos pais e filhos. Somos patrões e empregados;
+              professores e alunos; militares e civis; empresários,
+              empreendedores, publicitários, poetas e profetas. Somos ricos e
+              pobres. Somos engenheiros e arquitetos; construtores e operários.
             </p>
-            <p className="mb-5 leading-8 text-ink-2">
-              Cremos que Deus como nosso Pai tem um propósito eterno: uma
-              família, de muitos filhos, conformes à imagem de Jesus, para o
-              louvor da Sua glória.
+            <p className=”mb-5 leading-8 text-ink-2”>
+              Somos livres, escravos e libertadores. Somos pastores e ovelhas;
+              enviados, mestres e missionários. Somos artistas, músicos,
+              cantores, bailarinos e verdadeiros adoradores.
             </p>
-            <blockquote className="border-l-4 border-brand-200 pl-4 italic leading-8 text-ink-2">
-              “Porque os que dantes conheceu, também os predestinou para serem
-              conformes à imagem de seu Filho, a fim de Ele seja o primogênito
-              entre muitos irmãos”
-              <footer className="mt-2 text-sm not-italic text-ink-2">
-                Romanos 8:29
-              </footer>
-            </blockquote>
+            <p className=”mb-5 leading-8 text-ink-2”>
+              Somos chefes e donas de casa; comerciantes e ambulantes. Somos
+              funcionários públicos e privados. Somos profissionais autônomos e
+              liberais. Somos jornalistas, escritores e leitores. Somos gente
+              simples, mas também somos doutores.
+            </p>
+            <p className=”mb-5 leading-8 text-ink-2”>
+              Somos turistas, brasileiros e estrangeiros. Somos pilotos,
+              passageiros e caminhoneiros. Somos atletas, caminhantes e
+              cadeirantes.
+            </p>
+            <p className=”mb-5 leading-8 text-ink-2”>
+              Somos uma família, um corpo, uma casa, uma lavoura e um estilo de
+              vida. Somos sal da terra e luz do mundo. Somos embaixadores,
+              juízes e advogados. Somos guerreiros, abençoados e abençoadores.
+              Somos um milagre. Somos um povo de propriedade exclusiva. Somos
+              reis e sacerdotes.
+            </p>
+            <p className=”mb-5 leading-8 text-ink-2”>
+              Somos parte da igreja do Senhor Jesus Cristo na cidade do Rio de
+              Janeiro.
+            </p>
+            <p className=”mb-5 leading-8 text-ink-2”>
+              Somos do bem. Somos de Deus. Somos filhos de Deus!
+            </p>
           </div>
           <div className="relative h-[400px] overflow-hidden rounded-card bg-gradient-to-br from-brand-200 to-brand-500">
             <Image
