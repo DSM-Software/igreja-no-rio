@@ -73,7 +73,7 @@ export const Downloads: CollectionConfig = {
       admin: {
         position: 'sidebar',
         readOnly: true,
-        description: 'Definido automaticamente a partir do usuario que cria o conteudo.',
+        description: 'Definido automaticamente a partir do usuário que cria o conteúdo.',
       },
       hooks: {
         beforeChange: [resolveContentOwner],

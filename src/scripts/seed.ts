@@ -36,7 +36,7 @@ function requireAdminEnv(name: 'SEED_ADMIN_EMAIL' | 'SEED_ADMIN_PASSWORD' | 'SEE
   }
 
   if (ADMIN_PLACEHOLDERS.has(rawValue.toLowerCase())) {
-    throw new Error(`Defina ${name} com um valor real; placeholders inseguros nao sao aceitos.`)
+    throw new Error(`Defina ${name} com um valor real; placeholders inseguros não são aceitos.`)
   }
 
   return rawValue
