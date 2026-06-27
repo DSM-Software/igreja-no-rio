@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 const PUBLIC_ROUTES = [
   { path: '/', label: 'Home', heading: /Igreja no Rio/i },
-  { path: '/quem-somos', label: 'Quem Somos', heading: /Somos parte da igreja na cidade do Rio de Janeiro/i },
+  { path: '/quem-somos', label: 'Quem Somos', heading: /Somos parte da igreja do Senhor Jesus Cristo na cidade do Rio de Janeiro/i },
   { path: '/blog', label: 'Blog', heading: /Devocionais e Estudos/i },
   { path: '/downloads', label: 'Downloads', heading: /Downloads/i },
   { path: '/contato', label: 'Contato', heading: /Rua Ivan Pessoa, 341/i },
