@@ -29,42 +29,42 @@ export default function QuemSomosPage() {
         <div className="container content-grid-2 content-grid-align-center mt-4">
           <div>
             {/* <p className="section-label">Missão</p> */}
-            <h2 className=”section-title”>Quem somos?</h2>
-            <p className=”mb-5 leading-8 text-ink-2”>
+            <h2 className="section-title">Quem somos?</h2>
+            <p className="mb-5 leading-8 text-ink-2">
               Somos homens e mulheres. Somos anciãos, adultos, jovens e
               crianças. Somos pais e filhos. Somos patrões e empregados;
               professores e alunos; militares e civis; empresários,
               empreendedores, publicitários, poetas e profetas. Somos ricos e
               pobres. Somos engenheiros e arquitetos; construtores e operários.
             </p>
-            <p className=”mb-5 leading-8 text-ink-2”>
+            <p className="mb-5 leading-8 text-ink-2">
               Somos livres, escravos e libertadores. Somos pastores e ovelhas;
               enviados, mestres e missionários. Somos artistas, músicos,
               cantores, bailarinos e verdadeiros adoradores.
             </p>
-            <p className=”mb-5 leading-8 text-ink-2”>
+            <p className="mb-5 leading-8 text-ink-2">
               Somos chefes e donas de casa; comerciantes e ambulantes. Somos
               funcionários públicos e privados. Somos profissionais autônomos e
               liberais. Somos jornalistas, escritores e leitores. Somos gente
               simples, mas também somos doutores.
             </p>
-            <p className=”mb-5 leading-8 text-ink-2”>
+            <p className="mb-5 leading-8 text-ink-2">
               Somos turistas, brasileiros e estrangeiros. Somos pilotos,
               passageiros e caminhoneiros. Somos atletas, caminhantes e
               cadeirantes.
             </p>
-            <p className=”mb-5 leading-8 text-ink-2”>
+            <p className="mb-5 leading-8 text-ink-2">
               Somos uma família, um corpo, uma casa, uma lavoura e um estilo de
               vida. Somos sal da terra e luz do mundo. Somos embaixadores,
               juízes e advogados. Somos guerreiros, abençoados e abençoadores.
               Somos um milagre. Somos um povo de propriedade exclusiva. Somos
               reis e sacerdotes.
             </p>
-            <p className=”mb-5 leading-8 text-ink-2”>
+            <p className="mb-5 leading-8 text-ink-2">
               Somos parte da igreja do Senhor Jesus Cristo na cidade do Rio de
               Janeiro.
             </p>
-            <p className=”mb-5 leading-8 text-ink-2”>
+            <p className="mb-5 leading-8 text-ink-2">
               Somos do bem. Somos de Deus. Somos filhos de Deus!
             </p>
           </div>
