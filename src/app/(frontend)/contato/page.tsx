@@ -138,7 +138,7 @@ export default function ContatoPage() {
               </h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                 <p className="supporting-copy" style={{ margin: 0 }}>
-                  Este site nao envia as informacoes digitadas em um formulario de contato. Para falar com a igreja, use um canal funcional abaixo.
+                  Este site não envia as informações digitadas em um formulário de contato. Para falar com a igreja, use um canal funcional abaixo.
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
                   <a
@@ -172,7 +172,7 @@ export default function ContatoPage() {
                   </Link>
                 </div>
                 <p className="supporting-copy" style={{ margin: 0 }}>
-                  Se voce entrar em contato por e-mail, seus dados serao usados apenas para responder sua mensagem e conduzir o atendimento solicitado. Leia a <Link href="/privacidade">Política de Privacidade</Link> para mais detalhes.
+                  Se você entrar em contato por e-mail, seus dados serão usados apenas para responder sua mensagem e conduzir o atendimento solicitado. Leia a <Link href="/privacidade">Política de Privacidade</Link> para mais detalhes.
                 </p>
               </div>
             </div>

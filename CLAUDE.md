@@ -118,6 +118,18 @@ import { Icon } from '@iconify/react'
 <Icon icon="material-symbols:download-rounded" />
 ```
 
+## Conteúdo e copy (português)
+
+Todo texto voltado ao usuário — páginas públicas, descrições de campos no admin, mensagens, metadados (`title`/`description`), labels e conteúdo de seed — deve estar em **português correto**:
+
+- **Acentuação completa**: nunca escreva palavras sem acento (ex.: `informações`, não `informacoes`; `você`, não `voce`; `política`, não `politica`).
+- **Concordância nominal e verbal**: gênero, número e tempo verbal coerentes (ex.: "as informações digitadas", "os dados serão usados").
+- **Ortografia e gramática**: pontuação, crase e uso de maiúsculas conforme a norma culta.
+- **Aspas em texto** usam aspas tipográficas (`“ ”`); em atributos JSX (`className`, `href`) use **sempre** aspas retas (`"`) — aspas curvas em atributos quebram o build.
+- **Exceção**: `slug`, identificadores e chaves técnicas permanecem sem acento e em kebab-case.
+
+Antes de concluir qualquer alteração que crie ou edite texto, revise a acentuação e a concordância. Uma varredura útil: `grep -rnwE '(voce|nao|informacoes|...)' --include='*.tsx' --include='*.ts' src`.
+
 ## Testing rules
 
 ### Visual decisions — always run Playwright first
