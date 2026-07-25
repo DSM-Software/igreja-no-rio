@@ -34,8 +34,9 @@ export default async function HomePage() {
         sort: "-date",
         limit: 3,
       }),
-      // Apenas eventos elegíveis: recorrentes ou com data de hoje/futura.
-      // O filtro na query evita que eventos passados ocupem o limit e escondam os futuros.
+      // Apenas eventos elegíveis: recorrentes, futuros ou multi-dia em andamento
+      // (endDate de hoje/futura). O filtro na query evita que eventos passados
+      // ocupem o limit e escondam os futuros.
       payload.find({
         collection: "events",
         // Tie-break por horário acontece em memória depois do fetch
@@ -48,6 +49,7 @@ export default async function HomePage() {
           or: [
             { recurring: { exists: true } },
             { date: { greater_than_equal: today } },
+            { endDate: { greater_than_equal: today } },
           ],
         },
       }),
@@ -60,19 +62,42 @@ export default async function HomePage() {
   const dayPart = (d: string | null | undefined) => (d ?? "").slice(0, 10);
   const rawEvents =
     eventsResult.status === "fulfilled" ? eventsResult.value.docs : [];
-  const events = [...rawEvents]
-    .sort((a, b) => {
-      const cmp = dayPart(a.date).localeCompare(dayPart(b.date));
-      return cmp !== 0 ? cmp : (a.time ?? "").localeCompare(b.time ?? "");
-    })
-    .slice(0, 4);
+  const sortedEvents = [...rawEvents].sort((a, b) => {
+    const cmp = dayPart(a.date).localeCompare(dayPart(b.date));
+    return cmp !== 0 ? cmp : (a.time ?? "").localeCompare(b.time ?? "");
+  });
+  const events = sortedEvents.slice(0, 4);
   const downloads =
     downloadsResult.status === "fulfilled" ? downloadsResult.value.docs : [];
 
-  // events já vem filtrado (recorrentes + futuros) e ordenado por data+hora:
-  // respeita o flag editorial highlight quando não-passado, senão cai no
-  // próximo evento mais próximo.
-  const highlightEvent = events.find((e) => e.highlight) ?? events[0] ?? null;
+  // sortedEvents já vem filtrado (recorrentes + não-encerrados) e ordenado por
+  // data+hora: respeita o flag editorial highlight quando não-encerrado —
+  // procurado no conjunto completo, não só nos 4 exibidos na lista —, senão
+  // cai no próximo evento mais próximo.
+  const highlightEvent =
+    sortedEvents.find((e) => e.highlight) ?? events[0] ?? null;
+
+  // Multi-dia: complementa a linha do banner com o término ("até 03 ago, 12:00").
+  const monthsShort = [
+    "jan", "fev", "mar", "abr", "mai", "jun",
+    "jul", "ago", "set", "out", "nov", "dez",
+  ];
+  let highlightEndLabel: string | null = null;
+  if (
+    highlightEvent?.endDate &&
+    dayPart(highlightEvent.endDate) !== dayPart(highlightEvent.date)
+  ) {
+    const end = new Date(
+      highlightEvent.endDate.includes("T")
+        ? highlightEvent.endDate
+        : `${highlightEvent.endDate}T12:00:00`,
+    );
+    if (!Number.isNaN(end.getTime())) {
+      highlightEndLabel = `até ${String(end.getDate()).padStart(2, "0")} ${monthsShort[end.getMonth()]}${
+        highlightEvent.endTime ? `, ${highlightEvent.endTime}` : ""
+      }`;
+    }
+  }
 
   return (
     <>
@@ -93,6 +118,7 @@ export default async function HomePage() {
               </p>
               <p className="mt-1 text-sm text-white/85">
                 {highlightEvent.time} · {highlightEvent.location}
+                {highlightEndLabel && ` · ${highlightEndLabel}`}
                 {highlightEvent.recurring && ` · ${highlightEvent.recurring}`}
               </p>
             </div>

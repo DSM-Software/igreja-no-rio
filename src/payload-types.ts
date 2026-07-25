@@ -201,7 +201,7 @@ export interface Post {
    */
   published?: boolean | null;
   /**
-   * Definido automaticamente a partir do usuario que cria o conteudo.
+   * Definido automaticamente a partir do usuário que cria o conteúdo.
    */
   owner?: (number | null) | User;
   searchBody?: string | null;
@@ -279,7 +279,7 @@ export interface Download {
    */
   size?: string | null;
   /**
-   * Definido automaticamente a partir do usuario que cria o conteudo.
+   * Definido automaticamente a partir do usuário que cria o conteúdo.
    */
   owner?: (number | null) | User;
   updatedAt: string;
@@ -294,9 +294,18 @@ export interface Event {
   title: string;
   date: string;
   /**
-   * Ex.: 10:00
+   * Formato 24h. Ex.: 10:00
    */
   time: string;
+  /**
+   * Marque para eventos que terminam em outro dia (ex.: acampamentos e retiros).
+   */
+  isMultiDay?: boolean | null;
+  endDate?: string | null;
+  /**
+   * Formato 24h. Ex.: 12:00
+   */
+  endTime?: string | null;
   location: string;
   /**
    * Ex.: Todo domingo
@@ -307,9 +316,12 @@ export interface Event {
    * URL da página de inscrição do evento. Quando preenchido, exibe o botão de inscrição.
    */
   registrationUrl?: string | null;
+  /**
+   * Entre os eventos marcados, o banner da home exibe o primeiro por data de início. Eventos já encerrados são ignorados mesmo marcados.
+   */
   highlight?: boolean | null;
   /**
-   * Definido automaticamente a partir do usuario que cria o conteudo.
+   * Definido automaticamente a partir do usuário que cria o conteúdo.
    */
   owner?: (number | null) | User;
   updatedAt: string;
@@ -479,6 +491,9 @@ export interface EventsSelect<T extends boolean = true> {
   title?: T;
   date?: T;
   time?: T;
+  isMultiDay?: T;
+  endDate?: T;
+  endTime?: T;
   location?: T;
   recurring?: T;
   desc?: T;
