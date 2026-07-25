@@ -18,8 +18,22 @@ export default async function AgendaPage() {
     timeZone: "America/Sao_Paulo",
   });
 
+  // Apenas eventos elegíveis: recorrentes ou com data de hoje/futura.
+  // Sem esse filtro na query, eventos passados ocupam o limit (sort
+  // ascendente por data busca os mais antigos primeiro) e os futuros
+  // nem chegam a ser retornados — mesma regra usada na home.
   const eventsResult = await payload
-    .find({ collection: "events", sort: "date", limit: 20, where: {} })
+    .find({
+      collection: "events",
+      sort: "date",
+      limit: 20,
+      where: {
+        or: [
+          { recurring: { exists: true } },
+          { date: { greater_than_equal: today } },
+        ],
+      },
+    })
     .catch(() => ({ docs: [] }));
 
   // Tie-break por horário em memória. O campo `date` no banco guarda

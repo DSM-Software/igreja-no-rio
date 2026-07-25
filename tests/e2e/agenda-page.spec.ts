@@ -21,6 +21,33 @@ interface CardInfo {
   time: string
 }
 
+test.describe('Agenda — paridade com a home', () => {
+  test('todo evento listado na home aparece também na agenda', async ({
+    page,
+  }) => {
+    // Regressão: a agenda buscava os 20 eventos mais antigos sem filtro de
+    // data; com 20+ eventos passados no banco, os futuros (visíveis na home,
+    // que filtra na query) sumiam da agenda.
+    await page.goto('/')
+    const homeSection = page
+      .locator('section', {
+        has: page.getByRole('heading', { name: /próximos eventos/i }),
+      })
+      .first()
+    const homeTitles = await homeSection.locator('h4').allInnerTexts()
+
+    test.skip(
+      homeTitles.length === 0,
+      'Sem eventos na home para comparar com a agenda',
+    )
+
+    await page.goto('/agenda')
+    for (const title of homeTitles) {
+      await expect(page.locator('body')).toContainText(title.trim())
+    }
+  })
+})
+
 test.describe('Agenda — ordenação por data e horário', () => {
   test('eventos com a mesma data aparecem em ordem crescente de horário', async ({
     page,
