@@ -24,13 +24,17 @@ test.describe('Imagens da comunidade — home', () => {
     page,
   }) => {
     await page.goto('/')
-    const ctaImg = page.locator('section img[src*="comunhao"]').first()
-    await expect(ctaImg).toBeVisible()
+    // Escopo na própria banda de CTA: os mesmos rótulos existem no header e
+    // em outras seções da home.
+    const ctaSection = page
+      .locator('section', { has: page.locator('img[src*="comunhao"]') })
+      .first()
+    await expect(ctaSection.locator('img[src*="comunhao"]').first()).toBeVisible()
     await expect(
-      page.getByRole('link', { name: /venha no domingo/i }),
+      ctaSection.getByRole('link', { name: /ver agenda/i }),
     ).toBeVisible()
     await expect(
-      page.getByRole('link', { name: /fale conosco/i }),
+      ctaSection.getByRole('link', { name: /fale conosco/i }),
     ).toBeVisible()
   })
 })

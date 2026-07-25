@@ -231,7 +231,7 @@ test.describe('Copy institucional atualizada', () => {
 
   test('contato comunica que o formulário não envia dados e aponta para a política', async ({ page }) => {
     await page.goto('/contato')
-    await expect(page.locator('body')).toContainText(/nao envia as informacoes digitadas em um formulario de contato/i)
+    await expect(page.locator('body')).toContainText(/não envia as informações digitadas em um formulário de contato/i)
     await expect(page.getByRole('link', { name: /ver política de privacidade/i })).toHaveAttribute('href', '/privacidade')
     await expect(page.getByRole('link', { name: /enviar e-mail/i })).toHaveAttribute('href', /mailto:contato@igrejanorio\.com/)
   })
