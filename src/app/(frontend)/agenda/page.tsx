@@ -18,8 +18,23 @@ export default async function AgendaPage() {
     timeZone: "America/Sao_Paulo",
   });
 
+  // Apenas eventos elegíveis: recorrentes, futuros ou multi-dia em andamento
+  // (endDate de hoje/futura). Sem esse filtro na query, eventos passados
+  // ocupam o limit (sort ascendente por data busca os mais antigos primeiro)
+  // e os futuros nem chegam a ser retornados — mesma regra usada na home.
   const eventsResult = await payload
-    .find({ collection: "events", sort: "date", limit: 20, where: {} })
+    .find({
+      collection: "events",
+      sort: "date",
+      limit: 20,
+      where: {
+        or: [
+          { recurring: { exists: true } },
+          { date: { greater_than_equal: today } },
+          { endDate: { greater_than_equal: today } },
+        ],
+      },
+    })
     .catch(() => ({ docs: [] }));
 
   // Tie-break por horário em memória. O campo `date` no banco guarda
@@ -34,8 +49,10 @@ export default async function AgendaPage() {
   });
 
   const recurringEvents = events.filter((e) => e.recurring);
+  // Um evento conta como "próximo" enquanto não encerrou: dia de término
+  // (endDate quando preenchido, senão date) igual a hoje ou futuro.
   const upcomingEvents = events.filter(
-    (e) => !e.recurring && (!e.date || e.date >= today),
+    (e) => !e.recurring && (!e.date || dayPart(e.endDate ?? e.date) >= today),
   );
   const hasContent = recurringEvents.length > 0 || upcomingEvents.length > 0;
 
